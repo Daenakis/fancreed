@@ -1,0 +1,22 @@
+# Smoke test: sign-in → home → sign-out → back to sign-in
+# Replace the appId below with your real dev bundle id before running.
+appId: com.testexpoowner.dev # TODO: replace with your dev bundle id (see app.config.ts)
+---
+# Launch the app from scratch so the auth state is cleared.
+- launchApp:
+    clearState: true
+
+# Sign-in screen should be visible.
+- assertVisible: "Welcome"
+- assertVisible: "Sign in to continue"
+
+# Tap the sign-in button (matches both visible text and accessibilityLabel).
+- tapOn: "Sign In"
+
+# Home screen should now be visible — confirms the auth flow completed.
+- assertVisible: "Home"
+- assertVisible: "You are authenticated"
+
+# Sign out and verify we land back on the sign-in screen.
+- tapOn: "Sign Out"
+- assertVisible: "Welcome"
