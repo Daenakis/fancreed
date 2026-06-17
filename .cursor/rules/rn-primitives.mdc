@@ -1,0 +1,256 @@
+---
+description: Use when creating, editing, or discussing UI components. Covers: checking local folders, copy-pasting source from rn-primitives and reactnativereusables, converting NativeWind to Unistyles v3, working with design screens, and asking clarifying questions before coding.
+globs: src/ui/**/*.tsx
+alwaysApply: false
+---
+
+# UI Component Workflow
+
+## Project structure
+
+```
+src/ui/
+├── primitives/      ← copy-pasted source from github.com/roninoss/rn-primitives (no styles)
+│   ├── checkbox.tsx ← raw headless source, no Unistyles, no className
+│   └── index.ts
+├── components/      ← styled components: primitive + Unistyles, or adapted rnr source
+│   ├── Checkbox/
+│   │   └── index.tsx
+│   └── index.ts
+└── theme/           ← colors, spacing, fonts, breakpoints (read-only reference)
+```
+
+---
+
+## STEP 1 — Before writing any code, follow this checklist
+
+### A. Decision tree
+
+**First:** check `src/ui/components/` — if the styled component already exists, use it. Stop here.
+
+**If not found in components**, check `src/ui/primitives/`:
+- If the primitive file exists → go to STEP 3, create the styled component in `components/`
+- If not → follow the tree below
+
+```
+Does the component exist in rn-primitives?
+(see list: Headless primitives below)
+            │
+      ┌─────┴─────┐
+     YES           NO
+      │             │
+COPY SOURCE      It is a plain component
+from GitHub      (Button, Badge, Card, Input…)
+(see B below)         │
+      │          Fetch CURRENT source from
+      │          reactnativereusables GitHub:
+      │          .../new-york/components/ui/<name>.tsx
+      │          Convert NativeWind → Unistyles (STEP 2)
+      │          Save directly to src/ui/components/<Name>/index.tsx
+      │
+Save to src/ui/primitives/<name>.tsx (no styles)
+Then go to STEP 3 → create styled component in src/ui/components/
+```
+
+**If not found on reactnativereusables either:** build from scratch with plain RN (`Pressable`, `View`, `Text`) directly in `src/ui/components/`.
+
+### B. How to copy a primitive from rn-primitives
+
+1. Fetch `package.json` to get exact dep versions:
+   ```
+   https://raw.githubusercontent.com/roninoss/rn-primitives/main/packages/<name>/package.json
+   ```
+
+2. Fetch the current source:
+   ```
+   https://raw.githubusercontent.com/roninoss/rn-primitives/main/packages/<name>/src/index.tsx
+   ```
+
+3. Save the source as-is to `src/ui/primitives/<name>.tsx`.
+   - Do NOT add Unistyles or any styles here
+   - Fix import paths if the source imports from other `@rn-primitives/*` packages
+
+4. Install ONLY the shared utilities the copied source actually imports, using the exact versions from the `package.json` fetched in step 1:
+   ```bash
+   yarn add @rn-primitives/slot@x.x.x
+   yarn add @rn-primitives/types@x.x.x
+   ```
+   Do NOT install `@rn-primitives/<name>` itself — we copied the source instead.
+
+5. Always fetch the **current** source at the time of the request. Do not use memorised or cached code.
+
+### C. Headless primitives — exist in rn-primitives (copy source from GitHub)
+
+```
+accordion    alert-dialog   aspect-ratio   avatar      checkbox
+collapsible  context-menu   dialog         dropdown-menu  hover-card
+label        menubar        navigation-menu  popover    progress
+radio-group  select         separator      slider      switch
+table        tabs           toast          toggle      toggle-group
+toolbar      tooltip
+```
+
+### D. Plain components — NOT in rn-primitives (copy from reactnativereusables, adapt)
+
+```
+alert   badge   button   card   input   skeleton   text   textarea
+```
+
+Raw URL for reactnativereusables:
+```
+https://raw.githubusercontent.com/mrzachnugent/react-native-reusables/main/packages/registry/src/new-york/components/ui/<name>.tsx
+```
+
+---
+
+## STEP 2 — NativeWind → Unistyles v3 conversion rules
+
+Applied when adapting a plain component from reactnativereusables (STEP 1 path D).
+
+### Remove these imports
+
+```diff
+- import { cn } from '@/lib/utils';
+- import { cva, type VariantProps } from 'class-variance-authority';
++ import { StyleSheet } from 'react-native-unistyles';
+```
+
+### Remove className props, replace with style
+
+```diff
+- function Button({ className, variant, size, ...props }) {
++ function Button({ style, variant, size, ...props }) {
+```
+
+### Convert className → StyleSheet.create
+
+```diff
+- <Pressable className={cn('flex-row items-center', props.disabled && 'opacity-50')} />
++ <Pressable style={[styles.root, props.disabled && styles.disabled, style]} />
+
++ const styles = StyleSheet.create((theme) => ({
++   root: { flexDirection: 'row', alignItems: 'center' },
++   disabled: { opacity: 0.5 },
++ }));
+```
+
+### Convert cva variants → Unistyles variants
+
+```diff
+- const buttonVariants = cva('base', {
+-   variants: {
+-     variant: { default: 'bg-primary', destructive: 'bg-destructive' },
+-     size: { sm: 'h-8 px-3', default: 'h-10 px-4' },
+-   },
+- });
+```
+
+Becomes:
+
+```ts
+const styles = StyleSheet.create((theme) => ({
+  root: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    variants: {
+      variant: {
+        default: { backgroundColor: theme.colors.primary },
+        destructive: { backgroundColor: theme.colors.destructive },
+        ghost: { backgroundColor: 'transparent' },
+      },
+      size: {
+        sm: { height: 32, paddingHorizontal: 12 },
+        default: { height: 40, paddingHorizontal: 16 },
+        lg: { height: 44, paddingHorizontal: 24 },
+      },
+    },
+  },
+}));
+```
+
+Activate in the component body:
+
+```ts
+styles.useVariants({ variant, size });
+```
+
+### NativeWind class → Unistyles token mapping
+
+| NativeWind | Unistyles |
+|---|---|
+| `bg-primary` | `theme.colors.primary` |
+| `bg-background` | `theme.colors.background` |
+| `text-foreground` | `theme.colors.foreground` |
+| `text-muted-foreground` | `theme.colors.mutedForeground` |
+| `border-input` | `theme.colors.border` |
+| `rounded-md` | `theme.radius.md` |
+| `p-4` | `theme.spacing[4]` |
+| `dark:bg-xxx` | handled by dark theme automatically |
+
+### Keep as-is
+
+- `Platform.select()` logic
+- `hitSlop` values
+- `React.forwardRef` pattern
+- `displayName`
+
+---
+
+## STEP 3 — Create the styled component in src/ui/components/
+
+For components that have a primitive in `src/ui/primitives/`, create the styled wrapper here.
+
+### File placement
+
+| What | Where |
+|---|---|
+| Headless primitive (from rn-primitives) | `src/ui/primitives/<name>.tsx` |
+| Styled component | `src/ui/components/<ComponentName>/index.tsx` |
+| Plain component (from rnr, no primitive) | `src/ui/components/<ComponentName>/index.tsx` |
+| Barrel export | `src/ui/components/index.ts` |
+
+### Code rules
+
+- Import primitives from `@/ui/primitives/<name>` — never from `@rn-primitives/*` directly inside components
+- `StyleSheet.create((theme) => ({...}))` at the BOTTOM of every file
+- Always merge style prop: `[styles.root, style]`
+- No `StyleSheet` from `react-native`, no inline styles
+- Always `React.forwardRef` for components that wrap a primitive
+- Always set `displayName`
+
+---
+
+## STEP 4 — When design screens are provided
+
+Study every image in detail before asking. Then ask only about what is genuinely unclear:
+
+- All interactive states: default, pressed, focused, disabled, loading, error, success
+- Colors: map to tokens in `src/ui/theme/colors.ts`; ask if a color is not in the theme
+- Spacing/dimensions that differ from `src/ui/theme/metrics.ts`
+- Typography: match to `src/ui/theme/fonts.ts`
+- Corner radius, shadow, border
+- Animation behavior
+- Dark mode variant
+
+**Do NOT write any code until all states and ambiguities are confirmed by the user.**
+
+Standard clarifying questions (ask when not obvious):
+- Loading / skeleton state?
+- Size variants (sm / md / lg)?
+- Style variants (primary / secondary / destructive / ghost)?
+- Appears in a list (performance)?
+- Needs `ref` forwarding?
+
+---
+
+## How the user requests a component
+
+The AI must follow STEP 1 → STEP 2 → STEP 3 → STEP 4 in that order every time.
+
+Good prompt examples:
+
+> "Add a Checkbox. Check locally first, then follow the rule."
+
+> "Add a Button with variants: default, destructive, outline, ghost. Here is the design: [image]. Ask me anything unclear before coding."
+
+> "Add a Switch. Fetch current source from rn-primitives GitHub, copy to primitives/, then style in components/."

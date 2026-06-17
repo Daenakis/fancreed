@@ -8709,7 +8709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25":
+"i18next@npm:^25.10.10":
   version: 25.10.10
   resolution: "i18next@npm:25.10.10"
   dependencies:
@@ -12815,7 +12815,7 @@ __metadata:
     expo-splash-screen: "npm:~31.0.13"
     expo-status-bar: "npm:~3.0.9"
     husky: "npm:^9.1.7"
-    i18next: "npm:^25"
+    i18next: "npm:^25.10.10"
     jest: "npm:^30.2.0"
     jest-expo: "npm:^54.0.17"
     lint-staged: "npm:^16.2.7"
