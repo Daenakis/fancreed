@@ -101,5 +101,8 @@
   "engines": {
     "node": ">=22"
   },
+  "resolutions": {
+    "jest-mock": "^30.4.1"
+  },
   "private": true
 }
