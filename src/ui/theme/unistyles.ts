@@ -8,13 +8,13 @@ import type { ThemeName } from '@/types';
 import { STORAGE_KEYS } from '@/constants';
 
 import { darkColors, lightColors } from './colors';
-import { fontSizes, fontWeights } from './fonts';
+import { fontSizes, fontWeights, typography } from './fonts';
 import { breakpoints, radius, spacing } from './metrics';
 
 const shared = {
   spacing,
   radius,
-  font: { sizes: fontSizes, weights: fontWeights },
+  font: { sizes: fontSizes, weights: fontWeights, typography },
 } as const;
 
 export const lightTheme = { colors: lightColors, ...shared };

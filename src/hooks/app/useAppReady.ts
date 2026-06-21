@@ -1,12 +1,21 @@
+import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 
 import { loadAuthFromStorage, useAuthStore } from '@/store';
 
 export function useAppReady() {
+  const [fontsLoaded] = useFonts({
+    'Inter-Regular': require('../../../assets/fonts/Inter-Regular.ttf'),
+    'Inter-Medium': require('../../../assets/fonts/Inter-Medium.ttf'),
+    'Inter-SemiBold': require('../../../assets/fonts/Inter-SemiBold.ttf'),
+  });
+
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    if (!fontsLoaded) return;
+
     async function prepare() {
       try {
         await loadAuthFromStorage();
@@ -29,7 +38,7 @@ export function useAppReady() {
     }
 
     prepare();
-  }, []);
+  }, [fontsLoaded]);
 
   return isReady;
 }

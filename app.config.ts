@@ -81,6 +81,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...(Env.EXPO_PUBLIC_BUGSNAG_API_KEY
       ? ['@bugsnag/plugin-expo-eas-sourcemaps']
       : []),
+    [
+      'expo-font',
+      {
+        fonts: [
+          './assets/fonts/Inter-Regular.ttf',
+          './assets/fonts/Inter-Medium.ttf',
+          './assets/fonts/Inter-SemiBold.ttf',
+        ],
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
