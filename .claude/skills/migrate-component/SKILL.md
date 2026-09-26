@@ -24,6 +24,8 @@ Denis names the component(s) to migrate — **only migrate what he named**. Curr
 5. **New npm packages require Denis's approval.** If the old component uses a library we don't have, stop and ask (name, why, alternatives, native or JS-only).
 6. **Styling:** Unistyles v3 + theme tokens only. Map old hardcoded colours/sizes to the closest `theme.colors.*`, `theme.spacing()`, `theme.radius.*`, `Text` `variant`. List every value that had no exact match (old value → token used) so Denis can check. Ask when the choice changes the look noticeably.
 
+7. **Merge duplicates.** Before creating a new component, check `src/ui/components/` and the feature components: if the old component duplicates an existing one, extend that one with a variant/prop instead of adding another. Same if two old components overlap. Optimise old code when needed (typed props instead of `any`/raw data, theme tokens, no magic numbers or screen-% widths, a11y) and list every change.
+
 ## Where it goes
 
 - Used by several features in the old app → `src/ui/components/[Name]/` (test required, add to `src/ui/components/index.ts`)
