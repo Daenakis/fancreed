@@ -95,7 +95,11 @@ export function TextInput({
         ) : null}
       </View>
       {error ? (
-        <Text variant="bodySRegular" color="destructive" style={styles.error}>
+        <Text
+          variant="bodySRegular"
+          color={inverse ? 'destructiveMuted' : 'destructive'}
+          style={styles.error}
+        >
           {error}
         </Text>
       ) : null}
@@ -126,7 +130,9 @@ const styles = StyleSheet.create((theme) => ({
       borderRadius: theme.radius.md,
       paddingHorizontal: theme.spacing(4),
       borderColor: hasError
-        ? theme.colors.destructive
+        ? inverse
+          ? theme.colors.destructiveMuted
+          : theme.colors.destructive
         : focused
           ? focusBorder
           : idleBorder,
