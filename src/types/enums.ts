@@ -5,3 +5,7 @@
 //   User = 'user',
 //   UserProfile = 'user:profile',
 // }
+
+export enum QueryKey {
+  Leagues = 'leagues',
+}

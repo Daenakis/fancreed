@@ -1,4 +1,5 @@
 export { shouldRetryQuery } from './shouldRetryQuery';
+export { rowsAroundTeam, toStandingsRow } from './standings';
 export {
   getItem,
   removeItem,

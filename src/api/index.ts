@@ -1,5 +1,5 @@
 export { axiosInstance } from './client';
-export { authApi } from './endpoints';
+export { authApi, leaguesApi } from './endpoints';
 export {
   API_ERROR_MESSAGE_KEYS,
   type ApiErrorCode,

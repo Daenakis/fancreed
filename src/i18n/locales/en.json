@@ -63,7 +63,9 @@
   },
   "home": {
     "title": "Home",
-    "subtitle": "You are authenticated"
+    "subtitle": "You are authenticated",
+    "tableTitle": "STANDINGS",
+    "allTable": "Full table"
   },
   "errors": {
     "network": "No internet connection",
