@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Production-grade Expo SDK 54 / React Native 0.81 template — file-based routing (Expo Router), Unistyles v3 styling, React Query v5 server state, Zustand v5 client state, Zod v4 schemas, React Hook Form, MMKV storage, SecureStore for tokens, i18next localization, BugSnag error tracking.
+Production-grade Expo SDK 57 / React Native 0.86 template — file-based routing (Expo Router), Unistyles v3 styling, React Query v5 server state, Zustand v5 client state, Zod v4 schemas, React Hook Form, MMKV storage, SecureStore for tokens, i18next localization, BugSnag error tracking.
 
 > Node >= 22. Uses a Dev Client — **Expo Go will not work** (MMKV, Unistyles v3, Reanimated, BugSnag require native modules).
 
@@ -206,11 +206,12 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Fonts:** keep `useFonts` in `useAppReady`. The font files' PostScript names are `Inter18pt-*`; iOS only finds embedded fonts by that name, `useFonts` registers the `Inter-*` names the theme uses.
 - **Auth API contract is assumed:** `LoginResponse` / `RefreshResponse` in `src/types/api.ts` use `{ accessToken, refreshToken }` until the real backend is confirmed. Flag it if a task touches auth.
 - **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` and API URLs (`eas.json`).
+- **Autonomy:** run commands, installs and checks yourself without asking. Stop and ask Denis only for important/hard changes (breaking behaviour, visible UI change, new npm packages that add functionality, anything outward-facing).
 - **Workflows:** use the project skills — `/migrate-component`, `/new-feature`, `/new-component`, `/migrate-screen`, `/review`, `/setup`.
 
 ### Migration from the old app (Denis's rules)
 
-- **Old project:** _path to be added_ — **READ-ONLY**. Only read it; never modify, format, install or run anything that changes it.
+- **Old project:** `~/Documents/ruhOld` (sibling of this repo `~/Documents/fancreed`; RN 0.63) — the old app we take components from. **READ-ONLY**. Only read it; never modify, format, install or run anything that changes it.
 - **Scope:** migrate only the components Denis names in his message (currently one per request). Never pick extras.
 - **Structure is protected:** every component is exactly `Name.tsx` + `index.ts` + `types.ts` (every component has props). Sub-components that aren't worth their own folder live inside `Name.tsx`. Enforced by `yarn check:structure` (runs in `yarn lint` and pre-commit).
 - **No Storybook** — never migrate stories, `.storybook/`, or story-only code.
@@ -218,6 +219,8 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Styles:** map old hardcoded values to the closest theme token; list every non-exact match. Ask when the look would change noticeably.
 - **New npm packages** require Denis's approval — ask first.
 - **Tests** for every migrated component, following best practices in `src/docs/testing.md`.
+- **Visual check:** render the component on the simulator (Maestro at `~/.maestro/bin/maestro`, screenshots), exercise every prop and confirm its effect; compare with the old component. Say what couldn't be checked.
+- **Ask Denis** only when a decision is critical (visible look change, prop/API change, new package); otherwise decide and list it.
 
 ## Reference Docs
 
