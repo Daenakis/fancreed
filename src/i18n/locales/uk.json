@@ -116,5 +116,16 @@
     "lost": "П",
     "points": "О",
     "rowLabel": "{{rank}}. {{team}}: ігор {{played}}, перемог {{won}}, нічиїх {{drawn}}, поразок {{lost}}, очок {{points}}"
+  },
+  "fanCard": {
+    "title": "FAN CARD",
+    "season": "Сезон",
+    "empty": "Заповніть усі поля у Профілі для повного доступу до FanCard",
+    "toProfile": "Перейти у Профіль",
+    "level": "{{level}} CLUB",
+    "flipHint": "Натисніть, щоб показати штрихкод",
+    "bronze": "BRONZE",
+    "silver": "SILVER",
+    "gold": "GOLD"
   }
 }

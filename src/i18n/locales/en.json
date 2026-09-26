@@ -114,5 +114,16 @@
     "lost": "L",
     "points": "PTS",
     "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points"
+  },
+  "fanCard": {
+    "title": "FAN CARD",
+    "season": "Season",
+    "empty": "Fill in all the fields in your profile to get full access to the FanCard",
+    "toProfile": "Go to Profile",
+    "level": "{{level}} CLUB",
+    "flipHint": "Tap to show the barcode",
+    "bronze": "BRONZE",
+    "silver": "SILVER",
+    "gold": "GOLD"
   }
 }

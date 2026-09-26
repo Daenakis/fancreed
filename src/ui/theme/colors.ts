@@ -25,6 +25,10 @@ export const palette = {
   whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
   // Shadows
   blackAlpha25: 'rgba(0, 0, 0, 0.25)',
+  // Loyalty levels (fan card)
+  bronze: '#A36117',
+  silver: '#C6C8CA',
+  gold: '#D19F11',
   // Red
   red300: '#CF0000',
   red200: '#FFA8A8',
@@ -57,6 +61,12 @@ export const lightColors = {
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
   translucentSurface: palette.whiteAlpha50,
+  // Dark card surfaces that stay dark in both themes (fan card)
+  inverseSurface: palette.black,
+  onInverseSurface: palette.white,
+  loyaltyBronze: palette.bronze,
+  loyaltySilver: palette.silver,
+  loyaltyGold: palette.gold,
 } as const;
 
 export const darkColors = {
@@ -85,6 +95,12 @@ export const darkColors = {
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
   translucentSurface: palette.whiteAlpha50,
+  // Dark card surfaces that stay dark in both themes (fan card)
+  inverseSurface: palette.black,
+  onInverseSurface: palette.white,
+  loyaltyBronze: palette.bronze,
+  loyaltySilver: palette.silver,
+  loyaltyGold: palette.gold,
 } as const;
 
 export type ColorToken = keyof typeof lightColors;
