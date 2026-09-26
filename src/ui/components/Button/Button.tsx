@@ -1,75 +1,144 @@
-import { Image, Pressable } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { ActivityIndicator, Image, Pressable } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+
+import type { ColorToken, TypographyVariant } from '@/ui/theme';
 
 import { Text } from '../Text';
-import type { ButtonProps } from './types';
+import type { ButtonProps, ButtonSize, ButtonVariant } from './types';
+
+type Colors = {
+  background: ColorToken;
+  label: ColorToken;
+  border?: ColorToken;
+};
+
+/** Resolves the colour set for a variant and its current state. */
+function getColors(
+  variant: ButtonVariant,
+  state: { selected: boolean; disabled: boolean },
+  custom: { background: ColorToken; label: ColorToken },
+): Colors {
+  switch (variant) {
+    case 'outline':
+      return state.selected
+        ? {
+            background: 'primary',
+            label: 'primaryForeground',
+            border: 'primary',
+          }
+        : { background: 'background', label: 'foreground', border: 'border' };
+    case 'brand':
+      return state.disabled
+        ? { background: 'brandStrong', label: 'brandMutedForeground' }
+        : { background: 'onBrand', label: 'brand' };
+    default:
+      return custom;
+  }
+}
+
+function getLabelVariant(
+  variant: ButtonVariant,
+  size: ButtonSize,
+): TypographyVariant {
+  if (size === 'sm') return 'h4Semibold';
+  if (variant === 'brand') return 'bodyMMedium';
+  if (variant === 'outline') return 'bodyLMedium';
+  return 'bodyLRegular';
+}
 
 /**
- * Pill button with a leading image. Also works as a selectable option:
- * pass `choosen` + `onChoose` to render it as a choice in a list.
+ * The app's button. One component for actions, choices and brand screens —
+ * pick the look with `variant`, the density with `size`.
  *
  * @example
- * <Button source={saveIcon} text={t('save')} onPress={save} />
- * <Button source={icon} text={label} choosen={isSelected} onChoose={select} />
+ * <Button text={t('common.save')} onPress={save} loading={isPending} />
+ * <Button variant="outline" text={label} image={icon} selected={isActive} onPress={select} />
+ * <Button variant="brand" fullWidth text={t('auth.signIn')} disabled={!isValid} onPress={submit} />
  */
 export function Button({
-  source,
   text,
+  variant = 'solid',
+  size = 'md',
+  image,
+  selected = false,
+  loading = false,
   disabled = false,
-  onPress,
-  onChoose,
-  choosen = false,
+  fullWidth = false,
+  backgroundColor = 'foreground',
+  textColor = 'background',
   style,
   ...props
 }: ButtonProps) {
+  const { theme } = useUnistyles();
+  const colors = getColors(
+    variant,
+    { selected, disabled },
+    { background: backgroundColor, label: textColor },
+  );
+  // Brand buttons show "disabled" with colours; the others dim.
+  const dimmed = disabled && variant !== 'brand';
+
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled, selected: choosen }}
-      disabled={disabled}
-      onPress={onChoose ?? onPress}
+      accessibilityLabel={text}
+      accessibilityState={{
+        disabled: disabled || loading,
+        busy: loading,
+        selected: variant === 'outline' ? selected : undefined,
+      }}
+      disabled={disabled || loading}
       style={({ pressed }) => [
-        styles.container(choosen),
+        styles.button(size, colors.background, colors.border),
+        fullWidth && styles.fullWidth,
+        dimmed && styles.dimmed,
         pressed && styles.pressed,
         style,
       ]}
       {...props}
     >
-      <Image source={source} style={styles.image} />
-      <Text
-        variant="bodyLMedium"
-        color={choosen ? 'primaryForeground' : 'foreground'}
-        style={styles.text}
-      >
-        {text}
-      </Text>
+      {loading ? (
+        <ActivityIndicator color={theme.colors[colors.label]} />
+      ) : (
+        <>
+          {image ? <Image source={image} style={styles.image} /> : null}
+          <Text variant={getLabelVariant(variant, size)} color={colors.label}>
+            {text}
+          </Text>
+        </>
+      )}
     </Pressable>
   );
 }
 
 Button.displayName = 'Button';
 
-const styles = StyleSheet.create((theme, rt) => ({
-  container: (choosen: boolean) => ({
+const styles = StyleSheet.create((theme) => ({
+  button: (size: ButtonSize, background: ColorToken, border?: ColorToken) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: rt.screen.width * 0.6,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+    alignSelf: 'center',
+    minHeight: size === 'sm' ? undefined : theme.spacing(12),
+    paddingVertical: size === 'sm' ? theme.spacing(1) : theme.spacing(2.5),
+    paddingHorizontal: size === 'sm' ? theme.spacing(4) : theme.spacing(6),
     borderRadius: theme.radius.md,
-    backgroundColor: choosen ? theme.colors.primary : theme.colors.background,
+    borderWidth: border ? 1 : 0,
+    borderColor: border ? theme.colors[border] : undefined,
+    backgroundColor: theme.colors[background],
   }),
+  fullWidth: {
+    alignSelf: 'stretch',
+  },
+  dimmed: {
+    opacity: 0.6,
+  },
   pressed: {
-    opacity: 0.2,
+    opacity: 0.7,
   },
   image: {
     width: theme.spacing(6),
     height: theme.spacing(6),
     marginRight: theme.spacing(2.5),
-  },
-  text: {
-    paddingVertical: theme.spacing(2.5),
-    textAlign: 'center',
   },
 }));

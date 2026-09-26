@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text, TextInput } from '@/ui/components';
+import { Button, Text, TextInput } from '@/ui/components';
 
 import { type SignInFormValues, signInSchema } from '@/schemas';
 
 import { useFieldErrorText } from '../../hooks';
-import { AuthButton } from '../AuthButton';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignInFormProps } from './types';
@@ -91,8 +90,10 @@ export function SignInForm({
           {t('auth.forgotPassword')}
         </Text>
       </Pressable>
-      <AuthButton
-        title={t('auth.signIn')}
+      <Button
+        variant="brand"
+        fullWidth
+        text={t('auth.signIn')}
         disabled={!isValid}
         loading={submitting}
         onPress={submit}

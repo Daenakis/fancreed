@@ -1,4 +1,3 @@
-export { AuthButton, type AuthButtonProps } from './AuthButton';
 export { AuthFooterLink, type AuthFooterLinkProps } from './AuthFooterLink';
 export { AuthLayout, type AuthLayoutProps } from './AuthLayout';
 export { CodeInput, type CodeInputProps } from './CodeInput';

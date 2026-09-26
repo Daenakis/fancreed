@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { TextInput } from '@/ui/components';
+import { Button, TextInput } from '@/ui/components';
 
 import { useLoginMutation, useRecoverPasswordMutation } from '@/hooks';
 
@@ -14,12 +14,7 @@ import { usePendingActivationStore } from '@/store';
 
 import { type NewPasswordFormValues, newPasswordSchema } from '@/schemas';
 
-import {
-  AuthButton,
-  AuthFooterLink,
-  AuthLayout,
-  FormError,
-} from '../../components';
+import { AuthFooterLink, AuthLayout, FormError } from '../../components';
 import { useFieldErrorText } from '../../hooks';
 
 /** Step 3 of password recovery: set the new password, then sign in with it. */
@@ -135,8 +130,10 @@ export function NewPasswordScreen() {
           />
         )}
       />
-      <AuthButton
-        title={t('auth.save')}
+      <Button
+        variant="brand"
+        fullWidth
+        text={t('auth.save')}
         disabled={!isValid}
         loading={recoverPassword.isPending || login.isPending}
         onPress={handleSubmit(onSubmit)}

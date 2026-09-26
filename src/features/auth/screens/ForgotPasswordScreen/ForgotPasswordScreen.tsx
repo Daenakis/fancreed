@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { TextInput } from '@/ui/components';
+import { Button, TextInput } from '@/ui/components';
 
 import { useForgotPasswordMutation } from '@/hooks';
 
@@ -12,12 +12,7 @@ import { toFormError } from '@/api';
 
 import { type ForgotPasswordFormValues, forgotPasswordSchema } from '@/schemas';
 
-import {
-  AuthButton,
-  AuthFooterLink,
-  AuthLayout,
-  FormError,
-} from '../../components';
+import { AuthFooterLink, AuthLayout, FormError } from '../../components';
 import { useFieldErrorText } from '../../hooks';
 
 /** Step 1 of password recovery: ask where to send the code. */
@@ -88,8 +83,10 @@ export function ForgotPasswordScreen() {
           />
         )}
       />
-      <AuthButton
-        title={t('auth.resetPassword')}
+      <Button
+        variant="brand"
+        fullWidth
+        text={t('auth.resetPassword')}
         disabled={!isValid}
         loading={forgotPassword.isPending}
         onPress={submit}

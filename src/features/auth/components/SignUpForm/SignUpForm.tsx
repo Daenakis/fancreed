@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { TextInput } from '@/ui/components';
+import { Button, TextInput } from '@/ui/components';
 
 import {
   type SignUpFormInput,
@@ -13,7 +13,6 @@ import {
 } from '@/schemas';
 
 import { useFieldErrorText } from '../../hooks';
-import { AuthButton } from '../AuthButton';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignUpFormProps } from './types';
@@ -104,8 +103,10 @@ export function SignUpForm({
           />
         )}
       />
-      <AuthButton
-        title={t('auth.signUp')}
+      <Button
+        variant="brand"
+        fullWidth
+        text={t('auth.signUp')}
         disabled={!isValid}
         loading={submitting}
         onPress={submit}
