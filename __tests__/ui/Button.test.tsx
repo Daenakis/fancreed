@@ -163,4 +163,24 @@ describe('Button', () => {
       ).toEqual(expectedOrder);
     },
   );
+
+  describe('ghost with icon on top (old IconText)', () => {
+    it('has no background and stacks the icon above a small caption', () => {
+      const { getByRole, getByText, toJSON } = render(
+        <Button variant="ghost" icon="bell" iconPosition="top" text="Remind" />,
+      );
+      const style = styleOf(getByRole('button'));
+      const button = toJSON() as { children: { type: string }[] };
+
+      expect(style.backgroundColor).toBe('transparent');
+      expect(style.flexDirection).toBe('column');
+      expect(
+        button.children.map((c) => (c.type === 'Text' ? 'label' : 'icon')),
+      ).toEqual(['icon', 'label']);
+      expect(styleOf(getByText('Remind'))).toMatchObject({
+        ...lightTheme.typography.bodySRegular,
+        color: colors.foreground,
+      });
+    });
+  });
 });

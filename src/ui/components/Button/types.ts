@@ -16,8 +16,9 @@ import type { ColorToken } from '@/ui/theme';
  *   filled choice (e.g. one option in a list).
  * - `brand`: for brand-green screens (auth) — white when active, dark green
  *   when disabled.
+ * - `ghost`: no background or border, e.g. small icon actions (Share, Remind).
  */
-export type ButtonVariant = 'solid' | 'outline' | 'brand';
+export type ButtonVariant = 'solid' | 'outline' | 'brand' | 'ghost';
 
 export type ButtonSize = 'md' | 'sm';
 
@@ -35,8 +36,8 @@ export type ButtonProps = Omit<
   image?: ImageSourcePropType;
   /** Icon from the app icon set, tinted like the label. */
   icon?: IconName;
-  /** Side of the label the icon goes on. Defaults to `left`. */
-  iconPosition?: 'left' | 'right';
+  /** Where the icon goes: `top` stacks it above a small caption. Defaults to `left`. */
+  iconPosition?: 'left' | 'right' | 'top';
   /** Choice state; fills an `outline` button. Defaults to `false`. */
   selected?: boolean;
   /** Spinner instead of the label; blocks presses. Defaults to `false`. */
@@ -47,7 +48,7 @@ export type ButtonProps = Omit<
   fullWidth?: boolean;
   /** `solid` only: theme colour of the button. Defaults to `foreground`. */
   backgroundColor?: ColorToken;
-  /** `solid` only: theme colour of the label. Defaults to `background`. */
+  /** `solid`/`ghost`: theme colour of the label. Defaults to `background` (solid) or `foreground` (ghost). */
   textColor?: ColorToken;
   style?: StyleProp<ViewStyle>;
   ref?: Ref<View>;

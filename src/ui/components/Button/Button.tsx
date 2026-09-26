@@ -8,7 +8,8 @@ import { Text } from '../Text';
 import type { ButtonProps, ButtonSize, ButtonVariant } from './types';
 
 type Colors = {
-  background: ColorToken;
+  /** `null` = transparent. */
+  background: ColorToken | null;
   label: ColorToken;
   border?: ColorToken;
 };
@@ -28,6 +29,8 @@ function getColors(
             border: 'primary',
           }
         : { background: 'background', label: 'foreground', border: 'border' };
+    case 'ghost':
+      return { background: null, label: custom.label };
     case 'brand':
       return state.disabled
         ? { background: 'brandStrong', label: 'brandMutedForeground' }
@@ -40,7 +43,9 @@ function getColors(
 function getLabelVariant(
   variant: ButtonVariant,
   size: ButtonSize,
+  iconOnTop: boolean,
 ): TypographyVariant {
+  if (iconOnTop) return 'bodySRegular';
   if (size === 'sm') return 'h4Semibold';
   if (variant === 'brand') return 'bodyMMedium';
   if (variant === 'outline') return 'bodyLMedium';
@@ -55,6 +60,7 @@ function getLabelVariant(
  * <Button text={t('common.save')} onPress={save} loading={isPending} />
  * <Button variant="outline" text={label} image={icon} selected={isActive} onPress={select} />
  * <Button variant="outline" text={t('club.uploadDocument')} icon="upload" iconPosition="right" onPress={pick} />
+ * <Button variant="ghost" icon="bell" iconPosition="top" text={t('match.remind')} onPress={remind} />
  * <Button variant="brand" fullWidth text={t('auth.signIn')} disabled={!isValid} onPress={submit} />
  */
 export function Button({
@@ -69,21 +75,33 @@ export function Button({
   disabled = false,
   fullWidth = false,
   backgroundColor = 'foreground',
-  textColor = 'background',
+  textColor,
   style,
   ...props
 }: ButtonProps) {
   const { theme } = useUnistyles();
+  const ghost = variant === 'ghost';
+  const iconOnTop = iconPosition === 'top';
   const colors = getColors(
     variant,
     { selected, disabled },
-    { background: backgroundColor, label: textColor },
+    {
+      background: backgroundColor,
+      // Ghost buttons sit on the screen background: label in text colour.
+      label: textColor ?? (ghost ? 'foreground' : 'background'),
+    },
   );
   const iconElement = icon ? (
     <Icon
       name={icon}
       color={theme.colors[colors.label]}
-      style={iconPosition === 'left' ? styles.iconLeft : styles.iconRight}
+      style={
+        iconOnTop
+          ? styles.iconTop
+          : iconPosition === 'left'
+            ? styles.iconLeft
+            : styles.iconRight
+      }
     />
   ) : null;
   // Brand buttons show "disabled" with colours; the others dim.
@@ -101,6 +119,8 @@ export function Button({
       disabled={disabled || loading}
       style={({ pressed }) => [
         styles.button(size, colors.background, colors.border),
+        ghost && styles.ghost,
+        iconOnTop && styles.column,
         fullWidth && styles.fullWidth,
         dimmed && styles.dimmed,
         pressed && styles.pressed,
@@ -113,8 +133,12 @@ export function Button({
       ) : (
         <>
           {image ? <Image source={image} style={styles.image} /> : null}
-          {icon && iconPosition === 'left' ? iconElement : null}
-          <Text variant={getLabelVariant(variant, size)} color={colors.label}>
+          {icon && iconPosition !== 'right' ? iconElement : null}
+          <Text
+            variant={getLabelVariant(variant, size, iconOnTop)}
+            color={colors.label}
+            style={iconOnTop ? styles.centered : undefined}
+          >
             {text}
           </Text>
           {icon && iconPosition === 'right' ? iconElement : null}
@@ -127,7 +151,11 @@ export function Button({
 Button.displayName = 'Button';
 
 const styles = StyleSheet.create((theme) => ({
-  button: (size: ButtonSize, background: ColorToken, border?: ColorToken) => ({
+  button: (
+    size: ButtonSize,
+    background: ColorToken | null,
+    border?: ColorToken,
+  ) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -138,8 +166,23 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.md,
     borderWidth: border ? 1 : 0,
     borderColor: border ? theme.colors[border] : undefined,
-    backgroundColor: theme.colors[background],
+    backgroundColor: background ? theme.colors[background] : 'transparent',
   }),
+  // No box: just the content, compact touch area.
+  ghost: {
+    minHeight: undefined,
+    paddingVertical: theme.spacing(1),
+    paddingHorizontal: theme.spacing(1),
+  },
+  column: {
+    flexDirection: 'column',
+  },
+  iconTop: {
+    marginBottom: theme.spacing(1),
+  },
+  centered: {
+    textAlign: 'center',
+  },
   fullWidth: {
     alignSelf: 'stretch',
   },
