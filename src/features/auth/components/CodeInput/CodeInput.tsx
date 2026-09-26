@@ -4,7 +4,6 @@ import { Pressable, TextInput, View } from 'react-native';
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
-  useReducedMotion,
   useSharedValue,
   withDelay,
   withSequence,
@@ -14,6 +13,8 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Text } from '@/ui/components';
 
+import { SHAKE_STEP_MS, SHAKE_STEPS, useShakeAnimation } from '@/hooks';
+
 import type { CodeBoxProps, CodeInputProps } from './types';
 
 const DISALLOWED = {
@@ -21,9 +22,6 @@ const DISALLOWED = {
   alphanumeric: /\W/g,
 } as const;
 
-const SHAKE_OFFSET = 8;
-const SHAKE_STEP_MS = 50;
-const SHAKE_STEPS = 5;
 /** Borders fade back to normal once the shake is over. */
 const ERROR_FADE_MS = 150;
 const BUSY_OPACITY = 0.5;
@@ -48,32 +46,23 @@ export function CodeInput({
   const inputRef = useRef<TextInput>(null);
   const [focused, setFocused] = useState(false);
   const activeIndex = Math.min(value.length, length - 1);
-  const reduceMotion = useReducedMotion();
-  const shakeX = useSharedValue(0);
   const errorProgress = useSharedValue(0);
 
-  // Each new error: borders turn red and the row shakes, then borders
-  // fade back to their normal colour.
+  // Each new error: borders turn red while the row shakes, then fade back.
   useEffect(() => {
     if (!error) return;
-    const shakeDuration = SHAKE_STEP_MS * SHAKE_STEPS;
     errorProgress.value = withSequence(
       withTiming(1, { duration: 0 }),
-      withDelay(shakeDuration, withTiming(0, { duration: ERROR_FADE_MS })),
+      withDelay(
+        SHAKE_STEP_MS * SHAKE_STEPS,
+        withTiming(0, { duration: ERROR_FADE_MS }),
+      ),
     );
-    if (reduceMotion) return;
-    shakeX.value = withSequence(
-      withTiming(-SHAKE_OFFSET, { duration: SHAKE_STEP_MS }),
-      withTiming(SHAKE_OFFSET, { duration: SHAKE_STEP_MS }),
-      withTiming(-SHAKE_OFFSET, { duration: SHAKE_STEP_MS }),
-      withTiming(SHAKE_OFFSET, { duration: SHAKE_STEP_MS }),
-      withTiming(0, { duration: SHAKE_STEP_MS }),
-    );
-  }, [error, reduceMotion, shakeX, errorProgress]);
+  }, [error, errorProgress]);
 
+  const shakeStyle = useShakeAnimation(error);
   const rowStyle = useAnimatedStyle(() => ({
     opacity: withTiming(busy ? BUSY_OPACITY : 1, { duration: BUSY_FADE_MS }),
-    transform: [{ translateX: shakeX.value }],
   }));
 
   const setRefs = (node: TextInput | null) => {
@@ -84,7 +73,10 @@ export function CodeInput({
 
   return (
     <View style={style}>
-      <Animated.View accessibilityState={{ busy }} style={rowStyle}>
+      <Animated.View
+        accessibilityState={{ busy }}
+        style={[rowStyle, shakeStyle]}
+      >
         <Pressable
           accessible={false}
           onPress={() => inputRef.current?.focus()}
