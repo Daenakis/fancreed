@@ -6,6 +6,7 @@ export {
   type ButtonSize,
   type ButtonVariant,
 } from './Button';
+export { Carousel, type CarouselProps } from './Carousel';
 export {
   ChoiceGroup,
   type ChoiceGroupProps,
