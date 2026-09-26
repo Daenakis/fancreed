@@ -28,6 +28,14 @@ const SCHEMES = {
   prod: 'fancreed',
 } as const;
 
+// Same backend for every build until staging/production servers exist.
+// EXPO_PUBLIC_API_URL (e.g. in .env) overrides it for local testing.
+const API_URLS = {
+  dev: 'https://app.fancreed.com/api/',
+  stg: 'https://app.fancreed.com/api/',
+  prod: 'https://app.fancreed.com/api/',
+} as const;
+
 const NAME = 'Fancreed';
 
 // Check if strict validation is required (before prebuild)
@@ -43,7 +51,8 @@ const _env: EnvType = {
   EXPO_PUBLIC_BUNDLE_ID: BUNDLE_IDS[EXPO_PUBLIC_RUN_MODE],
   EXPO_PUBLIC_PACKAGE: PACKAGES[EXPO_PUBLIC_RUN_MODE],
 
-  EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL ?? '',
+  EXPO_PUBLIC_API_URL:
+    process.env.EXPO_PUBLIC_API_URL || API_URLS[EXPO_PUBLIC_RUN_MODE],
   EXPO_PUBLIC_BUGSNAG_API_KEY: process.env.EXPO_PUBLIC_BUGSNAG_API_KEY ?? '',
 
   EXPO_PUBLIC_VERSION: packageJSON.version,

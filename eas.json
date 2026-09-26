@@ -15,8 +15,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_RUN_MODE": "dev",
-        "EXPO_PUBLIC_API_URL": "https://api.placeholder.com"
+        "EXPO_PUBLIC_RUN_MODE": "dev"
       }
     },
     "development-simulator": {
@@ -29,8 +28,7 @@
       "extends": "base",
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_RUN_MODE": "stg",
-        "EXPO_PUBLIC_API_URL": "https://api.placeholder.com"
+        "EXPO_PUBLIC_RUN_MODE": "stg"
       },
       "android": {
         "buildType": "apk"
@@ -40,8 +38,7 @@
       "extends": "base",
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_RUN_MODE": "prod",
-        "EXPO_PUBLIC_API_URL": "https://api.placeholder.com"
+        "EXPO_PUBLIC_RUN_MODE": "prod"
       }
     }
   },
