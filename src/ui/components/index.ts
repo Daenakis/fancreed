@@ -7,6 +7,7 @@ export {
 } from './Button';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { Icon, type IconProps } from './Icon';
+export { PlayerItem, type PlayerItemProps } from './PlayerItem';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export { Text, type TextProps } from './Text';
 export {
