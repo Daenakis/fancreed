@@ -15,6 +15,13 @@ export const palette = {
   mintGreen300: '#66CA96',
   mintGreen200: '#CCEDDC',
   mintGreen100: '#F5FBF8',
+  // Brand green (auth / splash backgrounds)
+  brandGreen300: '#3F8652',
+  brandGreen200: '#58AF6C',
+  // White overlays for content on brand backgrounds
+  whiteAlpha70: 'rgba(255, 255, 255, 0.7)',
+  whiteAlpha30: 'rgba(255, 255, 255, 0.3)',
+  whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
   // Red
   red300: '#CF0000',
   red200: '#FFA8A8',
@@ -36,6 +43,15 @@ export const lightColors = {
   destructiveMuted: palette.red100,
   border: palette.grey200,
   ring: palette.green100,
+  // Brand screens (sign-in, splash) look the same in both themes
+  brand: palette.brandGreen200,
+  brandStrong: palette.brandGreen300,
+  brandSurface: palette.whiteAlpha13,
+  brandBorder: palette.whiteAlpha30,
+  brandMutedForeground: palette.whiteAlpha70,
+  onBrand: palette.white,
+  socialSurface: palette.white,
+  socialForeground: palette.black,
 } as const;
 
 export const darkColors = {
@@ -53,6 +69,15 @@ export const darkColors = {
   destructiveMuted: palette.red100,
   border: palette.grey400,
   ring: palette.green100,
+  // Brand screens (sign-in, splash) look the same in both themes
+  brand: palette.brandGreen200,
+  brandStrong: palette.brandGreen300,
+  brandSurface: palette.whiteAlpha13,
+  brandBorder: palette.whiteAlpha30,
+  brandMutedForeground: palette.whiteAlpha70,
+  onBrand: palette.white,
+  socialSurface: palette.white,
+  socialForeground: palette.black,
 } as const;
 
 export type ColorToken = keyof typeof lightColors;
