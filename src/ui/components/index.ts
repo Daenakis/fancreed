@@ -10,6 +10,11 @@ export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { Icon, type IconProps } from './Icon';
 export { PlayerItem, type PlayerItemProps } from './PlayerItem';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
+export {
+  type StandingsRowData,
+  StandingsTable,
+  type StandingsTableProps,
+} from './StandingsTable';
 export { Text, type TextProps } from './Text';
 export {
   TextInput,

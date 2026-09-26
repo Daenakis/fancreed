@@ -104,5 +104,15 @@
     "label": "Photo",
     "add": "Add photo",
     "change": "Change photo"
+  },
+  "standings": {
+    "place": "#",
+    "club": "Club",
+    "played": "P",
+    "won": "W",
+    "drawn": "D",
+    "lost": "L",
+    "points": "PTS",
+    "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points"
   }
 }

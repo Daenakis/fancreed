@@ -106,5 +106,15 @@
     "label": "Фото",
     "add": "Додати фото",
     "change": "Змінити фото"
+  },
+  "standings": {
+    "place": "МІСЦЕ",
+    "club": "КОМАНДА",
+    "played": "І",
+    "won": "В",
+    "drawn": "Н",
+    "lost": "П",
+    "points": "О",
+    "rowLabel": "{{rank}}. {{team}}: ігор {{played}}, перемог {{won}}, нічиїх {{drawn}}, поразок {{lost}}, очок {{points}}"
   }
 }
