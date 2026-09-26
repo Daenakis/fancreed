@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { create } from 'axios';
 
 import * as T from '@/types/api';
 
@@ -14,13 +14,13 @@ const defaults = {
   },
 };
 
-export const axiosInstance = axios.create(defaults);
+export const axiosInstance = create(defaults);
 
 /**
  * Bare client used only for the refresh call. It has no interceptors,
  * so a 401 from the refresh endpoint can't trigger another refresh.
  */
-const refreshClient = axios.create(defaults);
+const refreshClient = create(defaults);
 
 setupAuthInterceptors(axiosInstance, (refreshToken) =>
   fetcher(

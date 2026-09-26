@@ -1,6 +1,7 @@
-import axios, {
+import {
   AxiosError,
   type AxiosResponse,
+  create,
   type InternalAxiosRequestConfig,
 } from 'axios';
 
@@ -41,7 +42,7 @@ function createClient(handler: Handler) {
   const adapter = jest.fn((config: InternalAxiosRequestConfig) =>
     respond(config, handler(config)),
   );
-  const instance = axios.create({ adapter });
+  const instance = create({ adapter });
   const refreshTokens = jest.fn();
   setupAuthInterceptors(instance, refreshTokens);
   return { instance, adapter, refreshTokens };

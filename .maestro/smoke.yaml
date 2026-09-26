@@ -1,6 +1,5 @@
 # Smoke test: sign-in → home → sign-out → back to sign-in
-# Replace the appId below with your real dev bundle id before running.
-appId: com.testexpoowner.dev # TODO: replace with your dev bundle id (see app.config.ts)
+appId: com.fancreed.app.dev # dev bundle id (see env.ts)
 ---
 # Launch the app from scratch so the auth state is cleared.
 - launchApp:

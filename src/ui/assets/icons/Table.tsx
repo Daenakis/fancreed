@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
-const SvgTabl = (props: SvgProps) => (
+const SvgTable = (props: SvgProps) => (
   <Svg width={20} height={20} fill="none" viewBox="0 0 20 20" {...props}>
     <Path
       stroke="currentColor"
@@ -12,4 +12,4 @@ const SvgTabl = (props: SvgProps) => (
     />
   </Svg>
 );
-export default SvgTabl;
+export default SvgTable;

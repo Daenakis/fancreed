@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
-const SvgBall1 = (props: SvgProps) => (
+const SvgVolleyball = (props: SvgProps) => (
   <Svg width={20} height={20} fill="none" viewBox="0 0 20 20" {...props}>
     <Path
       stroke="currentColor"
@@ -33,4 +33,4 @@ const SvgBall1 = (props: SvgProps) => (
     />
   </Svg>
 );
-export default SvgBall1;
+export default SvgVolleyball;

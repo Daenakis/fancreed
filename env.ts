@@ -9,24 +9,26 @@ const EXPO_PUBLIC_RUN_MODE = (process.env.EXPO_PUBLIC_RUN_MODE ??
   'dev') as EnvType['EXPO_PUBLIC_RUN_MODE'];
 
 const BUNDLE_IDS = {
-  dev: 'com.testexpoowner.dev',
-  stg: 'com.testexpoowner.stg',
-  prod: 'com.testexpoowner',
+  dev: 'com.fancreed.app.dev',
+  stg: 'com.fancreed.app.stg',
+  prod: 'com.fancreed.app',
 } as const;
 
 const PACKAGES = {
-  dev: 'com.testexpoowner.dev',
-  stg: 'com.testexpoowner.stg',
-  prod: 'com.testexpoowner',
+  dev: 'com.fancreed.app.dev',
+  stg: 'com.fancreed.app.stg',
+  prod: 'com.fancreed.app',
 } as const;
 
+// Unique per environment so deep links open the right build when several
+// are installed on one device.
 const SCHEMES = {
-  dev: 'testexpo-owner',
-  stg: 'testexpo-owner.stg',
-  prod: 'testexpo-owner',
+  dev: 'fancreed-dev',
+  stg: 'fancreed-stg',
+  prod: 'fancreed',
 } as const;
 
-const NAME = 'testexpo-owner';
+const NAME = 'Fancreed';
 
 // Check if strict validation is required (before prebuild)
 const STRICT_ENV_VALIDATION = process.env.STRICT_ENV_VALIDATION === 'true';

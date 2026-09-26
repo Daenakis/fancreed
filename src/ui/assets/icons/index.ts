@@ -5,7 +5,6 @@ import ArrowLeft from './ArrowLeft';
 import ArrowRight from './ArrowRight';
 import ArrowUp from './ArrowUp';
 import Ball from './Ball';
-import Ball1 from './Ball1';
 import Bell from './Bell';
 import Bus from './Bus';
 import Calendar from './Calendar';
@@ -48,7 +47,7 @@ import Sort from './Sort';
 import StarEmpty from './StarEmpty';
 import StarFilled from './StarFilled';
 import Support from './Support';
-import Tabl from './Tabl';
+import Table from './Table';
 import Team from './Team';
 import Telegram from './Telegram';
 import Tiktok from './Tiktok';
@@ -59,6 +58,7 @@ import UserMinus from './UserMinus';
 import UserPlus from './UserPlus';
 import Verification from './Verification';
 import Video from './Video';
+import Volleyball from './Volleyball';
 import Website from './Website';
 import Woman from './Woman';
 import XTwitter from './XTwitter';
@@ -71,7 +71,6 @@ export const ICONS = {
   arrowRight: ArrowRight,
   arrowUp: ArrowUp,
   ball: Ball,
-  ball1: Ball1,
   bell: Bell,
   bus: Bus,
   calendar: Calendar,
@@ -115,7 +114,6 @@ export const ICONS = {
   starFilled: StarFilled,
   support: Support,
   tShirt: TShirt,
-  tabl: Tabl,
   team: Team,
   telegram: Telegram,
   tiktok: Tiktok,
@@ -128,6 +126,8 @@ export const ICONS = {
   website: Website,
   woman: Woman,
   xTwitter: XTwitter,
+  table: Table,
+  volleyball: Volleyball,
 } as const;
 
 export type IconName = keyof typeof ICONS;

@@ -30,7 +30,7 @@ yarn e2e
 
 ## Set the correct `appId`
 
-Open `.maestro/smoke.yaml` and replace `com.testexpoowner.dev` with your actual dev bundle id. You can find it in `app.config.ts` under `ios.bundleIdentifier` / `android.package` for the `development` profile.
+`.maestro/smoke.yaml` targets the dev build (`com.fancreed.app.dev`). If the bundle ids change, update `appId` there to match `BUNDLE_IDS.dev` in `env.ts`.
 
 ## Flows
 

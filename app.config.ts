@@ -32,7 +32,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   owner: EXPO_ACCOUNT_OWNER,
 
   scheme: Env.EXPO_PUBLIC_SCHEME,
-  slug: 'your-app-slug', // ⚠️ REPLACE with your app slug
+  slug: 'fancreed',
 
   version: Env.EXPO_PUBLIC_VERSION.toString(),
 

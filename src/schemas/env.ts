@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 
 export const envSchema = z.object({
   EXPO_PUBLIC_RUN_MODE: z.enum(['dev', 'stg', 'prod']),
