@@ -4,10 +4,24 @@ import './mocks/i18next';
 import './mocks/mmkv';
 import './mocks/react-query';
 
-jest.mock('react-native-reanimated', () =>
+jest.mock(
+  'react-native-safe-area-context',
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  require('react-native-reanimated/mock'),
+  () => require('react-native-safe-area-context/jest/mock').default,
 );
+
+// Reanimated 4 loads react-native-worklets natively — mock it first.
+jest.mock('react-native-worklets', () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('react-native-worklets/lib/module/mock'),
+);
+
+jest.mock('react-native-reanimated', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  ...require('react-native-reanimated/mock'),
+  // Missing from the official mock.
+  useReducedMotion: () => false,
+}));
 
 beforeEach(() => {
   jest.clearAllMocks();
