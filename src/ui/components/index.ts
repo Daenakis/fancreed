@@ -8,8 +8,17 @@ export {
 } from './Button';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { Icon, type IconProps } from './Icon';
+export {
+  ImageCard,
+  type ImageCardProps,
+  type ImageCardVariant,
+} from './ImageCard';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
-export { PlayerItem, type PlayerItemProps } from './PlayerItem';
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedOption,
+} from './SegmentedControl';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export {
   type StandingsRowData,
