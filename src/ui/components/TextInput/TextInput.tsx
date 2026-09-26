@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, Pressable, TextInput as RNTextInput, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
+
+import { useShakeAnimation } from '@/hooks';
 
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { TextInputProps, TextInputVariant } from './types';
 
 /**
- * Text field with optional label, error, leading image, trailing accessory
- * and a show/hide toggle for `secureTextEntry`.
+ * Text field with optional label, error (red border + shake), leading image,
+ * prefix, trailing accessory and a show/hide toggle for `secureTextEntry`.
  *
  * @example
  * <TextInput label={t('auth.emailPlaceholder')} value={email} onChangeText={setEmail} />
@@ -19,6 +22,8 @@ export function TextInput({
   label,
   error,
   leftIcon,
+  prefix,
+  shakeKey = 0,
   rightAccessory,
   disabled = false,
   variant = 'default',
@@ -36,6 +41,9 @@ export function TextInput({
   const [hidden, setHidden] = useState(true);
   const inverse = variant === 'inverse';
   const onColor = inverse ? theme.colors.onBrand : theme.colors.foreground;
+  const shakeStyle = useShakeAnimation(
+    error ? `${error}|${shakeKey}` : undefined,
+  );
 
   return (
     <View style={containerStyle}>
@@ -48,8 +56,22 @@ export function TextInput({
           {label}
         </Text>
       ) : null}
-      <View style={styles.field(variant, focused, !!error, disabled)}>
+      <Animated.View
+        style={[
+          styles.field(variant, focused, !!error, disabled, !!multiline),
+          shakeStyle,
+        ]}
+      >
         {leftIcon ? <Image source={leftIcon} style={styles.leftIcon} /> : null}
+        {prefix ? (
+          <Text
+            variant="bodyLRegular"
+            color={inverse ? 'brandMutedForeground' : 'mutedForeground'}
+            style={styles.prefix}
+          >
+            {prefix}
+          </Text>
+        ) : null}
         <RNTextInput
           placeholderTextColor={
             inverse
@@ -93,13 +115,9 @@ export function TextInput({
         {rightAccessory ? (
           <View style={styles.accessory}>{rightAccessory}</View>
         ) : null}
-      </View>
+      </Animated.View>
       {error ? (
-        <Text
-          variant="bodySRegular"
-          color={inverse ? 'destructiveMuted' : 'destructive'}
-          style={styles.error}
-        >
+        <Text variant="bodySRegular" color="destructive" style={styles.error}>
           {error}
         </Text>
       ) : null}
@@ -113,11 +131,15 @@ const styles = StyleSheet.create((theme) => ({
   label: {
     marginBottom: theme.spacing(1),
   },
+  prefix: {
+    marginRight: theme.spacing(1),
+  },
   field: (
     variant: TextInputVariant,
     focused: boolean,
     hasError: boolean,
     disabled: boolean,
+    multiline: boolean,
   ) => {
     const inverse = variant === 'inverse';
     const idleBorder = inverse ? theme.colors.brandBorder : theme.colors.border;
@@ -126,13 +148,13 @@ const styles = StyleSheet.create((theme) => ({
     return {
       flexDirection: 'row',
       alignItems: 'center',
+      // Fixed height for one line: typing must not change the field size.
+      height: multiline ? undefined : theme.spacing(12),
       borderWidth: 1,
       borderRadius: theme.radius.md,
       paddingHorizontal: theme.spacing(4),
       borderColor: hasError
-        ? inverse
-          ? theme.colors.destructiveMuted
-          : theme.colors.destructive
+        ? theme.colors.destructive
         : focused
           ? focusBorder
           : idleBorder,
@@ -143,10 +165,14 @@ const styles = StyleSheet.create((theme) => ({
           : theme.colors.background,
     };
   },
+  // No lineHeight on single-line inputs: on iOS it makes the height jump
+  // between the placeholder and typed text.
   input: (variant: TextInputVariant, disabled: boolean) => ({
-    ...theme.typography.bodyLRegular,
+    fontFamily: theme.typography.bodyLRegular.fontFamily,
+    fontSize: theme.typography.bodyLRegular.fontSize,
     flex: 1,
-    paddingVertical: theme.spacing(2.5),
+    alignSelf: 'stretch',
+    paddingVertical: 0,
     color: disabled
       ? theme.colors.mutedForeground
       : variant === 'inverse'
@@ -154,6 +180,8 @@ const styles = StyleSheet.create((theme) => ({
         : theme.colors.foreground,
   }),
   multiline: {
+    lineHeight: theme.typography.bodyLRegular.lineHeight,
+    paddingVertical: theme.spacing(2.5),
     minHeight: theme.spacing(30),
     textAlignVertical: 'top',
   },

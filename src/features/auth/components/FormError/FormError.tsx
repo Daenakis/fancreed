@@ -11,7 +11,7 @@ export function FormError({ message, style }: FormErrorProps) {
   return (
     <Text
       variant="bodySRegular"
-      color="destructiveMuted"
+      color="destructive"
       accessibilityRole="alert"
       style={[styles.text, style]}
     >

@@ -109,4 +109,26 @@ describe('TextInput', () => {
 
     expect(styleOf(getByLabelText('Email')).textAlign).toBe('center');
   });
+
+  it('shows the prefix before the value when prefix is set', () => {
+    const { getByText } = render(
+      <TextInput label="Phone" prefix="+38" keyboardType="phone-pad" />,
+    );
+
+    expect(getByText('+38')).toBeTruthy();
+  });
+
+  it('keeps a red border and red message on the brand variant while an error shows, even when focused', () => {
+    const { getByLabelText, getByText } = render(
+      <TextInput label="Email" variant="inverse" error="Wrong" />,
+    );
+    const input = getByLabelText('Email');
+
+    fireEvent(input, 'focus');
+
+    expect(fieldOf(input).borderColor).toBe(lightTheme.colors.destructive);
+    expect(
+      (StyleSheet.flatten(getByText('Wrong').props.style) as TextStyle).color,
+    ).toBe(lightTheme.colors.destructive);
+  });
 });
