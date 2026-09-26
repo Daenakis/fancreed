@@ -1,6 +1,7 @@
 import { Image, Pressable, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
+import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { ImageCardProps, ImageCardVariant } from './types';
 
@@ -11,6 +12,7 @@ import type { ImageCardProps, ImageCardVariant } from './types';
  *
  * @example
  * <ImageCard image={player.photo} title={player.name} subtitle="45%" />
+ * <ImageCard image={club.photo} title={club.name} subtitle={club.city} subtitleIcon="location" onPress={open} />
  * <ImageCard variant="article" image={news.image} title={news.title} description={news.description} onPress={open} />
  * <ImageCard variant="tile" image={event.image} title={event.name} textColor="background" onPress={open} />
  */
@@ -18,12 +20,14 @@ export function ImageCard({
   image,
   title,
   subtitle,
+  subtitleIcon,
   description,
   variant = 'photo',
   onPress,
   textColor = 'foreground',
   style,
 }: ImageCardProps) {
+  const { theme } = useUnistyles();
   const source = typeof image === 'string' ? { uri: image } : image;
   const article = variant === 'article';
   const label = [title, subtitle].filter(Boolean).join(', ');
@@ -54,6 +58,22 @@ export function ImageCard({
             <Text variant="bodyMSemibold" color={textColor} numberOfLines={4}>
               {description}
             </Text>
+          ) : null}
+        </>
+      ) : subtitleIcon ? (
+        <>
+          {title ? (
+            <Text variant="h3Medium" color={textColor} style={styles.caption}>
+              {title}
+            </Text>
+          ) : null}
+          {subtitle ? (
+            <View style={styles.subtitleRow}>
+              <Icon name={subtitleIcon} color={theme.colors[textColor]} />
+              <Text variant="bodyMRegular" color={textColor}>
+                {subtitle}
+              </Text>
+            </View>
           ) : null}
         </>
       ) : title || subtitle ? (
@@ -130,6 +150,12 @@ const styles = StyleSheet.create((theme) => ({
     variant === 'tile'
       ? { width: '80%', height: '80%', borderRadius: theme.radius.md }
       : { width: '100%', height: '100%' },
+  subtitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    marginTop: theme.spacing(2),
+  },
   articleTitle: {
     marginTop: theme.spacing(2),
   },

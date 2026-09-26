@@ -1,5 +1,6 @@
 import type { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 
+import type { IconName } from '@/ui/assets/icons';
 import type { ColorToken } from '@/ui/theme';
 
 /**
@@ -15,8 +16,10 @@ export type ImageCardProps = {
   image?: string | ImageSourcePropType | null;
   /** Caption under the image. */
   title?: string | null;
-  /** Second caption line, e.g. a vote share "45%". */
+  /** Second caption line, e.g. a vote share "45%" or a city. */
   subtitle?: string;
+  /** Icon before the subtitle, e.g. `location` for a club's city. */
+  subtitleIcon?: IconName;
   /** `article` only: body text under the title, cut to 4 lines. */
   description?: string;
   /** Defaults to `photo`. */

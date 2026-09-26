@@ -101,4 +101,18 @@ describe('ImageCard', () => {
     fireEvent.press(getByRole('button', { name: 'Big win' }));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
+
+  it('shows the subtitle with its icon on a separate line when subtitleIcon is set', () => {
+    const { getByText, getByLabelText } = render(
+      <ImageCard
+        title="Knights"
+        subtitle="Ivano-Frankivsk"
+        subtitleIcon="location"
+      />,
+    );
+
+    expect(getByText('Knights')).toBeTruthy();
+    expect(getByText('Ivano-Frankivsk')).toBeTruthy();
+    expect(getByLabelText('Knights, Ivano-Frankivsk')).toBeTruthy();
+  });
 });
