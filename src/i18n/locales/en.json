@@ -30,9 +30,7 @@
     "language": "Language",
     "colors": "Colors",
     "typography": "Typography",
-    "heading": "Heading",
-    "body": "Body text looks like this",
-    "caption": "Caption text"
+    "body": "Body text looks like this"
   },
   "validation": {
     "required": "This field is required",

@@ -22,6 +22,17 @@ The main folder. All project components live here. Using `primitives/` is not re
 
 **One hard rule:** styling via [Unistyles v3](https://unistyl.es/v3/start/getting-started/) only. Styles must rely on theme tokens (`theme.colors.*`, `theme.spacing.*`, `theme.radius.*`) so that switching themes updates the entire UI without touching components.
 
+## Text
+
+All text goes through `Text` from `@/ui/components` — `Text` from `react-native` is blocked by ESLint.
+
+| Prop      | Type                                    | Default        |
+| --------- | --------------------------------------- | -------------- |
+| `variant` | `TypographyVariant` (`h1Semibold`, …)   | `bodyLRegular` |
+| `color`   | `ColorToken` (`foreground`, `primary`…) | `foreground`   |
+
+Plus all React Native `Text` props. Use `style` only for layout (margins, alignment, `textTransform`) — typography comes from `variant`. The full scale is in `src/ui/theme/fonts.ts` and is shown on the Playground screen.
+
 ## Conventions
 
 | Rule              | Description                                                       |

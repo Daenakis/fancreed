@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
+
+import { Text } from '@/ui/components';
 
 import { useAuthStore } from '@/store';
 
@@ -14,17 +16,25 @@ export function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <Text accessibilityRole="header" style={styles.title}>
+      <Text
+        variant="h1Semibold"
+        accessibilityRole="header"
+        style={styles.title}
+      >
         {t('auth.welcomeTitle')}
       </Text>
-      <Text style={styles.subtitle}>{t('auth.welcomeSubtitle')}</Text>
+      <Text color="mutedForeground" style={styles.subtitle}>
+        {t('auth.welcomeSubtitle')}
+      </Text>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('auth.signIn')}
         style={styles.button}
         onPress={handleSignIn}
       >
-        <Text style={styles.buttonText}>{t('auth.signIn')}</Text>
+        <Text variant="bodyLMedium" color="primaryForeground">
+          {t('auth.signIn')}
+        </Text>
       </Pressable>
     </View>
   );
@@ -39,14 +49,9 @@ const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.background,
   },
   title: {
-    fontSize: theme.font.sizes['2xl'],
-    fontWeight: theme.font.weights.bold,
-    color: theme.colors.foreground,
     marginBottom: theme.spacing(2),
   },
   subtitle: {
-    fontSize: theme.font.sizes.md,
-    color: theme.colors.mutedForeground,
     marginBottom: theme.spacing(8),
   },
   button: {
@@ -54,10 +59,5 @@ const styles = StyleSheet.create((theme) => ({
     paddingVertical: theme.spacing(3.5),
     backgroundColor: theme.colors.primary,
     borderRadius: theme.radius.md,
-  },
-  buttonText: {
-    fontSize: theme.font.sizes.md,
-    fontWeight: theme.font.weights.semibold,
-    color: theme.colors.primaryForeground,
   },
 }));

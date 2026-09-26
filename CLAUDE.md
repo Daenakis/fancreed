@@ -100,6 +100,17 @@ const styles = StyleSheet.create((theme) => ({
 
 Colors, spacing, and radius always come from `theme.*` — never hardcoded. Theme config lives in `src/ui/theme/` (`colors.ts`, `fonts.ts`, `metrics.ts`, `unistyles.ts`).
 
+### Text — always `<Text>` from `@/ui/components`
+
+Never use `Text` from `react-native` (ESLint-enforced). The UI `Text` applies the Figma typography scale (Inter) and a theme colour:
+
+```tsx
+<Text variant="h1Semibold" accessibilityRole="header">{t('title')}</Text>
+<Text variant="bodyMRegular" color="mutedForeground">{t('caption')}</Text>
+```
+
+`variant` = key of `theme.typography` (default `bodyLRegular`), `color` = theme colour token (default `foreground`). Never set `fontWeight` or `fontSize` by hand — weight comes from the font family; add a new variant to `src/ui/theme/fonts.ts` if Figma introduces one.
+
 ### Zustand — selectors only
 
 Never subscribe to the whole store. Always use a selector:

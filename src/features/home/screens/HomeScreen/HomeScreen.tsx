@@ -1,7 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
+
+import { Text } from '@/ui/components';
 
 import { useAuthStore } from '@/store';
 
@@ -12,17 +14,25 @@ export function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text accessibilityRole="header" style={styles.title}>
+      <Text
+        variant="h1Semibold"
+        accessibilityRole="header"
+        style={styles.title}
+      >
         {t('home.title')}
       </Text>
-      <Text style={styles.subtitle}>{t('home.subtitle')}</Text>
+      <Text color="mutedForeground" style={styles.subtitle}>
+        {t('home.subtitle')}
+      </Text>
       <View style={styles.buttons}>
         <Pressable
           accessibilityRole="button"
           style={styles.button}
           onPress={() => router.push('/(app)/playground')}
         >
-          <Text style={styles.buttonText}>{t('playground.title')}</Text>
+          <Text variant="bodyLMedium" color="primaryForeground">
+            {t('playground.title')}
+          </Text>
         </Pressable>
         <Pressable
           accessibilityRole="button"
@@ -30,7 +40,9 @@ export function HomeScreen() {
           style={styles.buttonDestructive}
           onPress={signOut}
         >
-          <Text style={styles.buttonDestructiveText}>{t('auth.signOut')}</Text>
+          <Text variant="bodyLMedium" color="destructiveForeground">
+            {t('auth.signOut')}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -46,14 +58,9 @@ const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.background,
   },
   title: {
-    fontSize: theme.font.sizes['2xl'],
-    fontWeight: theme.font.weights.bold,
-    color: theme.colors.foreground,
     marginBottom: theme.spacing(2),
   },
   subtitle: {
-    fontSize: theme.font.sizes.md,
-    color: theme.colors.mutedForeground,
     marginBottom: theme.spacing(8),
   },
   buttons: {
@@ -66,21 +73,11 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.md,
     alignItems: 'center',
   },
-  buttonText: {
-    fontSize: theme.font.sizes.md,
-    fontWeight: theme.font.weights.semibold,
-    color: theme.colors.primaryForeground,
-  },
   buttonDestructive: {
     paddingHorizontal: theme.spacing(8),
     paddingVertical: theme.spacing(3.5),
     backgroundColor: theme.colors.destructive,
     borderRadius: theme.radius.md,
     alignItems: 'center',
-  },
-  buttonDestructiveText: {
-    fontSize: theme.font.sizes.md,
-    fontWeight: theme.font.weights.semibold,
-    color: theme.colors.destructiveForeground,
   },
 }));

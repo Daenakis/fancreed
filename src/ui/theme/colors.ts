@@ -54,3 +54,5 @@ export const darkColors = {
   border: palette.grey400,
   ring: palette.green100,
 } as const;
+
+export type ColorToken = keyof typeof lightColors;

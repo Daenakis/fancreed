@@ -64,6 +64,30 @@ module.exports = defineConfig([
     },
   },
   {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/ui/components/Text/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-native',
+              importNames: ['Text'],
+              message:
+                "Use Text from '@/ui/components' — it applies Inter typography and theme colours.",
+            },
+            {
+              name: 'react-native',
+              importNames: ['StyleSheet'],
+              message: "Use StyleSheet from 'react-native-unistyles'.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['env.ts', 'app.config.ts'],
     rules: {
       'no-restricted-syntax': 'off',

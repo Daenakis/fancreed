@@ -1,20 +1,11 @@
-export const fontSizes = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 20,
-  xl: 24,
-  '2xl': 28,
-  '3xl': 32,
-} as const;
-
-export const fontWeights = {
-  regular: '400' as const,
-  medium: '500' as const,
-  semibold: '600' as const,
-  bold: '700' as const,
-};
-
+/**
+ * Typography scale from Figma — the single source of truth for text styles.
+ * Use via <Text variant="..."> (preferred) or `theme.typography.*` in styles.
+ *
+ * Weight comes from the font family (Inter-Medium, Inter-SemiBold…), never
+ * from `fontWeight` — combining a custom family with `fontWeight` renders
+ * a faux/incorrect weight on Android.
+ */
 export const typography = {
   // Heading
   h1Semibold: { fontFamily: 'Inter-SemiBold', fontSize: 32, lineHeight: 36 },
@@ -33,3 +24,5 @@ export const typography = {
   bodySRegular: { fontFamily: 'Inter-Regular', fontSize: 12, lineHeight: 16 },
   bodyXSMedium: { fontFamily: 'Inter-Medium', fontSize: 10, lineHeight: 14 },
 } as const;
+
+export type TypographyVariant = keyof typeof typography;
