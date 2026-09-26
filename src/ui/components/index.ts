@@ -24,6 +24,11 @@ export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export { SlideshowList, type SlideshowListProps } from './SlideshowList';
 export {
+  type SocialLink,
+  SocialLinks,
+  type SocialLinksProps,
+} from './SocialLinks';
+export {
   type StandingsRowData,
   StandingsTable,
   type StandingsTableProps,
