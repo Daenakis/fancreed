@@ -11,18 +11,21 @@ import type { ImageCardProps, ImageCardVariant } from './types';
  *
  * @example
  * <ImageCard image={player.photo} title={player.name} subtitle="45%" />
+ * <ImageCard variant="article" image={news.image} title={news.title} description={news.description} onPress={open} />
  * <ImageCard variant="tile" image={event.image} title={event.name} textColor="background" onPress={open} />
  */
 export function ImageCard({
   image,
   title,
   subtitle,
+  description,
   variant = 'photo',
   onPress,
   textColor = 'foreground',
   style,
 }: ImageCardProps) {
   const source = typeof image === 'string' ? { uri: image } : image;
+  const article = variant === 'article';
   const label = [title, subtitle].filter(Boolean).join(', ');
 
   const content = (
@@ -31,12 +34,29 @@ export function ImageCard({
         {source ? (
           <Image
             source={source}
-            resizeMode="contain"
+            resizeMode={article ? 'cover' : 'contain'}
             style={styles.image(variant)}
           />
         ) : null}
       </View>
-      {title || subtitle ? (
+      {article ? (
+        <>
+          {title ? (
+            <Text
+              variant="h3Medium"
+              color={textColor}
+              style={styles.articleTitle}
+            >
+              {title}
+            </Text>
+          ) : null}
+          {description ? (
+            <Text variant="bodyMSemibold" color={textColor} numberOfLines={4}>
+              {description}
+            </Text>
+          ) : null}
+        </>
+      ) : title || subtitle ? (
         <Text
           variant={variant === 'tile' ? 'bodyMSemibold' : 'bodySSemibold'}
           color={textColor}
@@ -81,10 +101,13 @@ export function ImageCard({
 ImageCard.displayName = 'ImageCard';
 
 const styles = StyleSheet.create((theme) => ({
-  card: (variant: ImageCardVariant) => ({
-    width: variant === 'tile' ? 100 : theme.spacing(28),
-    alignItems: 'center',
-  }),
+  card: (variant: ImageCardVariant) =>
+    variant === 'article'
+      ? { width: theme.spacing(70), padding: theme.spacing(2) }
+      : {
+          width: variant === 'tile' ? 100 : theme.spacing(28),
+          alignItems: 'center',
+        },
   frame: (variant: ImageCardVariant, empty: boolean) =>
     variant === 'tile'
       ? {
@@ -97,8 +120,9 @@ const styles = StyleSheet.create((theme) => ({
         }
       : {
           width: '100%',
-          height: 200,
-          borderRadius: theme.radius.lg,
+          height: variant === 'article' ? 250 : 200,
+          borderRadius:
+            variant === 'article' ? theme.radius.md : theme.radius.lg,
           overflow: 'hidden',
           backgroundColor: empty ? theme.colors.muted : undefined,
         },
@@ -106,6 +130,9 @@ const styles = StyleSheet.create((theme) => ({
     variant === 'tile'
       ? { width: '80%', height: '80%', borderRadius: theme.radius.md }
       : { width: '100%', height: '100%' },
+  articleTitle: {
+    marginTop: theme.spacing(2),
+  },
   caption: {
     maxWidth: '90%',
     marginTop: theme.spacing(1),

@@ -80,4 +80,25 @@ describe('ImageCard', () => {
       (StyleSheet.flatten(getByText('Ivan').props.style) as TextStyle).color,
     ).toBe(lightTheme.colors.background);
   });
+
+  it('shows a cover image, title and 4-line description when variant is article', () => {
+    const onPress = jest.fn();
+    const { getByText, getByRole, UNSAFE_getByType } = render(
+      <ImageCard
+        variant="article"
+        image={url}
+        title="Big win"
+        description="Rukh beat Vorskla 4:3 in a thriller."
+        onPress={onPress}
+      />,
+    );
+
+    expect(getByText('Big win')).toBeTruthy();
+    expect(
+      getByText('Rukh beat Vorskla 4:3 in a thriller.').props.numberOfLines,
+    ).toBe(4);
+    expect(UNSAFE_getByType(Image).props.resizeMode).toBe('cover');
+    fireEvent.press(getByRole('button', { name: 'Big win' }));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
 });

@@ -5,8 +5,10 @@ import type { ColorToken } from '@/ui/theme';
 /**
  * - `photo` (default): tall full-bleed photo, e.g. a player in a vote carousel.
  * - `tile`: small framed tile with the image inset, e.g. an event or challenge.
+ * - `article`: wide cover image with a left-aligned title and description
+ *   (news).
  */
-export type ImageCardVariant = 'photo' | 'tile';
+export type ImageCardVariant = 'photo' | 'tile' | 'article';
 
 export type ImageCardProps = {
   /** URL or local image; a grey placeholder is shown when missing. */
@@ -15,6 +17,8 @@ export type ImageCardProps = {
   title?: string | null;
   /** Second caption line, e.g. a vote share "45%". */
   subtitle?: string;
+  /** `article` only: body text under the title, cut to 4 lines. */
+  description?: string;
   /** Defaults to `photo`. */
   variant?: ImageCardVariant;
   /** Makes the card pressable. */
