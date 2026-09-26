@@ -7,6 +7,7 @@ import type {
   ViewStyle,
 } from 'react-native';
 
+import type { IconName } from '@/ui/assets/icons';
 import type { ColorToken } from '@/ui/theme';
 
 /**
@@ -30,8 +31,12 @@ export type ButtonProps = Omit<
   variant?: ButtonVariant;
   /** `md` (default, 48 px high) or compact `sm` with a bolder label. */
   size?: ButtonSize;
-  /** Image before the label (24×24). */
+  /** Image before the label (24×24), e.g. a club logo. */
   image?: ImageSourcePropType;
+  /** Icon from the app icon set, tinted like the label. */
+  icon?: IconName;
+  /** Side of the label the icon goes on. Defaults to `left`. */
+  iconPosition?: 'left' | 'right';
   /** Choice state; fills an `outline` button. Defaults to `false`. */
   selected?: boolean;
   /** Spinner instead of the label; blocks presses. Defaults to `false`. */

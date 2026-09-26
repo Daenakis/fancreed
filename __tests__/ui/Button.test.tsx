@@ -144,4 +144,23 @@ describe('Button', () => {
 
     expect(styleOf(getByRole('button')).marginTop).toBe(20);
   });
+
+  it.each([
+    ['left', ['icon', 'label']],
+    ['right', ['label', 'icon']],
+  ] as const)(
+    'puts the icon on the %s of the label',
+    (iconPosition, expectedOrder) => {
+      const { toJSON } = render(
+        <Button text="Upload" icon="upload" iconPosition={iconPosition} />,
+      );
+      const button = toJSON() as { children: { type: string }[] };
+
+      expect(
+        button.children.map((child) =>
+          child.type === 'Text' ? 'label' : 'icon',
+        ),
+      ).toEqual(expectedOrder);
+    },
+  );
 });

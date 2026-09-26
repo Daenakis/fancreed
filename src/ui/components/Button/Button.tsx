@@ -3,6 +3,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import type { ColorToken, TypographyVariant } from '@/ui/theme';
 
+import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { ButtonProps, ButtonSize, ButtonVariant } from './types';
 
@@ -53,6 +54,7 @@ function getLabelVariant(
  * @example
  * <Button text={t('common.save')} onPress={save} loading={isPending} />
  * <Button variant="outline" text={label} image={icon} selected={isActive} onPress={select} />
+ * <Button variant="outline" text={t('club.uploadDocument')} icon="upload" iconPosition="right" onPress={pick} />
  * <Button variant="brand" fullWidth text={t('auth.signIn')} disabled={!isValid} onPress={submit} />
  */
 export function Button({
@@ -60,6 +62,8 @@ export function Button({
   variant = 'solid',
   size = 'md',
   image,
+  icon,
+  iconPosition = 'left',
   selected = false,
   loading = false,
   disabled = false,
@@ -75,6 +79,13 @@ export function Button({
     { selected, disabled },
     { background: backgroundColor, label: textColor },
   );
+  const iconElement = icon ? (
+    <Icon
+      name={icon}
+      color={theme.colors[colors.label]}
+      style={iconPosition === 'left' ? styles.iconLeft : styles.iconRight}
+    />
+  ) : null;
   // Brand buttons show "disabled" with colours; the others dim.
   const dimmed = disabled && variant !== 'brand';
 
@@ -102,9 +113,11 @@ export function Button({
       ) : (
         <>
           {image ? <Image source={image} style={styles.image} /> : null}
+          {icon && iconPosition === 'left' ? iconElement : null}
           <Text variant={getLabelVariant(variant, size)} color={colors.label}>
             {text}
           </Text>
+          {icon && iconPosition === 'right' ? iconElement : null}
         </>
       )}
     </Pressable>
@@ -135,6 +148,12 @@ const styles = StyleSheet.create((theme) => ({
   },
   pressed: {
     opacity: 0.7,
+  },
+  iconLeft: {
+    marginRight: theme.spacing(2),
+  },
+  iconRight: {
+    marginLeft: theme.spacing(2),
   },
   image: {
     width: theme.spacing(6),
