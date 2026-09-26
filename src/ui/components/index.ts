@@ -6,6 +6,12 @@ export {
   type ButtonSize,
   type ButtonVariant,
 } from './Button';
+export {
+  ChoiceGroup,
+  type ChoiceGroupProps,
+  type ChoiceGroupVariant,
+  type ChoiceOption,
+} from './ChoiceGroup';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { Icon, type IconProps } from './Icon';
 export {
@@ -14,11 +20,6 @@ export {
   type ImageCardVariant,
 } from './ImageCard';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
-export {
-  SegmentedControl,
-  type SegmentedControlProps,
-  type SegmentedOption,
-} from './SegmentedControl';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export {
   type StandingsRowData,
