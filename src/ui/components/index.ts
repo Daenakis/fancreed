@@ -22,6 +22,7 @@ export {
 } from './ImageCard';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
+export { SlideshowList, type SlideshowListProps } from './SlideshowList';
 export {
   type StandingsRowData,
   StandingsTable,
