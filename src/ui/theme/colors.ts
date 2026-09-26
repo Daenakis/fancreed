@@ -20,6 +20,7 @@ export const palette = {
   brandGreen200: '#58AF6C',
   // White overlays for content on brand backgrounds
   whiteAlpha70: 'rgba(255, 255, 255, 0.7)',
+  whiteAlpha50: 'rgba(255, 255, 255, 0.5)',
   whiteAlpha30: 'rgba(255, 255, 255, 0.3)',
   whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
   // Shadows
@@ -55,6 +56,7 @@ export const lightColors = {
   socialSurface: palette.white,
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
+  translucentSurface: palette.whiteAlpha50,
 } as const;
 
 export const darkColors = {
@@ -82,6 +84,7 @@ export const darkColors = {
   socialSurface: palette.white,
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
+  translucentSurface: palette.whiteAlpha50,
 } as const;
 
 export type ColorToken = keyof typeof lightColors;
