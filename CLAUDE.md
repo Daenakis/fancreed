@@ -187,7 +187,7 @@ Full rule: `.cursor/rules/conventional-commits.mdc`
 | File                                     | What it covers                                                                         |
 | ---------------------------------------- | -------------------------------------------------------------------------------------- |
 | `src/docs/features.md`                   | Feature module structure and conventions                                               |
-| `src/docs/api.md`                        | Axios instance, `fetcher()`, JWT refresh interceptor pattern                           |
+| `src/docs/api.md`                        | Axios instance, `fetcher()`, auth interceptors (token + refresh-on-401), session flow  |
 | `src/docs/hooks-query.md`                | React Query hook conventions, `fetcher()` usage, query key enums                       |
 | `src/docs/store.md`                      | Zustand store conventions, `useShallow` for multi-field selectors                      |
 | `src/docs/schemas.md`                    | Zod schema conventions, `zod4Resolver` for RHF                                         |

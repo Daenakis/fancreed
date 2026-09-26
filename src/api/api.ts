@@ -4,16 +4,31 @@ import * as T from '@/types/api';
 
 import { CONFIG } from '@/config';
 
-export const axiosInstance = axios.create({
+import { setupAuthInterceptors } from './authInterceptors';
+import { fetcher } from './fetcher';
+
+const defaults = {
   baseURL: CONFIG.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-});
+};
 
-// ── Interceptors ────────────────────────────────────────────────────
-// See src/docs/api.md for a full JWT refresh token implementation
-// guide with request/response interceptors.
+export const axiosInstance = axios.create(defaults);
+
+/**
+ * Bare client used only for the refresh call. It has no interceptors,
+ * so a 401 from the refresh endpoint can't trigger another refresh.
+ */
+const refreshClient = axios.create(defaults);
+
+setupAuthInterceptors(axiosInstance, (refreshToken) =>
+  fetcher(
+    refreshClient.post<T.RefreshResponse>('auth/refresh', {
+      refreshToken,
+    } satisfies T.RefreshRequest),
+  ),
+);
 
 // ── API methods ─────────────────────────────────────────────────────
 export const api = {

@@ -49,3 +49,5 @@ app-example
 ios/
 android/
 
+# Figma SVG inbox for `yarn icons` — generated components live in src/ui/assets/icons/
+assets/icons/*.svg

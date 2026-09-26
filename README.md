@@ -194,7 +194,7 @@ src/
 ├── store/          # Zustand stores (client state)
 ├── types/          # Global TypeScript types, enums, API contracts
 └── ui/
-    ├── assets/     # Icons (SVG), images, fonts
+    ├── assets/     # Icon components, images, fonts
     ├── components/ # Reusable atomic UI components
     └── theme/      # Unistyles config, colors, fonts, metrics
 ```
@@ -272,7 +272,20 @@ Translation files live in `src/i18n/locales/`. Supported languages are declared 
 
 ### SVG Icons
 
-SVGs are imported as React components via `react-native-svg-transformer`. Use the `<Icon>` component with the icon registry in `src/ui/assets/icons/`.
+Icons are `react-native-svg` components in `src/ui/assets/icons/`, rendered through `<Icon>`:
+
+```tsx
+<Icon name="bell" />                                // theme foreground (black / white)
+<Icon name="bell" color={theme.colors.primary} size={24} />
+```
+
+To add icons from Figma:
+
+1. Export as SVG and drop the files into `assets/icons/` (e.g. `arrow_down.svg`)
+2. Run `yarn icons` — generates `ArrowDown.tsx` and updates the `ICONS` registry (`arrowDown`)
+3. Delete the processed `.svg` files (they are git-ignored)
+
+The dark brand colour (`#101010`) becomes `currentColor`, so `color` tints the icon; multi-colour logos keep their colours. Existing icons are skipped — `yarn icons --force` overwrites them (careful: some were edited by hand, e.g. `Lion.tsx`).
 
 ## Testing
 

@@ -19,7 +19,6 @@ const config = {
     '^@env$': '<rootDir>/env.ts',
     '^env$': '<rootDir>/env.ts',
     '^@tests/(.*)$': '<rootDir>/__tests__/$1',
-    '\\.svg$': '<rootDir>/__tests__/setup/svgMock.tsx',
     '^expo/src/winter$': '<rootDir>/__tests__/setup/empty.ts',
   },
 

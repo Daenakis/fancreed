@@ -7,4 +7,6 @@ export const STORAGE_KEYS = {
   LANGUAGE: 'app-language',
   /** User theme preference (stored in plain MMKV) */
   THEME: 'app-theme',
+  /** Set on first launch (plain MMKV) — detects reinstalls, see loadAuthFromStorage */
+  HAS_LAUNCHED: 'app-has-launched',
 } as const;

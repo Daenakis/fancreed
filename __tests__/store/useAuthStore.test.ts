@@ -1,4 +1,12 @@
-import { signIn, signOut, useAuthStore } from '@/store';
+import * as SecureStore from 'expo-secure-store';
+
+import { queryClient } from '@/providers/queryClient';
+
+import { storage } from '@/utils/storage';
+
+import { loadAuthFromStorage, signIn, signOut, useAuthStore } from '@/store';
+
+import { STORAGE_KEYS } from '@/constants';
 
 beforeEach(() => {
   useAuthStore.setState({ accessToken: null, refreshToken: null });
@@ -48,5 +56,51 @@ describe('standalone actions', () => {
 
     expect(useAuthStore.getState().accessToken).toBeNull();
     expect(useAuthStore.getState().refreshToken).toBeNull();
+  });
+});
+
+describe('session lifecycle', () => {
+  it('persists tokens to SecureStore when setTokens is called', async () => {
+    await useAuthStore.getState().setTokens('new-access', 'new-refresh');
+
+    expect(await SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN)).toBe(
+      'new-access',
+    );
+    expect(await SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN)).toBe(
+      'new-refresh',
+    );
+  });
+
+  it('clears cached server data on signOut', async () => {
+    const clear = jest.spyOn(queryClient, 'clear');
+    await signIn('access', 'refresh');
+
+    await signOut();
+
+    expect(clear).toHaveBeenCalled();
+  });
+
+  it('drops leftover tokens on the first launch after install', async () => {
+    storage.remove(STORAGE_KEYS.HAS_LAUNCHED);
+    await signIn('leftover-access', 'leftover-refresh');
+    useAuthStore.setState({ accessToken: null, refreshToken: null });
+
+    await loadAuthFromStorage();
+
+    expect(useAuthStore.getState().accessToken).toBeNull();
+    expect(
+      await SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN),
+    ).toBeNull();
+  });
+
+  it('restores saved tokens on later launches', async () => {
+    storage.set(STORAGE_KEYS.HAS_LAUNCHED, true);
+    await signIn('saved-access', 'saved-refresh');
+    useAuthStore.setState({ accessToken: null, refreshToken: null });
+
+    await loadAuthFromStorage();
+
+    expect(useAuthStore.getState().accessToken).toBe('saved-access');
+    expect(useAuthStore.getState().refreshToken).toBe('saved-refresh');
   });
 });

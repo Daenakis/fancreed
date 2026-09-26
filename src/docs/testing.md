@@ -69,7 +69,6 @@ __tests__/
 │   │   ├── mmkv.ts
 │   │   └── react-query.ts
 │   ├── setup.ts                  # Global beforeEach / afterEach
-│   ├── svgMock.tsx
 │   └── empty.ts
 ├── test-utils.tsx                # renderWithProviders helper
 ├── utils/                        # Unit tests for src/utils/
