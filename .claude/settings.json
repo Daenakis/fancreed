@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn lint)",
+      "Bash(yarn lint *)",
+      "Bash(yarn check:structure)",
+      "Bash(yarn type-check)",
+      "Bash(yarn type-check *)",
+      "Bash(yarn test)",
+      "Bash(yarn test *)",
+      "Bash(yarn format)",
+      "Bash(yarn icons)",
+      "Bash(npx jest *)",
+      "Bash(npx eslint *)",
+      "Bash(npx prettier *)",
+      "Bash(npx expo export *)",
+      "Bash(npx expo config *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)"
+    ],
+    "deny": [
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(yarn icons --force)"
+    ]
+  }
+}

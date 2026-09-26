@@ -11,7 +11,8 @@ Production-grade Expo SDK 54 / React Native 0.81 template — file-based routing
 | Command                    | What it does                                                      |
 | -------------------------- | ----------------------------------------------------------------- |
 | `yarn start`               | Start Metro dev server (connects to Dev Client)                   |
-| `yarn lint`                | Run ESLint                                                        |
+| `yarn lint`                | Run ESLint + folder structure check                               |
+| `yarn check:structure`     | Check component folders (Name.tsx + index.ts + types.ts)          |
 | `yarn type-check`          | TypeScript check, no emit                                         |
 | `yarn test`                | Run Jest tests                                                    |
 | `yarn test:watch`          | Jest in watch mode                                                |
@@ -70,6 +71,8 @@ ComponentName/
 ├── types.ts        # Props and local enums — never inline in the .tsx
 └── index.ts        # Barrel re-export
 ```
+
+Exactly these three files — no `styles.ts`, stories, or subfolders. Small sub-components live inside `ComponentName.tsx`. Screens may omit `types.ts` when they take no props. Enforced by `yarn check:structure` (part of `yarn lint` and pre-commit).
 
 ### Barrel re-exports
 
@@ -192,6 +195,29 @@ Full rule: `.cursor/rules/conventional-commits.mdc`
 - **pre-push**: `yarn type-check && yarn test` — both must pass before push
 
 ---
+
+## Working in this repo (for Claude)
+
+Project-specific rules learned the hard way. Personal preferences (git, reply style) live in `~/.claude/CLAUDE.md`.
+
+- **Verify before "done":** `yarn type-check`, `yarn lint`, `yarn test` must pass. For native-affecting changes (entry file, config plugins, fonts, bundle ids) also run `npx expo export --platform ios` — and say that it wasn't checked on a device.
+- **Dependencies:** never remove a package because `src/` doesn't import it. Check `peerDependencies` of installed packages first — BugSnag needs netinfo, expo-crypto, expo-file-system, expo-application, expo-device; Unistyles uses react-native-edge-to-edge.
+- **Icons:** generate with `yarn icons` (never hand-write SVG components). Some icons are hand-edited after generation (`Lion.tsx`) — never run `yarn icons --force` without asking.
+- **Fonts:** keep `useFonts` in `useAppReady`. The font files' PostScript names are `Inter18pt-*`; iOS only finds embedded fonts by that name, `useFonts` registers the `Inter-*` names the theme uses.
+- **Auth API contract is assumed:** `LoginResponse` / `RefreshResponse` in `src/types/api.ts` use `{ accessToken, refreshToken }` until the real backend is confirmed. Flag it if a task touches auth.
+- **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` and API URLs (`eas.json`).
+- **Workflows:** use the project skills — `/migrate-component`, `/new-feature`, `/new-component`, `/migrate-screen`, `/review`, `/setup`.
+
+### Migration from the old app (Denis's rules)
+
+- **Old project:** _path to be added_ — **READ-ONLY**. Only read it; never modify, format, install or run anything that changes it.
+- **Scope:** migrate only the components Denis names in his message (currently one per request). Never pick extras.
+- **Structure is protected:** every component is exactly `Name.tsx` + `index.ts` + `types.ts` (every component has props). Sub-components that aren't worth their own folder live inside `Name.tsx`. Enforced by `yarn check:structure` (runs in `yarn lint` and pre-commit).
+- **No Storybook** — never migrate stories, `.storybook/`, or story-only code.
+- **Props** stay as in the old component; list and justify any change. Data comes via our backend, not api-football directly — the api-football v3 docs check is deferred.
+- **Styles:** map old hardcoded values to the closest theme token; list every non-exact match. Ask when the look would change noticeably.
+- **New npm packages** require Denis's approval — ask first.
+- **Tests** for every migrated component, following best practices in `src/docs/testing.md`.
 
 ## Reference Docs
 

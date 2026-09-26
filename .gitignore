@@ -51,3 +51,6 @@ android/
 
 # Figma SVG inbox for `yarn icons` — generated components live in src/ui/assets/icons/
 assets/icons/*.svg
+
+# Claude Code personal settings (may contain tokens)
+.claude/settings.local.json

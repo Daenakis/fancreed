@@ -38,14 +38,14 @@ Open `.env` and fill in the four variables:
 
 File: `env.ts`
 
-These constants are defined near the top of the file and default to `testexpo-owner` / `com.testexpoowner.*`. Replace them with your real values:
+These constants are defined near the top of the file and are already set to `Fancreed` / `com.fancreed.app.*` — change only if the ids change. Replace them with your real values:
 
-| Symbol                           | Current placeholder                                    | What to set                                |
-| -------------------------------- | ------------------------------------------------------ | ------------------------------------------ |
-| `BUNDLE_IDS` (all three entries) | `com.testexpoowner.dev` / `.stg` / `com.testexpoowner` | Your iOS bundle IDs per environment        |
-| `PACKAGES` (all three entries)   | `com.testexpoowner.dev` / `.stg` / `com.testexpoowner` | Your Android package names per environment |
-| `SCHEMES` (all three entries)    | `testexpo-owner` / `testexpo-owner.stg`                | Your custom URL scheme per environment     |
-| `NAME`                           | `'testexpo-owner'`                                     | Your app display name                      |
+| Symbol                           | Current placeholder                                  | What to set                                |
+| -------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| `BUNDLE_IDS` (all three entries) | `com.fancreed.app.dev` / `.stg` / `com.fancreed.app` | Your iOS bundle IDs per environment        |
+| `PACKAGES` (all three entries)   | `com.fancreed.app.dev` / `.stg` / `com.fancreed.app` | Your Android package names per environment |
+| `SCHEMES` (all three entries)    | `fancreed-dev` / `fancreed-stg` / `fancreed`         | Your custom URL scheme per environment     |
+| `NAME`                           | `'Fancreed'`                                         | Your app display name                      |
 
 Example after replacing:
 

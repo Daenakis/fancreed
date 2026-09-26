@@ -5,7 +5,8 @@
   "scripts": {
     "eas-build-on-success": "npx bugsnag-eas-build-on-success",
     "start": "expo start",
-    "lint": "expo lint",
+    "lint": "expo lint && yarn check:structure",
+    "check:structure": "node scripts/check-structure.js",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "format": "prettier --write \"{src,__tests__}/**/*.{ts,tsx}\"",

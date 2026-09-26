@@ -6,24 +6,24 @@ Route files in `src/app/` stay thin — they only import and re-export screen co
 
 ## Conventions
 
-| Rule                                  | Description                                                         |
-| ------------------------------------- | ------------------------------------------------------------------- |
-| One feature = one folder              | `src/features/[name]/`                                              |
-| Screens in `screens/` subfolder       | `screens/[Name]Screen/[Name]Screen.tsx`                             |
-| Components in `components/` subfolder | `components/[Name]/[Name].tsx`                                      |
-| Every component/screen is a folder    | Contains `.tsx`, `types.ts` (if needed), and `index.ts`             |
-| Re-export from index                  | Every folder has an `index.ts` barrel file                          |
-| Feature-local hooks allowed           | `hooks/` inside feature; move to `src/hooks/` when reused elsewhere |
+| Rule                                  | Description                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------------ |
+| One feature = one folder              | `src/features/[name]/`                                                               |
+| Screens in `screens/` subfolder       | `screens/[Name]Screen/[Name]Screen.tsx`                                              |
+| Components in `components/` subfolder | `components/[Name]/[Name].tsx`                                                       |
+| Every component/screen is a folder    | Component: `.tsx` + `types.ts` + `index.ts`; screen: `types.ts` only if it has props |
+| Re-export from index                  | Every folder has an `index.ts` barrel file                                           |
+| Feature-local hooks allowed           | `hooks/` inside feature; move to `src/hooks/` when reused elsewhere                  |
 
 ## Types
 
-| Scope                                | Location                                          |
-| ------------------------------------ | ------------------------------------------------- |
-| Global (API contracts, shared enums) | `src/types/`                                      |
-| Component props, local enums         | `types.ts` or `[Name].types.ts` next to component |
-| Shared between feature components    | `features/[name]/types.ts`                        |
+| Scope                                | Location                     |
+| ------------------------------------ | ---------------------------- |
+| Global (API contracts, shared enums) | `src/types/`                 |
+| Component props, local enums         | `types.ts` next to component |
+| Shared between feature components    | `features/[name]/types.ts`   |
 
-Single component in a folder — use `types.ts`. Multiple related components — either one `types.ts` for all, or `[Name].types.ts` per component. Both are valid.
+One component per folder, props in its `types.ts`. Sub-components that live inside the same `.tsx` keep their props in that `types.ts` too.
 
 ## Folder Structure
 

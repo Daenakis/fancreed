@@ -40,7 +40,7 @@ Plus all React Native `Text` props. Use `style` only for layout (margins, alignm
 | Unistyles v3 only | `StyleSheet.create((theme) => ({...}))` at the bottom of the file |
 | Theme tokens      | Colors, spacing, radius — always from `theme.*`, never hardcoded  |
 | Merge style prop  | `style={[styles.root, style]}` — never override external styles   |
-| `forwardRef`      | Required for components wrapping a primitive                      |
+| `ref` as a prop   | React 19 — type `ref` in `types.ts`, no `forwardRef`              |
 | `displayName`     | Always set                                                        |
 
 ## Working with AI (Cursor)
