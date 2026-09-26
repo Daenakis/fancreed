@@ -1,3 +1,4 @@
+export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
 export { Button, type ButtonProps } from './Button';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { Icon, type IconProps } from './Icon';

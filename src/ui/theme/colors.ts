@@ -22,6 +22,8 @@ export const palette = {
   whiteAlpha70: 'rgba(255, 255, 255, 0.7)',
   whiteAlpha30: 'rgba(255, 255, 255, 0.3)',
   whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
+  // Shadows
+  blackAlpha25: 'rgba(0, 0, 0, 0.25)',
   // Red
   red300: '#CF0000',
   red200: '#FFA8A8',
@@ -52,6 +54,7 @@ export const lightColors = {
   onBrand: palette.white,
   socialSurface: palette.white,
   socialForeground: palette.black,
+  shadow: palette.blackAlpha25,
 } as const;
 
 export const darkColors = {
@@ -78,6 +81,7 @@ export const darkColors = {
   onBrand: palette.white,
   socialSurface: palette.white,
   socialForeground: palette.black,
+  shadow: palette.blackAlpha25,
 } as const;
 
 export type ColorToken = keyof typeof lightColors;
