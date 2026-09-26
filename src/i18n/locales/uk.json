@@ -127,5 +127,9 @@
     "bronze": "BRONZE",
     "silver": "SILVER",
     "gold": "GOLD"
+  },
+  "goals": {
+    "more": "На гол більше",
+    "less": "На гол менше"
   }
 }

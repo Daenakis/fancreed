@@ -13,6 +13,7 @@ export {
   type ChoiceOption,
 } from './ChoiceGroup';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
+export { GoalsPicker, type GoalsPickerProps } from './GoalsPicker';
 export { Icon, type IconProps } from './Icon';
 export {
   ImageCard,

@@ -7,6 +7,12 @@
  * a faux/incorrect weight on Android.
  */
 export const typography = {
+  // Display — not in Figma yet; big numbers (prediction score)
+  displaySemibold: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 62,
+    lineHeight: 70,
+  },
   // Heading
   h1Semibold: { fontFamily: 'Inter-SemiBold', fontSize: 32, lineHeight: 36 },
   h2Medium: { fontFamily: 'Inter-Medium', fontSize: 24, lineHeight: 32 },
