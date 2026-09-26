@@ -1,53 +1,53 @@
 # API
 
-Axios instance, API methods, and the `fetcher` utility for React Query.
+Backend: `https://app.fancreed.com/api/` (set per build in `env.ts`, overridable with `EXPO_PUBLIC_API_URL`). Contract: the backend apidoc (`/apidoc`, login required) — ask Denis for access.
 
 ## Structure
 
 ```
 src/api/
-├── api.ts               # Axios instance + endpoint methods
-├── authInterceptors.ts  # Bearer token + refresh-on-401
-├── fetcher.ts           # Unwraps AxiosResponse<T> → T
-└── index.ts             # Barrel re-export
+├── client.ts            # axiosInstance: base URL, JSON, auth interceptors
+├── authInterceptors.ts  # Bearer token on requests; 401 → signOut
+├── endpoints/
+│   ├── auth.ts          # authApi — one method per apidoc endpoint
+│   └── index.ts         # add clubs.ts, events.ts … per apidoc group
+├── errors.ts            # backend message → ApiErrorCode → i18n key; toFormError()
+├── fetcher.ts           # AxiosResponse<T> → T
+└── index.ts
+src/types/api/           # request/response types per apidoc group (+ common.ts)
+src/hooks/query/<group>/ # one mutation/query hook per endpoint (mutationOptions + hook)
 ```
 
 ## Conventions
 
-| Rule                       | Description                                              |
-| -------------------------- | -------------------------------------------------------- |
-| One `axiosInstance`        | All requests go through a single configured instance     |
-| Group methods by domain    | `api.login(...)`, `api.getUser(...)`, etc.               |
-| Types from `@/types`       | Import request/response types from `@/types/api`         |
-| Use `fetcher()` in queryFn | Wrap `api.*` calls with `fetcher()` to unwrap `res.data` |
+| Rule                         | Description                                                                                          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| One endpoints file per group | Mirrors the apidoc groups (`auth`, `clubs`, `events`…) — `xxxApi.method()` returns `AxiosResponse`   |
+| Hooks wrap endpoints         | `mutationOptions`/`queryOptions` + `useXxx` hook in `src/hooks/query/<group>/`; always via `fetcher` |
+| Side effects                 | Cache/session effects in the hook (`onSuccess`); navigation and UI feedback in the screen            |
+| Errors                       | Never read `error.response.data.message` in screens — use `getApiErrorCode` / `toFormError`          |
+| Types                        | Field names exactly as the backend sends them (e.g. `access_token`)                                  |
 
-## Auth — token attachment and refresh
+## Auth
 
-Implemented in `src/api/authInterceptors.ts` and wired up in `api.ts`. Nothing to do per request — every call through `axiosInstance` is authenticated.
-
-| Behaviour                         | How                                                                                      |
-| --------------------------------- | ---------------------------------------------------------------------------------------- |
-| Attach token                      | Request interceptor sets `Authorization: Bearer <accessToken>` from `useAuthStore`       |
-| Refresh on 401                    | Response interceptor calls `auth/refresh`, saves new tokens (SecureStore), retries once  |
-| Concurrent 401s                   | Single-flight — all waiting requests share one refresh call                              |
-| Refresh token rejected (4xx)      | `signOut()` → tokens cleared, React Query cache cleared, `Stack.Protected` shows sign-in |
-| Refresh fails (network / 5xx)     | Session kept, error propagated — users are never logged out for being offline            |
-| 401 while signed out (e.g. login) | No refresh, error propagated to the caller                                               |
-| Retried request gets 401 again    | No second refresh (`_retry` flag) — no loops                                             |
-
-The refresh call uses a separate `refreshClient` without interceptors, so a 401 from the refresh endpoint can't trigger another refresh.
-
-Request/response field names live in `src/types/api.ts` (`LoginResponse`, `RefreshRequest`, `RefreshResponse`) — change them there if the backend contract differs.
+| Case                          | Behaviour                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------ |
+| Token                         | One JWT (`access_token`, ~90 days). No refresh token — the backend has no refresh endpoint |
+| Every request                 | `Authorization: Bearer <token>` when signed in                                             |
+| 401 with the current token    | `signOut()` → token + React Query cache cleared, `Stack.Protected` shows sign-in           |
+| 401 with an older token       | Ignored (user signed in again meanwhile)                                                   |
+| Login with `activated: false` | No session; the screen opens email activation (4-digit code), then signs in automatically  |
 
 ### Session lifecycle (`useAuthStore`)
 
-- `signIn(access, refresh)` / `setTokens(access, refresh)` — persist to SecureStore and update memory
-- `signOut()` — clears memory, React Query cache, and SecureStore
-- `loadAuthFromStorage()` — called at startup; on the first launch after install it wipes leftover tokens (iOS Keychain survives uninstall, MMKV doesn't)
+- `signIn(accessToken)` — persists to SecureStore and updates memory (called by `useLoginMutation` for activated accounts)
+- `signOut()` — clears memory, React Query cache, and SecureStore (`useLogoutMutation` calls it even if the server call fails)
+- `loadAuthFromStorage()` — called at startup; on the first launch after install it wipes a leftover token (iOS Keychain survives uninstall, MMKV doesn't)
 
-Tests: `__tests__/api/authInterceptors.test.ts`, `__tests__/store/useAuthStore.test.ts`.
+Tests: `__tests__/api/`, `__tests__/store/useAuthStore.test.ts`, `__tests__/features/auth/`.
 
 ## Docs
 
 - [Axios interceptors](https://axios-http.com/docs/interceptors)
-- [TanStack React Query](https://tanstack.com/query/latest)
+- [TanStack Query — mutationOptions](https://tanstack.com/query/v5/docs/framework/react/reference/mutationOptions)
+- [TanStack Query — queryOptions](https://tanstack.com/query/v5/docs/react/reference/queryOptions)

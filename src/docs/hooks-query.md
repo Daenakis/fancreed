@@ -16,13 +16,13 @@ TanStack React Query hooks for server state — fetching, caching, and mutations
 
 ```ts
 import { useQuery } from '@tanstack/react-query';
-import { api, fetcher } from '@/api';
+import { authApi, fetcher, profileApi } from '@/api';
 import { QueryKey } from '@/types';
 
 export function useUserQuery(id: string) {
   return useQuery({
     queryKey: [QueryKey.User, id],
-    queryFn: () => fetcher(api.getUser(id)),
+    queryFn: () => fetcher(profileApi.getSelf()),
   });
 }
 ```
@@ -31,7 +31,7 @@ Mutation:
 
 ```ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, fetcher } from '@/api';
+import { authApi, fetcher, profileApi } from '@/api';
 import { QueryKey } from '@/types';
 import type { LoginRequest } from '@/types/api';
 
@@ -39,7 +39,7 @@ export function useLoginMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: LoginRequest) => fetcher(api.login(params)),
+    mutationFn: (params: LoginRequest) => fetcher(authApi.login(params)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKey.User] });
     },
@@ -53,13 +53,13 @@ export function useLoginMutation() {
 
 ```ts
 // api methods use raw axios — return AxiosResponse<T>
-api.getUser(id); // → Promise<AxiosResponse<UserResponse>>
+profileApi.getSelf(); // → Promise<AxiosResponse<Profile>>
 
 // fetcher unwraps to just the data
-fetcher(api.getUser(id)); // → Promise<UserResponse>
+fetcher(profileApi.getSelf()); // → Promise<UserResponse>
 ```
 
-API methods live in `src/api/api.ts` using raw `axiosInstance.*` calls. See the commented example there.
+API methods live in `src/api/endpoints/<group>.ts` (one file per apidoc group) using raw `axiosInstance.*` calls. Real example: `src/hooks/query/auth/` (`mutationOptions` + hook per endpoint). `profileApi` above is illustrative.
 
 ## Folder Structure
 

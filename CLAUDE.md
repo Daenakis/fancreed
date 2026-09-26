@@ -129,12 +129,12 @@ One store per file: `use[Name]Store.ts` in `src/store/`.
 
 ### React Query — one hook per resource
 
-Hook files live in `src/hooks/query/`, named `use[Resource]Query.ts` or `use[Action]Mutation.ts`.
+Hook files live in `src/hooks/query/<group>/` (one folder per apidoc group), named `use[Resource]Query.ts` or `use[Action]Mutation.ts`, each exporting its `queryOptions`/`mutationOptions` too. Endpoints live in `src/api/endpoints/<group>.ts`.
 Always wrap API calls with `fetcher()` from `@/api` to unwrap `AxiosResponse<T>` → `T`:
 
 ```ts
-import { api, fetcher } from '@/api';
-queryFn: () => fetcher(api.getUser(id));
+import { authApi, fetcher } from '@/api';
+mutationFn: (params: LoginRequest) => fetcher(authApi.login(params)),
 ```
 
 ### Environment access
@@ -204,8 +204,8 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Dependencies:** never remove a package because `src/` doesn't import it. Check `peerDependencies` of installed packages first — BugSnag needs netinfo, expo-crypto, expo-file-system, expo-application, expo-device; Unistyles uses react-native-edge-to-edge.
 - **Icons:** generate with `yarn icons` (never hand-write SVG components). Some icons are hand-edited after generation (`Lion.tsx`) — never run `yarn icons --force` without asking.
 - **Fonts:** keep `useFonts` in `useAppReady`. The font files' PostScript names are `Inter18pt-*`; iOS only finds embedded fonts by that name, `useFonts` registers the `Inter-*` names the theme uses.
-- **Auth API contract is assumed:** `LoginResponse` / `RefreshResponse` in `src/types/api.ts` use `{ accessToken, refreshToken }` until the real backend is confirmed. Flag it if a task touches auth.
-- **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` and API URLs (`eas.json`).
+- **Backend:** `https://app.fancreed.com/api/`, contract in the apidoc (`/apidoc`, credentials from Denis — never commit them). Auth is email-only, single JWT (no refresh), email activation with a 4-digit code. See `src/docs/api.md` for how requests are organised. Field validation in `src/schemas/authFields.ts` mirrors the apidoc regexes.
+- **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` (`eas.json`).
 - **Autonomy:** run commands, installs and checks yourself without asking. Stop and ask Denis only for important/hard changes (breaking behaviour, visible UI change, new npm packages that add functionality, anything outward-facing).
 - **Workflows:** use the project skills — `/migrate-component`, `/new-feature`, `/new-component`, `/migrate-screen`, `/review`, `/setup`.
 
@@ -219,7 +219,7 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Styles:** map old hardcoded values to the closest theme token; list every non-exact match. Ask when the look would change noticeably.
 - **New npm packages** require Denis's approval — ask first.
 - **Tests** for every migrated component, following best practices in `src/docs/testing.md`.
-- **Visual check:** only on Denis's booted iOS simulator via Maestro (`~/.maestro/bin/maestro`). Temporarily comment out the SignInScreen content and render the component demo there (no login/navigation steps), exercise every prop, screenshot, then revert. Light mode only — skip dark mode. Run `maestro --device <booted sim id> test` (another device is connected). Don't relaunch the app: keep it running, edit the file and let Fast Refresh reload it (or reload JS); flows start straight at the screen, no `launchApp`. Only if the app isn't running: `launchApp` (no `clearState`), tap `http://.*:8081`, then optional `Continue` and `Close` on the dev menu. Tap a non-input element to dismiss the keyboard (`hideKeyboard` fails on iOS). Screenshots: `xcrun simctl io <sim id> screenshot`, then `sips -Z 500`; tile several into one image before viewing. Full JS reload (e.g. to replay an intro): `curl -X POST http://localhost:8081/reload` only fast-refreshes — state survives. Say what couldn't be checked.
+- **Visual check:** only on Denis's booted iOS simulator via Maestro (`~/.maestro/bin/maestro`). Temporarily replace the SignInScreen content with the component demo (no login/navigation steps), exercise every prop, screenshot, then restore it. **Copy the file to the scratchpad first and restore from that copy** — `git checkout` drops uncommitted work in it. If edits stop showing up, Metro's file watcher is stale: ask Denis to restart `yarn start`. Light mode only — skip dark mode. Run `maestro --device <booted sim id> test` (another device is connected). Don't relaunch the app: keep it running, edit the file and let Fast Refresh reload it (or reload JS); flows start straight at the screen, no `launchApp`. Only if the app isn't running: `launchApp` (no `clearState`), tap `http://.*:8081`, then optional `Continue` and `Close` on the dev menu. Tap a non-input element to dismiss the keyboard (`hideKeyboard` fails on iOS). Screenshots: `xcrun simctl io <sim id> screenshot`, then `sips -Z 500`; tile several into one image before viewing. Full JS reload (e.g. to replay an intro): `curl -X POST http://localhost:8081/reload` only fast-refreshes — state survives. Say what couldn't be checked.
 - **Save tokens:** minimal reads/output — `grep`/`sed -n` over full files, `tail` command output, downscale screenshots (`sips -Z 800`) before viewing, no extra verification loops.
 - **Ask Denis** only when a decision is critical (visible look change, prop/API change, new package); otherwise decide and list it.
 
