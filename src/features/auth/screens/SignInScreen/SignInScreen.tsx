@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Keyboard, Pressable, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
   interpolate,
@@ -18,15 +18,15 @@ import { Text } from '@/ui/components';
 
 import { useAuthStore } from '@/store';
 
-import { SignInForm, SocialSignIn } from '../../components';
-
-const LOGO = require('../../../../../assets/exampleLogo.png');
-const LOGO_WIDTH = 84;
-const LOGO_HEIGHT = 126;
-/** Collapsed logo is 40 px wide, top-left above the form. */
-const LOGO_SCALE = 40 / LOGO_WIDTH;
-const SIDE_PADDING = 18;
-const LOGO_TOP_OFFSET = 12;
+import { AuthLayout, SignInForm } from '../../components';
+import {
+  AUTH_LOGO,
+  AUTH_LOGO_HEIGHT,
+  AUTH_LOGO_SCALE,
+  AUTH_LOGO_TOP_OFFSET,
+  AUTH_LOGO_WIDTH,
+  AUTH_SIDE_PADDING,
+} from '../../constants';
 
 const INTRO_DELAY = 600;
 const INTRO_DURATION = 800;
@@ -36,6 +36,7 @@ let introPlayed = false;
 
 export function SignInScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
   const signIn = useAuthStore((s) => s.signIn);
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
@@ -58,16 +59,17 @@ export function SignInScreen() {
   // Logo starts centred on screen and ends top-left, scaled down.
   // transformOrigin is the logo's top centre, so only its top edge and
   // horizontal centre need to line up with the target.
-  const startTop = height / 2 - LOGO_HEIGHT / 2;
-  const endTop = insets.top + LOGO_TOP_OFFSET;
-  const dx = SIDE_PADDING + (LOGO_WIDTH * LOGO_SCALE) / 2 - width / 2;
+  const startTop = height / 2 - AUTH_LOGO_HEIGHT / 2;
+  const endTop = insets.top + AUTH_LOGO_TOP_OFFSET;
+  const dx =
+    AUTH_SIDE_PADDING + (AUTH_LOGO_WIDTH * AUTH_LOGO_SCALE) / 2 - width / 2;
   const dy = endTop - startTop;
 
   const introStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: interpolate(progress.value, [0, 1], [0, dx]) },
       { translateY: interpolate(progress.value, [0, 1], [0, dy]) },
-      { scale: interpolate(progress.value, [0, 1], [1, LOGO_SCALE]) },
+      { scale: interpolate(progress.value, [0, 1], [1, AUTH_LOGO_SCALE]) },
     ],
   }));
   const welcomeStyle = useAnimatedStyle(() => ({
@@ -80,68 +82,39 @@ export function SignInScreen() {
   // TODO: real login via useLoginMutation once the backend contract is confirmed
   // (form field `login` = email or phone; LoginRequest has only `email`).
   const handleSubmit = () => signIn('mock-access-token', 'mock-refresh-token');
-  // TODO: wire up when the forgot-password / sign-up / social flows exist.
+  // TODO: wire up when the forgot-password / social flows exist.
   const notImplemented = () => {};
 
   return (
-    <Pressable
-      accessible={false}
-      onPress={Keyboard.dismiss}
-      style={styles.container}
-    >
-      <StatusBar style="light" />
-      <Animated.View style={[styles.content(insets.top), contentStyle]}>
-        <Text
-          variant="h4Medium"
-          color="onBrand"
-          accessibilityRole="header"
-          style={styles.title}
+    <AuthLayout
+      title={t('auth.signInTitle')}
+      onSocialPress={notImplemented}
+      hideLogo
+      contentStyle={contentStyle}
+      overlay={
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.intro(startTop), introStyle]}
         >
-          {t('auth.signInTitle')}
-        </Text>
-        <SignInForm
-          onSubmit={handleSubmit}
-          onForgotPassword={notImplemented}
-          onCreateAccount={notImplemented}
-        />
-      </Animated.View>
-      <Animated.View style={[styles.social(insets.bottom), contentStyle]}>
-        <SocialSignIn onPress={notImplemented} />
-      </Animated.View>
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.intro(startTop), introStyle]}
-      >
-        <Animated.Image source={LOGO} style={styles.logo} />
-        <Animated.View style={welcomeStyle}>
-          <Text variant="h3Medium" color="onBrand" style={styles.welcome}>
-            {t('auth.splashWelcome')}
-          </Text>
+          <Animated.Image source={AUTH_LOGO} style={styles.logo} />
+          <Animated.View style={welcomeStyle}>
+            <Text variant="h3Medium" color="onBrand" style={styles.welcome}>
+              {t('auth.splashWelcome')}
+            </Text>
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
-    </Pressable>
+      }
+    >
+      <SignInForm
+        onSubmit={handleSubmit}
+        onForgotPassword={notImplemented}
+        onCreateAccount={() => router.push('/sign-up')}
+      />
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.brand,
-  },
-  content: (topInset: number) => ({
-    paddingTop: topInset + LOGO_TOP_OFFSET + LOGO_HEIGHT * LOGO_SCALE,
-    paddingHorizontal: SIDE_PADDING,
-  }),
-  title: {
-    marginTop: theme.spacing(24),
-    marginBottom: theme.spacing(4),
-  },
-  social: (bottomInset: number) => ({
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: bottomInset + theme.spacing(2),
-  }),
   intro: (top: number) => ({
     position: 'absolute',
     top,
@@ -151,8 +124,8 @@ const styles = StyleSheet.create((theme) => ({
     transformOrigin: 'top',
   }),
   logo: {
-    width: LOGO_WIDTH,
-    height: LOGO_HEIGHT,
+    width: AUTH_LOGO_WIDTH,
+    height: AUTH_LOGO_HEIGHT,
   },
   welcome: {
     marginTop: theme.spacing(3),

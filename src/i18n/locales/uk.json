@@ -22,9 +22,14 @@
     "notRegistered": "Ще не зареєстровані?",
     "createAccount": "Створити акаунт",
     "signInWith": "Увійти через {{provider}}",
+    "signUp": "Зареєструватися",
+    "signUpTitle": "Створіть свій акаунт",
+    "namePlaceholder": "Ім’я",
+    "haveAccount": "Вже маєте акаунт?",
     "errors": {
       "loginRequired": "Введіть email або номер телефону",
-      "passwordRequired": "Введіть пароль"
+      "passwordRequired": "Введіть пароль",
+      "nameRequired": "Введіть ім’я"
     }
   },
   "home": {

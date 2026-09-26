@@ -1,1 +1,1 @@
-export { SignInScreen } from './screens';
+export { SignInScreen, SignUpScreen } from './screens';

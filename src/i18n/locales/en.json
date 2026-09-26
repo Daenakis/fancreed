@@ -22,9 +22,14 @@
     "notRegistered": "Not registered yet?",
     "createAccount": "Create account",
     "signInWith": "Sign in with {{provider}}",
+    "signUp": "Sign Up",
+    "signUpTitle": "Create your account",
+    "namePlaceholder": "Name",
+    "haveAccount": "Already have an account?",
     "errors": {
       "loginRequired": "Enter your email or phone number",
-      "passwordRequired": "Enter your password"
+      "passwordRequired": "Enter your password",
+      "nameRequired": "Enter your name"
     }
   },
   "home": {
