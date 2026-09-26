@@ -1,3 +1,4 @@
+export { AddPhoto, type AddPhotoProps } from './AddPhoto';
 export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
 export {
   Button,

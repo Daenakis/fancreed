@@ -99,5 +99,10 @@
     "required": "This field is required",
     "emailInvalid": "Invalid email address",
     "passwordMin": "Password must be at least {{min}} characters"
+  },
+  "photo": {
+    "label": "Photo",
+    "add": "Add photo",
+    "change": "Change photo"
   }
 }
