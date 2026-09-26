@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
@@ -13,7 +13,7 @@ import { toFormError } from '@/api';
 import { type ForgotPasswordFormValues, forgotPasswordSchema } from '@/schemas';
 
 import { AuthFooterLink, AuthLayout, FormError } from '../../components';
-import { useFieldErrorText } from '../../hooks';
+import { useAuthForm, useFieldErrorText } from '../../hooks';
 
 /** Step 1 of password recovery: ask where to send the code. */
 export function ForgotPasswordScreen() {
@@ -23,16 +23,17 @@ export function ForgotPasswordScreen() {
   const forgotPassword = useForgotPasswordMutation();
   const {
     control,
-    handleSubmit,
     setError,
-    formState: { isValid, errors },
-  } = useForm<ForgotPasswordFormValues>({
+    filled,
+    submitWith,
+    changeHandler,
+    formState: { submitCount, errors },
+  } = useAuthForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
-    mode: 'onTouched',
     defaultValues: { email: '' },
   });
 
-  const submit = handleSubmit(({ email }) =>
+  const submit = submitWith(({ email }) =>
     forgotPassword.mutate(
       { email },
       {
@@ -68,10 +69,11 @@ export function ForgotPasswordScreen() {
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.emailPlaceholder')}
             placeholder={t('auth.emailPlaceholder')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('email', onChange)}
             onBlur={onBlur}
             autoCapitalize="none"
             autoComplete="email"
@@ -87,7 +89,7 @@ export function ForgotPasswordScreen() {
         variant="brand"
         fullWidth
         text={t('auth.resetPassword')}
-        disabled={!isValid}
+        disabled={!filled}
         loading={forgotPassword.isPending}
         onPress={submit}
         style={styles.submit}

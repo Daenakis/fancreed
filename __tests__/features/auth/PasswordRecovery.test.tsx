@@ -109,17 +109,18 @@ describe('NewPasswordScreen', () => {
 
   beforeEach(() => useAuthStore.setState({ accessToken: null }));
 
-  it('shows a mismatch error and keeps save disabled when passwords differ', async () => {
+  it('shows a mismatch error when passwords differ and save is pressed', async () => {
+    const recover = jest.spyOn(authApi, 'recoverPassword');
     const { getByLabelText, getByRole, findByText } = render(
       <NewPasswordScreen />,
     );
 
     fireEvent.changeText(getByLabelText('auth.newPassword'), 'secret1');
     fireEvent.changeText(getByLabelText('auth.repeatPassword'), 'secret2');
-    fireEvent(getByLabelText('auth.repeatPassword'), 'blur');
+    fireEvent.press(getByRole('button', { name: 'auth.save' }));
 
     expect(await findByText('auth.errors.passwordsMismatch')).toBeTruthy();
-    expect(getByRole('button', { name: 'auth.save' })).toBeDisabled();
+    expect(recover).not.toHaveBeenCalled();
   });
 
   it('sets the new password and signs in with it', async () => {

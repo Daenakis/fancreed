@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
@@ -8,7 +8,7 @@ import { Button, Text, TextInput } from '@/ui/components';
 
 import { type SignInFormValues, signInSchema } from '@/schemas';
 
-import { useFieldErrorText } from '../../hooks';
+import { useAuthForm, useFieldErrorText } from '../../hooks';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignInFormProps } from './types';
@@ -25,16 +25,17 @@ export function SignInForm({
   const errorText = useFieldErrorText();
   const {
     control,
-    handleSubmit,
     setError,
-    formState: { isValid, errors },
-  } = useForm<SignInFormValues>({
+    filled,
+    submitWith,
+    changeHandler,
+    formState: { submitCount, errors },
+  } = useAuthForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
-    mode: 'onTouched',
     defaultValues: { login: '', password: '' },
   });
 
-  const submit = handleSubmit((values) => onSubmit(values, setError));
+  const submit = submitWith((values) => onSubmit(values, setError));
 
   return (
     <View style={style}>
@@ -45,10 +46,11 @@ export function SignInForm({
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.emailPlaceholder')}
             placeholder={t('auth.emailPlaceholder')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('login', onChange)}
             onBlur={onBlur}
             autoCapitalize="none"
             autoComplete="email"
@@ -66,10 +68,11 @@ export function SignInForm({
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.password')}
             placeholder={t('auth.password')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('password', onChange)}
             onBlur={onBlur}
             secureTextEntry
             autoComplete="password"
@@ -94,7 +97,7 @@ export function SignInForm({
         variant="brand"
         fullWidth
         text={t('auth.signIn')}
-        disabled={!isValid}
+        disabled={!filled}
         loading={submitting}
         onPress={submit}
       />

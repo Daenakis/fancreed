@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
@@ -12,7 +12,7 @@ import {
   signUpSchema,
 } from '@/schemas';
 
-import { useFieldErrorText } from '../../hooks';
+import { useAuthForm, useFieldErrorText } from '../../hooks';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignUpFormProps } from './types';
@@ -28,16 +28,17 @@ export function SignUpForm({
   const errorText = useFieldErrorText();
   const {
     control,
-    handleSubmit,
     setError,
-    formState: { isValid, errors },
-  } = useForm<SignUpFormInput, unknown, SignUpFormValues>({
+    filled,
+    submitWith,
+    changeHandler,
+    formState: { submitCount, errors },
+  } = useAuthForm<SignUpFormInput, SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onTouched',
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  const submit = handleSubmit((values) => onSubmit(values, setError));
+  const submit = submitWith((values) => onSubmit(values, setError));
 
   return (
     <View style={style}>
@@ -48,10 +49,11 @@ export function SignUpForm({
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.namePlaceholder')}
             placeholder={t('auth.namePlaceholder')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('name', onChange)}
             onBlur={onBlur}
             autoCapitalize="words"
             autoComplete="name"
@@ -67,10 +69,11 @@ export function SignUpForm({
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.emailPlaceholder')}
             placeholder={t('auth.emailPlaceholder')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('email', onChange)}
             onBlur={onBlur}
             autoCapitalize="none"
             autoComplete="email"
@@ -89,10 +92,11 @@ export function SignUpForm({
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.password')}
             placeholder={t('auth.password')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('password', onChange)}
             onBlur={onBlur}
             secureTextEntry
             autoComplete="new-password"
@@ -107,7 +111,7 @@ export function SignUpForm({
         variant="brand"
         fullWidth
         text={t('auth.signUp')}
-        disabled={!isValid}
+        disabled={!filled}
         loading={submitting}
         onPress={submit}
         style={styles.submit}

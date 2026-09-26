@@ -27,14 +27,37 @@ describe('SignInForm', () => {
     expect(getByRole('button', { name: 'auth.signIn' })).toBeDisabled();
   });
 
-  it('keeps submit disabled when the password is shorter than 6', async () => {
+  it('unlocks the button once both fields have text, even if invalid', async () => {
     const utils = setup();
 
-    fill(utils, 'user@mail.com', '12345');
+    fill(utils, 'user@mail.com', '123');
 
     await waitFor(() =>
-      expect(utils.getByRole('button', { name: 'auth.signIn' })).toBeDisabled(),
+      expect(utils.getByRole('button', { name: 'auth.signIn' })).toBeEnabled(),
     );
+  });
+
+  it('shows the error only after the button is pressed', async () => {
+    const utils = setup();
+
+    fill(utils, 'user@mail.com', '123');
+    expect(utils.queryByText('auth.errors.passwordTooShort')).toBeNull();
+
+    fireEvent.press(utils.getByRole('button', { name: 'auth.signIn' }));
+
+    expect(await utils.findByText('auth.errors.passwordTooShort')).toBeTruthy();
+    expect(utils.onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('removes the error when the user edits the field', async () => {
+    const utils = setup();
+    fill(utils, 'user@mail.com', '123');
+    fireEvent.press(utils.getByRole('button', { name: 'auth.signIn' }));
+    await utils.findByText('auth.errors.passwordTooShort');
+
+    fireEvent.changeText(utils.getByLabelText('auth.password'), '1234');
+
+    expect(utils.queryByText('auth.errors.passwordTooShort')).toBeNull();
   });
 
   it('submits trimmed values when both fields are valid', async () => {

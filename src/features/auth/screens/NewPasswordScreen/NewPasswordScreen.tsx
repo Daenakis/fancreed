@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
@@ -15,7 +15,7 @@ import { usePendingActivationStore } from '@/store';
 import { type NewPasswordFormValues, newPasswordSchema } from '@/schemas';
 
 import { AuthFooterLink, AuthLayout, FormError } from '../../components';
-import { useFieldErrorText } from '../../hooks';
+import { useAuthForm, useFieldErrorText } from '../../hooks';
 
 /** Step 3 of password recovery: set the new password, then sign in with it. */
 export function NewPasswordScreen() {
@@ -31,14 +31,13 @@ export function NewPasswordScreen() {
   const setPendingActivation = usePendingActivationStore((s) => s.setPending);
   const {
     control,
-    handleSubmit,
-    trigger,
-    getFieldState,
     setError,
-    formState: { isValid, errors },
-  } = useForm<NewPasswordFormValues>({
+    filled,
+    submitWith,
+    changeHandler,
+    formState: { submitCount, errors },
+  } = useAuthForm<NewPasswordFormValues>({
     resolver: zodResolver(newPasswordSchema),
-    mode: 'onTouched',
     defaultValues: { password: '', confirmPassword: '' },
   });
 
@@ -94,16 +93,11 @@ export function NewPasswordScreen() {
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.newPassword')}
             placeholder={t('auth.newPassword')}
             value={value}
-            onChangeText={(text) => {
-              onChange(text);
-              // Keep the "passwords do not match" error in sync.
-              if (getFieldState('confirmPassword').isTouched) {
-                void trigger('confirmPassword');
-              }
-            }}
+            onChangeText={changeHandler('password', onChange)}
             onBlur={onBlur}
             secureTextEntry
             autoComplete="new-password"
@@ -118,10 +112,11 @@ export function NewPasswordScreen() {
           <TextInput
             variant="inverse"
             error={errorText(fieldState.error)}
+            shakeKey={submitCount}
             accessibilityLabel={t('auth.repeatPassword')}
             placeholder={t('auth.repeatPassword')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={changeHandler('confirmPassword', onChange)}
             onBlur={onBlur}
             secureTextEntry
             autoComplete="new-password"
@@ -134,9 +129,9 @@ export function NewPasswordScreen() {
         variant="brand"
         fullWidth
         text={t('auth.save')}
-        disabled={!isValid}
+        disabled={!filled}
         loading={recoverPassword.isPending || login.isPending}
-        onPress={handleSubmit(onSubmit)}
+        onPress={submitWith(onSubmit)}
         style={styles.submit}
       />
       <FormError message={errorText(errors.root?.server)} />

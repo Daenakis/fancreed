@@ -7,20 +7,13 @@ const setup = () => {
   return { ...render(<SignUpForm {...handlers} />), ...handlers };
 };
 
-const typeAndLeave = (
-  utils: ReturnType<typeof setup>,
-  label: string,
-  text: string,
-) => {
-  const input = utils.getByLabelText(label);
-  fireEvent.changeText(input, text);
-  fireEvent(input, 'blur');
-};
-
 const fillValid = (utils: ReturnType<typeof setup>, name = 'Andriy') => {
-  typeAndLeave(utils, 'auth.namePlaceholder', name);
-  typeAndLeave(utils, 'auth.emailPlaceholder', 'user@mail.com');
-  typeAndLeave(utils, 'auth.password', 'secret1');
+  fireEvent.changeText(utils.getByLabelText('auth.namePlaceholder'), name);
+  fireEvent.changeText(
+    utils.getByLabelText('auth.emailPlaceholder'),
+    'user@mail.com',
+  );
+  fireEvent.changeText(utils.getByLabelText('auth.password'), 'secret1');
 };
 
 describe('SignUpForm', () => {
@@ -56,10 +49,26 @@ describe('SignUpForm', () => {
   });
 
   describe('validation (backend rules)', () => {
-    it('shows no error while the user is still typing', () => {
+    const VALID = {
+      'auth.namePlaceholder': 'Andriy',
+      'auth.emailPlaceholder': 'user@mail.com',
+      'auth.password': 'secret1',
+    } as const;
+
+    const fillWith = (
+      utils: ReturnType<typeof setup>,
+      overrides: Partial<Record<keyof typeof VALID, string>>,
+    ) => {
+      const values = { ...VALID, ...overrides };
+      (Object.keys(values) as (keyof typeof VALID)[]).forEach((label) =>
+        fireEvent.changeText(utils.getByLabelText(label), values[label]),
+      );
+    };
+
+    it('shows no error while the user is typing', () => {
       const utils = setup();
 
-      fireEvent.changeText(utils.getByLabelText('auth.emailPlaceholder'), 'x');
+      fillWith(utils, { 'auth.emailPlaceholder': 'user@' });
 
       expect(utils.queryByText(/auth.errors/)).toBeNull();
     });
@@ -77,14 +86,16 @@ describe('SignUpForm', () => {
       ['auth.password', 'a'.repeat(33), 'auth.errors.passwordTooLong'],
       ['auth.password', 'pass word1', 'auth.errors.passwordInvalid'],
       ['auth.password', 'пароль123', 'auth.errors.passwordInvalid'],
-    ])(
-      'shows an error when %s is "%s" and the field is left',
+    ] as const)(
+      'shows an error when %s is "%s" and the button is pressed',
       async (label, text, error) => {
         const utils = setup();
+        fillWith(utils, { [label]: text });
 
-        typeAndLeave(utils, label, text);
+        fireEvent.press(utils.getByRole('button', { name: 'auth.signUp' }));
 
         expect(await utils.findByText(error)).toBeTruthy();
+        expect(utils.onSubmit).not.toHaveBeenCalled();
       },
     );
   });
