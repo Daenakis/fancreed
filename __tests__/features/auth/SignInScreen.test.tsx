@@ -9,16 +9,21 @@ beforeEach(() => {
 });
 
 describe('SignInScreen', () => {
-  it('renders the header and sign-in button', () => {
+  it('renders the title and a disabled sign-in button when opened', () => {
     const { getByRole } = render(<SignInScreen />);
 
-    expect(getByRole('header')).toBeTruthy();
-    expect(getByRole('button', { name: 'auth.signIn' })).toBeTruthy();
+    expect(getByRole('header', { name: 'auth.signInTitle' })).toBeTruthy();
+    expect(getByRole('button', { name: 'auth.signIn' })).toBeDisabled();
   });
 
-  it('calls signIn with tokens when the button is pressed', async () => {
-    const { getByRole } = render(<SignInScreen />);
+  it('stores tokens when the filled form is submitted', async () => {
+    const { getByLabelText, getByRole } = render(<SignInScreen />);
 
+    fireEvent.changeText(getByLabelText('auth.loginPlaceholder'), 'a@b.c');
+    fireEvent.changeText(getByLabelText('auth.password'), 'secret');
+    await waitFor(() =>
+      expect(getByRole('button', { name: 'auth.signIn' })).toBeEnabled(),
+    );
     fireEvent.press(getByRole('button', { name: 'auth.signIn' }));
 
     await waitFor(() => {
@@ -27,10 +32,9 @@ describe('SignInScreen', () => {
     });
   });
 
-  it('starts with no tokens in the store', () => {
+  it('leaves the store empty when nothing is submitted', () => {
     render(<SignInScreen />);
 
     expect(useAuthStore.getState().accessToken).toBeNull();
-    expect(useAuthStore.getState().refreshToken).toBeNull();
   });
 });

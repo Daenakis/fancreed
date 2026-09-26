@@ -14,7 +14,18 @@
     "email": "Електронна пошта",
     "password": "Пароль",
     "welcomeTitle": "Ласкаво просимо",
-    "welcomeSubtitle": "Увійдіть, щоб продовжити"
+    "welcomeSubtitle": "Увійдіть, щоб продовжити",
+    "splashWelcome": "Ласкаво просимо!",
+    "signInTitle": "Увійдіть у свій акаунт",
+    "loginPlaceholder": "Email або номер телефону",
+    "forgotPassword": "Забули пароль?",
+    "notRegistered": "Ще не зареєстровані?",
+    "createAccount": "Створити акаунт",
+    "signInWith": "Увійти через {{provider}}",
+    "errors": {
+      "loginRequired": "Введіть email або номер телефону",
+      "passwordRequired": "Введіть пароль"
+    }
   },
   "home": {
     "title": "Головна",

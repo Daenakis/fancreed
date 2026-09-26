@@ -16,11 +16,18 @@ appId: com.fancreed.app.dev # dev bundle id (see env.ts)
           text: 'Continue'
           optional: true
 
-# Sign-in screen should be visible.
-- assertVisible: 'Welcome'
-- assertVisible: 'Sign in to continue'
+# Sign-in screen should be visible (after the logo intro).
+- extendedWaitUntil:
+    visible: 'Sign in to your account'
+    timeout: 15000
 
-# Tap the sign-in button (matches both visible text and accessibilityLabel).
+# Fill the form — the button unlocks once both fields have a value.
+- tapOn: 'Email or phone number'
+- inputText: 'user@example.com'
+- tapOn: 'Sign in to your account' # dismiss the keyboard
+- tapOn: 'Password'
+- inputText: 'secret123'
+- tapOn: 'Sign in to your account'
 - tapOn: 'Sign In'
 
 # Home screen should now be visible — confirms the auth flow completed.
@@ -29,4 +36,4 @@ appId: com.fancreed.app.dev # dev bundle id (see env.ts)
 
 # Sign out and verify we land back on the sign-in screen.
 - tapOn: 'Sign Out'
-- assertVisible: 'Welcome'
+- assertVisible: 'Sign in to your account'

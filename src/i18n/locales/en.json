@@ -14,7 +14,18 @@
     "email": "Email",
     "password": "Password",
     "welcomeTitle": "Welcome",
-    "welcomeSubtitle": "Sign in to continue"
+    "welcomeSubtitle": "Sign in to continue",
+    "splashWelcome": "Welcome!",
+    "signInTitle": "Sign in to your account",
+    "loginPlaceholder": "Email or phone number",
+    "forgotPassword": "Forgot password?",
+    "notRegistered": "Not registered yet?",
+    "createAccount": "Create account",
+    "signInWith": "Sign in with {{provider}}",
+    "errors": {
+      "loginRequired": "Enter your email or phone number",
+      "passwordRequired": "Enter your password"
+    }
   },
   "home": {
     "title": "Home",
