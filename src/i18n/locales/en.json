@@ -26,10 +26,29 @@
     "signUpTitle": "Create your account",
     "namePlaceholder": "Name",
     "haveAccount": "Already have an account?",
+    "forgotTitle": "Password recovery",
+    "forgotSubtitle": "Enter the email or phone number your account is registered with",
+    "resetPassword": "Reset password",
+    "codeTitle": "Verification code",
+    "codeSubtitle": "Enter the code we sent to your email",
+    "codeNotReceived": "Didn’t get the code?",
+    "resendIn": "Try again in",
+    "resendSeconds_one": "{{count}} second",
+    "resendSeconds_other": "{{count}} seconds",
+    "resendCode": "Send the code again",
+    "codeDigit": "Digit {{index}} of {{total}}",
+    "newPasswordTitle": "New password",
+    "newPasswordSubtitle": "Create a new password",
+    "newPassword": "New password",
+    "repeatPassword": "Repeat new password",
+    "save": "Save",
+    "rememberedPassword": "Remembered your password?",
     "errors": {
       "loginRequired": "Enter your email or phone number",
       "passwordRequired": "Enter your password",
-      "nameRequired": "Enter your name"
+      "nameRequired": "Enter your name",
+      "invalidCode": "Invalid code. Check it and try again",
+      "passwordsMismatch": "Passwords do not match"
     }
   },
   "home": {

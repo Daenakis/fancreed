@@ -26,10 +26,31 @@
     "signUpTitle": "Створіть свій акаунт",
     "namePlaceholder": "Ім’я",
     "haveAccount": "Вже маєте акаунт?",
+    "forgotTitle": "Відновлення пароля",
+    "forgotSubtitle": "Введіть email або номер телефону, на який зареєстровано ваш акаунт",
+    "resetPassword": "Скинути пароль",
+    "codeTitle": "Код-підтвердження",
+    "codeSubtitle": "Введіть код, що надійшов на вашу пошту",
+    "codeNotReceived": "Не отримали код?",
+    "resendIn": "Спробуйте ще раз через",
+    "resendSeconds_one": "{{count}} секунду",
+    "resendSeconds_few": "{{count}} секунди",
+    "resendSeconds_many": "{{count}} секунд",
+    "resendSeconds_other": "{{count}} секунди",
+    "resendCode": "Надіслати код ще раз",
+    "codeDigit": "Цифра {{index}} з {{total}}",
+    "newPasswordTitle": "Новий пароль",
+    "newPasswordSubtitle": "Створіть новий пароль",
+    "newPassword": "Новий пароль",
+    "repeatPassword": "Повторіть новий пароль",
+    "save": "Зберегти",
+    "rememberedPassword": "Згадали пароль?",
     "errors": {
       "loginRequired": "Введіть email або номер телефону",
       "passwordRequired": "Введіть пароль",
-      "nameRequired": "Введіть ім’я"
+      "nameRequired": "Введіть ім’я",
+      "invalidCode": "Невірний код. Перевірте та спробуйте ще раз",
+      "passwordsMismatch": "Паролі не збігаються"
     }
   },
   "home": {

@@ -34,4 +34,14 @@ setupAuthInterceptors(axiosInstance, (refreshToken) =>
 export const api = {
   login: (params: T.LoginRequest) =>
     axiosInstance.post<T.LoginResponse>('auth/login', params),
+  // Password reset — endpoint paths are assumed until the backend confirms them.
+  requestPasswordReset: (params: T.PasswordResetRequest) =>
+    axiosInstance.post<void>('auth/password/forgot', params),
+  verifyResetCode: (params: T.VerifyResetCodeRequest) =>
+    axiosInstance.post<T.VerifyResetCodeResponse>(
+      'auth/password/verify',
+      params,
+    ),
+  resetPassword: (params: T.ResetPasswordRequest) =>
+    axiosInstance.post<void>('auth/password/reset', params),
 } as const;

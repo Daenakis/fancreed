@@ -82,7 +82,7 @@ export function SignInScreen() {
   // TODO: real login via useLoginMutation once the backend contract is confirmed
   // (form field `login` = email or phone; LoginRequest has only `email`).
   const handleSubmit = () => signIn('mock-access-token', 'mock-refresh-token');
-  // TODO: wire up when the forgot-password / social flows exist.
+  // TODO: wire up when social sign-in exists.
   const notImplemented = () => {};
 
   return (
@@ -107,7 +107,7 @@ export function SignInScreen() {
     >
       <SignInForm
         onSubmit={handleSubmit}
-        onForgotPassword={notImplemented}
+        onForgotPassword={() => router.push('/forgot-password')}
         onCreateAccount={() => router.push('/sign-up')}
       />
     </AuthLayout>
