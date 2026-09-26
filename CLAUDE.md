@@ -207,6 +207,7 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Backend:** `https://app.fancreed.com/api/`, contract in the apidoc (`/apidoc`, credentials from Denis — never commit them). Auth is email-only, single JWT (no refresh), email activation with a 4-digit code. See `src/docs/api.md` for how requests are organised. Field validation in `src/schemas/authFields.ts` mirrors the apidoc regexes.
 - **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` (`eas.json`).
 - **Autonomy:** run commands, installs and checks yourself without asking. Stop and ask Denis only for important/hard changes (breaking behaviour, visible UI change, new npm packages that add functionality, anything outward-facing).
+- **Committing:** stage with `git add -A <folder>` (never list paths that may already be deleted — one bad path makes the whole `git add` fail silently in a chain) and check `git status` is clean for the intended files before pushing.
 - **Workflows:** use the project skills — `/migrate-component`, `/new-feature`, `/new-component`, `/migrate-screen`, `/review`, `/setup`.
 
 ### Migration from the old app (Denis's rules)
