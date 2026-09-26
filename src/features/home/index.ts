@@ -1,2 +1,7 @@
-export { TableBlock, type TableBlockProps } from './components';
+export {
+  NewsBlock,
+  type NewsBlockProps,
+  TableBlock,
+  type TableBlockProps,
+} from './components';
 export { HomeScreen } from './screens';

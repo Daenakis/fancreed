@@ -93,7 +93,7 @@ describe('ImageCard', () => {
       />,
     );
 
-    expect(getByText('Big win')).toBeTruthy();
+    expect(getByText('Big win').props.numberOfLines).toBe(3);
     expect(
       getByText('Rukh beat Vorskla 4:3 in a thriller.').props.numberOfLines,
     ).toBe(4);

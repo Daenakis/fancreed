@@ -8,6 +8,10 @@ export const CONFIG = {
   RUN_MODE: Env.EXPO_PUBLIC_RUN_MODE,
   NAME: Env.EXPO_PUBLIC_NAME,
   VERSION: Env.EXPO_PUBLIC_VERSION,
+  LINKS: {
+    /** Club site article: base + post slug. */
+    NEWS_POST: 'https://fcruhlviv.com/posts/',
+  },
 } as const;
 
 export const QUERY_CONFIG: QueryClientConfig = {

@@ -49,6 +49,7 @@ export function ImageCard({
             <Text
               variant="h3Medium"
               color={textColor}
+              numberOfLines={3}
               style={styles.articleTitle}
             >
               {title}
