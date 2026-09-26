@@ -21,9 +21,11 @@ const appIconBadgeConfig: AppIconBadgeConfig = {
   ],
 };
 
-// ⚠️ REPLACE with your Expo account username and project ID before running `eas init`
-const EXPO_ACCOUNT_OWNER = 'your-expo-username';
-const EAS_PROJECT_ID = 'your-eas-project-id';
+// Expo account or organization that owns the project (`eas whoami`).
+const EXPO_ACCOUNT_OWNER = 'fancreed';
+// UUID printed by `eas init` (e.g. 'a1b2c3d4-...'). Leave empty until then —
+// a non-UUID value makes EAS fail with "Invalid UUID appId".
+const EAS_PROJECT_ID = '';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -97,9 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     // supportsRTL: true,
-    eas: {
-      projectId: EAS_PROJECT_ID,
-    },
+    eas: EAS_PROJECT_ID ? { projectId: EAS_PROJECT_ID } : {},
     bugsnag: {
       apiKey: Env.EXPO_PUBLIC_BUGSNAG_API_KEY || undefined,
     },
