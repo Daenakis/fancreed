@@ -24,6 +24,7 @@ const MESSAGE_CODES: Record<string, ApiErrorCode> = {
   'Code expired': 'CODE_EXPIRED',
   'Account already confirmed': 'ALREADY_ACTIVATED',
   'Your account needs to be verified': 'NOT_ACTIVATED',
+  'Account not verified': 'NOT_ACTIVATED',
   'Bad request': 'BAD_REQUEST',
 };
 

@@ -16,6 +16,7 @@ describe('getApiErrorCode', () => {
     ['Wrong code', 'WRONG_CODE'],
     ['Code expired', 'CODE_EXPIRED'],
     ['Account already confirmed', 'ALREADY_ACTIVATED'],
+    ['Account not verified', 'NOT_ACTIVATED'],
     ['Bad request', 'BAD_REQUEST'],
   ])('maps the backend message "%s" to %s', (message, code) => {
     expect(getApiErrorCode(apiError(400, message))).toBe(code);
