@@ -44,12 +44,12 @@ Copy the example env file and fill in the values:
 cp .env.example .env
 ```
 
-| Variable                      | Description                                  | Example                   |
-| ----------------------------- | -------------------------------------------- | ------------------------- |
-| `EXPO_PUBLIC_RUN_MODE`        | App environment                              | `dev` / `stg` / `prod`    |
-| `EXPO_PUBLIC_API_URL`         | API base URL                                 | `https://api.example.com` |
-| `EXPO_PUBLIC_BUGSNAG_API_KEY` | BugSnag API key for error reporting          | `abc123...`               |
-| `STRICT_ENV_VALIDATION`       | Enable strict Zod validation before prebuild | `true` / `false`          |
+| Variable                      | Description                                                  | Example                   |
+| ----------------------------- | ------------------------------------------------------------ | ------------------------- |
+| `EXPO_PUBLIC_RUN_MODE`        | App environment                                              | `dev` / `stg` / `prod`    |
+| `EXPO_PUBLIC_API_URL`         | API base URL                                                 | `https://api.example.com` |
+| `EXPO_PUBLIC_BUGSNAG_API_KEY` | BugSnag API key for error reporting                          | `abc123...`               |
+| `STRICT_ENV_VALIDATION`       | `true`: invalid env fails the build; otherwise it only warns | `true` / `false`          |
 
 ## Running the App
 

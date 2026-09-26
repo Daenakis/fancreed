@@ -10,6 +10,7 @@ const schema = z.object({
 describe('validateEnv', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   it('returns parsed values when env is valid', () => {
@@ -34,5 +35,24 @@ describe('validateEnv', () => {
     expect(() => validateEnv({ schema, env: {} })).toThrow(
       'Invalid environment variables',
     );
+  });
+
+  it('warns and returns env unchanged when invalid in warn mode', () => {
+    const env = { NAME: 'app' };
+
+    const result = validateEnv({ schema, env, onInvalid: 'warn' });
+
+    expect(result).toBe(env);
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('PORT'));
+  });
+
+  it('does not warn when env is valid in warn mode', () => {
+    validateEnv({
+      schema,
+      env: { NAME: 'app', PORT: '3000' },
+      onInvalid: 'warn',
+    });
+
+    expect(console.warn).not.toHaveBeenCalled();
   });
 });

@@ -47,11 +47,12 @@ const _env: EnvType = {
   EXPO_PUBLIC_VERSION: packageJSON.version,
 };
 
-const Env = STRICT_ENV_VALIDATION
-  ? validateEnv({
-      schema: envSchema,
-      env: _env,
-    })
-  : _env;
+// Strict (EAS builds): invalid env fails the build.
+// Otherwise (local dev): invalid env is logged as a warning.
+const Env = validateEnv({
+  schema: envSchema,
+  env: _env,
+  onInvalid: STRICT_ENV_VALIDATION ? 'throw' : 'warn',
+});
 
 export default Env;

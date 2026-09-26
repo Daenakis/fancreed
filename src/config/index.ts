@@ -1,6 +1,8 @@
 import type { QueryClientConfig } from '@tanstack/react-query';
 import Env from 'env';
 
+import { shouldRetryQuery } from '@/utils/shouldRetryQuery';
+
 export const CONFIG = {
   API_URL: Env.EXPO_PUBLIC_API_URL,
   RUN_MODE: Env.EXPO_PUBLIC_RUN_MODE,
@@ -13,7 +15,7 @@ export const QUERY_CONFIG: QueryClientConfig = {
     queries: {
       staleTime: 1000 * 60,
       gcTime: 1000 * 60 * 5,
-      retry: 2,
+      retry: shouldRetryQuery,
     },
     mutations: {
       retry: 0,

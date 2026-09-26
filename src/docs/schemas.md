@@ -13,7 +13,7 @@ Zod schemas for runtime validation and type inference. Used for env validation (
 ## Quick Example
 
 ```ts
-import z from 'zod';
+import { z } from 'zod';
 
 export const userSchema = z.object({
   id: z.string(),
@@ -34,15 +34,13 @@ src/schemas/
 
 ## Using Schemas with Forms
 
-Schemas double as form validators via `zod4Resolver` from `@/utils`.
-
-> **Why a custom resolver?** `@hookform/resolvers` doesn't support Zod v4 yet. Use `zod4Resolver` from `@/utils` instead.
+Schemas double as form validators via `zodResolver` from `@hookform/resolvers/zod` (v5.1+ supports Zod v4).
 
 ### Step 1 — Define the schema in `src/schemas/`
 
 ```ts
 // src/schemas/signIn.ts
-import z from 'zod';
+import { z } from 'zod';
 
 export const signInSchema = z.object({
   email: z.email(),
@@ -55,10 +53,9 @@ export type SignInFields = z.infer<typeof signInSchema>;
 ### Step 2 — Wire up the form in the screen
 
 ```tsx
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { TextInput } from 'react-native';
-
-import { zod4Resolver } from '@/utils';
 
 import { type SignInFields, signInSchema } from '@/schemas';
 
@@ -68,7 +65,7 @@ export function SignInScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInFields>({
-    resolver: zod4Resolver(signInSchema),
+    resolver: zodResolver(signInSchema),
   });
 
   const onSubmit = (data: SignInFields) => {

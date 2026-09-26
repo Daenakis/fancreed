@@ -146,7 +146,7 @@ Auth tokens (access + refresh) live in **SecureStore** (iOS Keychain / Android K
 
 ### Forms
 
-Use `zod4Resolver` from `@/utils` (not `@hookform/resolvers` — it doesn't support Zod v4 yet). Define schemas in `src/schemas/`, infer types with `z.infer<>`.
+Use `zodResolver` from `@hookform/resolvers/zod` (v5.1+ supports Zod v4). Define schemas in `src/schemas/`, infer types with `z.infer<>`.
 
 ### Imports order (ESLint-enforced)
 
@@ -201,7 +201,7 @@ Full rule: `.cursor/rules/conventional-commits.mdc`
 | `src/docs/api.md`                        | Axios instance, `fetcher()`, auth interceptors (token + refresh-on-401), session flow  |
 | `src/docs/hooks-query.md`                | React Query hook conventions, `fetcher()` usage, query key enums                       |
 | `src/docs/store.md`                      | Zustand store conventions, `useShallow` for multi-field selectors                      |
-| `src/docs/schemas.md`                    | Zod schema conventions, `zod4Resolver` for RHF                                         |
+| `src/docs/schemas.md`                    | Zod schema conventions, `zodResolver` for RHF                                          |
 | `src/docs/ui-components.md`              | UI component workflow: primitives vs components, Unistyles v3                          |
 | `src/docs/testing.md`                    | Full testing conventions, folder structure, examples                                   |
 | `src/docs/e2e.md`                        | Maestro E2E setup and how to run the smoke flow                                        |

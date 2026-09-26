@@ -21,12 +21,19 @@
   "errors": {
     "network": "No internet connection",
     "unknown": "Something went wrong",
+    "unexpected": "Please try again. If the problem persists, restart the app.",
     "tryAgain": "Try Again"
   },
   "playground": {
     "title": "Playground",
     "subtitle": "Test styling, themes, and localization",
-    "currentTheme": "Current theme",
+    "currentTheme": "Theme",
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "showing": "Showing: {{theme}}",
     "language": "Language",
     "colors": "Colors",
     "typography": "Typography",

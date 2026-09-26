@@ -1,4 +1,3 @@
-import { Appearance } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import { storage } from '@/utils/storage';
@@ -34,12 +33,19 @@ declare module 'react-native-unistyles' {
   export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
-function resolveInitialTheme(): ThemeName {
+/**
+ * Restores the saved theme preference before the first render (no flash).
+ * A fixed light/dark choice uses that theme; 'system' or no choice yet
+ * follows the device colour scheme via Unistyles adaptive themes.
+ */
+function resolveThemeSettings() {
   const saved = storage.getString(STORAGE_KEYS.THEME);
 
-  if (saved === 'light' || saved === 'dark') return saved;
+  if (saved === 'light' || saved === 'dark') {
+    return { initialTheme: saved as ThemeName };
+  }
 
-  return Appearance.getColorScheme() ?? 'light';
+  return { adaptiveThemes: true };
 }
 
 StyleSheet.configure({
@@ -48,7 +54,5 @@ StyleSheet.configure({
     dark: darkTheme,
   },
   breakpoints,
-  settings: {
-    initialTheme: resolveInitialTheme,
-  },
+  settings: resolveThemeSettings(),
 });

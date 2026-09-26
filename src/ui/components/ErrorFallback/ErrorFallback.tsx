@@ -22,7 +22,8 @@ export function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
         color="mutedForeground"
         style={styles.message}
       >
-        {error.message}
+        {/* Raw error messages are for developers only — never show them to users */}
+        {__DEV__ ? error.message : t('errors.unexpected')}
       </Text>
       {onRetry && (
         <Pressable

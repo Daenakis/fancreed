@@ -21,7 +21,8 @@ const TYPOGRAPHY_VARIANTS = Object.keys(typography) as TypographyVariant[];
 
 export function PlaygroundScreen() {
   const { t } = useTranslation();
-  const { currentTheme, toggleTheme } = useTheme();
+  const { currentTheme, preference, themePreferences, setPreference } =
+    useTheme();
   const { currentLanguage, changeLanguage, supportedLanguages } = useLanguage();
 
   return (
@@ -45,15 +46,35 @@ export function PlaygroundScreen() {
         >
           {t('playground.currentTheme')}
         </Text>
-        <Pressable
-          accessibilityRole="button"
-          style={styles.button}
-          onPress={toggleTheme}
+        <View style={styles.row}>
+          {themePreferences.map((option) => {
+            const isActive = option === preference;
+
+            return (
+              <Pressable
+                key={option}
+                accessibilityRole="button"
+                accessibilityState={{ selected: isActive }}
+                style={[styles.chip, isActive && styles.chipActive]}
+                onPress={() => setPreference(option)}
+              >
+                <Text
+                  variant="bodyMMedium"
+                  color={isActive ? 'primaryForeground' : 'foreground'}
+                >
+                  {t(`playground.theme.${option}`)}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text
+          variant="bodySRegular"
+          color="mutedForeground"
+          style={styles.hint}
         >
-          <Text variant="bodyLMedium" color="primaryForeground">
-            {currentTheme === 'dark' ? '🌙 Dark' : '☀️ Light'}
-          </Text>
-        </Pressable>
+          {t('playground.showing', { theme: currentTheme })}
+        </Text>
       </View>
 
       <View style={styles.section}>
@@ -154,12 +175,8 @@ const styles = StyleSheet.create((theme) => ({
     letterSpacing: 0.5,
     marginBottom: theme.spacing(3),
   },
-  button: {
-    paddingHorizontal: theme.spacing(5),
-    paddingVertical: theme.spacing(3),
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.md,
-    alignSelf: 'flex-start',
+  hint: {
+    marginTop: theme.spacing(2),
   },
   row: {
     flexDirection: 'row',

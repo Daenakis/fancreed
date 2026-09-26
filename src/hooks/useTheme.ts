@@ -4,30 +4,46 @@ import { UnistylesRuntime, useUnistyles } from 'react-native-unistyles';
 
 import { storage } from '@/utils/storage';
 
-import type { ThemeName } from '@/types';
+import type { ThemeName, ThemePreference } from '@/types';
 
 import { STORAGE_KEYS } from '@/constants';
 
-const availableThemes: ThemeName[] = ['light', 'dark'];
+const themePreferences: ThemePreference[] = ['system', 'light', 'dark'];
 
+function isThemePreference(value: unknown): value is ThemePreference {
+  return themePreferences.includes(value as ThemePreference);
+}
+
+/**
+ * Theme state and the user's theme preference (persisted in MMKV).
+ *
+ * - `currentTheme` — the theme actually shown ('light' | 'dark')
+ * - `preference` — what the user picked ('system' | 'light' | 'dark')
+ */
 export function useTheme() {
-  const { theme } = useUnistyles();
-  const [, setStoredTheme] = useMMKVString(STORAGE_KEYS.THEME, storage);
-
-  const currentTheme = UnistylesRuntime.themeName as ThemeName;
-
-  const setTheme = useCallback(
-    (name: ThemeName) => {
-      UnistylesRuntime.setTheme(name);
-      setStoredTheme(name);
-    },
-    [setStoredTheme],
+  const { theme, rt } = useUnistyles();
+  const [storedPreference, setStoredPreference] = useMMKVString(
+    STORAGE_KEYS.THEME,
+    storage,
   );
 
-  const toggleTheme = useCallback(() => {
-    const next = currentTheme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-  }, [currentTheme, setTheme]);
+  const currentTheme = rt.themeName as ThemeName;
+  const preference: ThemePreference = isThemePreference(storedPreference)
+    ? storedPreference
+    : 'system';
 
-  return { theme, currentTheme, availableThemes, setTheme, toggleTheme };
+  const setPreference = useCallback(
+    (next: ThemePreference) => {
+      if (next === 'system') {
+        UnistylesRuntime.setAdaptiveThemes(true);
+      } else {
+        UnistylesRuntime.setAdaptiveThemes(false);
+        UnistylesRuntime.setTheme(next);
+      }
+      setStoredPreference(next);
+    },
+    [setStoredPreference],
+  );
+
+  return { theme, currentTheme, preference, themePreferences, setPreference };
 }

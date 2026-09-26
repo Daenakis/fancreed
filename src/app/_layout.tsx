@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useUnistyles } from 'react-native-unistyles';
 
 import { ErrorFallback } from '@/ui/components';
 
@@ -20,7 +21,8 @@ SplashScreen.preventAutoHideAsync();
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   useEffect(() => {
-    Bugsnag.notify(error);
+    // Bugsnag only runs when an API key is configured (see src/config/bugsnag.ts)
+    if (Bugsnag.isStarted()) Bugsnag.notify(error);
   }, [error]);
 
   return <ErrorFallback error={error} onRetry={retry} />;
@@ -28,6 +30,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 
 function RootLayout() {
   const isReady = useAppReady();
+  const { rt } = useUnistyles();
 
   if (!isReady) return null;
 
@@ -35,7 +38,8 @@ function RootLayout() {
     <SafeAreaProvider>
       <QueryProvider>
         <RootNavigator />
-        <StatusBar style="auto" />
+        {/* Follow the app theme, not the device — they differ when the user picks a fixed theme */}
+        <StatusBar style={rt.themeName === 'dark' ? 'light' : 'dark'} />
       </QueryProvider>
     </SafeAreaProvider>
   );

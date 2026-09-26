@@ -12,3 +12,6 @@ import { STORAGE_KEYS } from '@/constants';
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 
 export type ThemeName = 'light' | 'dark';
+
+/** User choice: a fixed theme, or follow the device setting. */
+export type ThemePreference = ThemeName | 'system';

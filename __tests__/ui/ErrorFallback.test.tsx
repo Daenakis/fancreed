@@ -50,6 +50,23 @@ describe('ErrorFallback', () => {
     expect(onRetry).not.toHaveBeenCalled();
   });
 
+  it('hides the raw error message in production and shows a generic one', () => {
+    const globals = global as unknown as { __DEV__: boolean };
+    const originalDev = globals.__DEV__;
+    globals.__DEV__ = false;
+
+    try {
+      const { getByText, queryByText } = render(
+        <ErrorFallback error={error} />,
+      );
+
+      expect(queryByText('Something broke')).toBeNull();
+      expect(getByText('errors.unexpected')).toBeTruthy();
+    } finally {
+      globals.__DEV__ = originalDev;
+    }
+  });
+
   it('displays different error messages correctly', () => {
     const customError = new Error('Custom failure reason');
     const { getByText } = render(<ErrorFallback error={customError} />);
