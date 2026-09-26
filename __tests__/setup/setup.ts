@@ -4,6 +4,15 @@ import './mocks/i18next';
 import './mocks/mmkv';
 import './mocks/react-query';
 
+// The real module pulls in Expo's lazy `fetch` global, which Jest rejects
+// as an out-of-scope require once the suite has loaded.
+jest.mock('expo-splash-screen', () => ({
+  preventAutoHideAsync: jest.fn(() => Promise.resolve(true)),
+  hideAsync: jest.fn(() => Promise.resolve(true)),
+  hide: jest.fn(),
+  setOptions: jest.fn(),
+}));
+
 jest.mock(
   'react-native-safe-area-context',
   // eslint-disable-next-line @typescript-eslint/no-require-imports
