@@ -6,7 +6,8 @@
     "save": "Зберегти",
     "back": "Назад",
     "showPassword": "Показати пароль",
-    "hidePassword": "Сховати пароль"
+    "hidePassword": "Сховати пароль",
+    "slideOf": "Слайд {{current}} з {{total}}"
   },
   "auth": {
     "signIn": "Увійти",

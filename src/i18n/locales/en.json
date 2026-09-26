@@ -6,7 +6,8 @@
     "save": "Save",
     "back": "Back",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "slideOf": "Slide {{current}} of {{total}}"
   },
   "auth": {
     "signIn": "Sign In",
