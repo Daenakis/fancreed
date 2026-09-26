@@ -9,4 +9,5 @@
 export enum QueryKey {
   Leagues = 'leagues',
   News = 'news',
+  Votes = 'votes',
 }

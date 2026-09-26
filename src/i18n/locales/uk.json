@@ -133,5 +133,11 @@
   "goals": {
     "more": "На гол більше",
     "less": "На гол менше"
+  },
+  "votes": {
+    "playerOfMatch": "ГРАВЕЦЬ МАТЧУ",
+    "choose": "Обрати",
+    "share": "Поділитись",
+    "shareMessage": "Обери гравця матчу {{home}} – {{away}} у застосунку Fancreed!"
   }
 }

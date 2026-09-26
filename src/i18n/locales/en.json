@@ -131,5 +131,11 @@
   "goals": {
     "more": "One more goal",
     "less": "One goal less"
+  },
+  "votes": {
+    "playerOfMatch": "PLAYER OF THE MATCH",
+    "choose": "Choose",
+    "share": "Share",
+    "shareMessage": "Pick the player of the match {{home}} – {{away}} in the Fancreed app!"
   }
 }
