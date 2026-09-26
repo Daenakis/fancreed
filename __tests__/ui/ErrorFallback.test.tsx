@@ -51,7 +51,7 @@ describe('ErrorFallback', () => {
   });
 
   it('hides the raw error message in production and shows a generic one', () => {
-    const globals = global as unknown as { __DEV__: boolean };
+    const globals = globalThis as unknown as { __DEV__: boolean };
     const originalDev = globals.__DEV__;
     globals.__DEV__ = false;
 

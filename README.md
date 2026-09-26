@@ -6,7 +6,7 @@ Expo-based React Native template with TypeScript, file-based routing, and a scal
 
 | Category       | Technology                      |
 | -------------- | ------------------------------- |
-| Framework      | React Native 0.81 + Expo SDK 54 |
+| Framework      | React Native 0.86 + Expo SDK 57 |
 | Language       | TypeScript (strict mode)        |
 | Navigation     | Expo Router (file-based)        |
 | Styling        | Unistyles v3 (C++ engine)       |

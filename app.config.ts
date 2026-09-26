@@ -4,6 +4,7 @@ import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 import Env from './env';
+import withIosSceneDelegate from './plugins/withIosSceneDelegate';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_RUN_MODE !== 'prod',
@@ -27,7 +28,7 @@ const EXPO_ACCOUNT_OWNER = 'fancreed';
 // a non-UUID value makes EAS fail with "Invalid UUID appId".
 const EAS_PROJECT_ID = '';
 
-export default ({ config }: ConfigContext): ExpoConfig => ({
+const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: Env.EXPO_PUBLIC_NAME,
   description: `${Env.EXPO_PUBLIC_NAME} Mobile App`,
@@ -41,7 +42,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/icon.png',
 
-  newArchEnabled: true,
   ios: {
     supportsTablet: false,
     bundleIdentifier: Env.EXPO_PUBLIC_BUNDLE_ID,
@@ -54,11 +54,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#E6F4FE',
       foregroundImage: './assets/adaptive-icon.png',
     },
-    edgeToEdgeEnabled: true,
     package: Env.EXPO_PUBLIC_PACKAGE,
   },
   plugins: [
     'expo-router',
+    'expo-secure-store',
+    'expo-status-bar',
     [
       'expo-localization',
       {
@@ -105,3 +106,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
 });
+
+// iOS 27 SDK requires the scene life cycle; remove on Expo SDK 58.
+export default (ctx: ConfigContext): ExpoConfig =>
+  withIosSceneDelegate(createConfig(ctx));

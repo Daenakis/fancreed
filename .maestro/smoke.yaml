@@ -5,17 +5,28 @@ appId: com.fancreed.app.dev # dev bundle id (see env.ts)
 - launchApp:
     clearState: true
 
+# Dev Client only: clearState also forgets the last Metro server, so connect
+# to the running one from the launcher and dismiss the dev-menu onboarding.
+- runFlow:
+    when:
+      visible: 'Development Build'
+    commands:
+      - tapOn: 'http://.*:8081'
+      - tapOn:
+          text: 'Continue'
+          optional: true
+
 # Sign-in screen should be visible.
-- assertVisible: "Welcome"
-- assertVisible: "Sign in to continue"
+- assertVisible: 'Welcome'
+- assertVisible: 'Sign in to continue'
 
 # Tap the sign-in button (matches both visible text and accessibilityLabel).
-- tapOn: "Sign In"
+- tapOn: 'Sign In'
 
 # Home screen should now be visible — confirms the auth flow completed.
-- assertVisible: "Home"
-- assertVisible: "You are authenticated"
+- assertVisible: 'Home'
+- assertVisible: 'You are authenticated'
 
 # Sign out and verify we land back on the sign-in screen.
-- tapOn: "Sign Out"
-- assertVisible: "Welcome"
+- tapOn: 'Sign Out'
+- assertVisible: 'Welcome'

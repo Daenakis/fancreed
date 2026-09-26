@@ -1,5 +1,5 @@
+import Env from '@env';
 import type { QueryClientConfig } from '@tanstack/react-query';
-import Env from 'env';
 
 import { shouldRetryQuery } from '@/utils/shouldRetryQuery';
 
