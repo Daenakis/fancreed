@@ -1,3 +1,4 @@
+export { ActivateScreen } from './ActivateScreen';
 export { ForgotPasswordScreen } from './ForgotPasswordScreen';
 export { NewPasswordScreen } from './NewPasswordScreen';
 export { SignInScreen } from './SignInScreen';

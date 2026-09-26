@@ -43,128 +43,61 @@ function createClient(handler: Handler) {
     respond(config, handler(config)),
   );
   const instance = create({ adapter });
-  const refreshTokens = jest.fn();
-  setupAuthInterceptors(instance, refreshTokens);
-  return { instance, adapter, refreshTokens };
-}
-
-const authHeader = (config: InternalAxiosRequestConfig) =>
-  config.headers.Authorization;
-
-/** Server that accepts only the given access token. */
-const acceptsOnly = (token: string) => (config: InternalAxiosRequestConfig) =>
-  authHeader(config) === `Bearer ${token}` ? 200 : 401;
-
-function refreshError(status?: number) {
-  const response = status
-    ? {
-        data: {},
-        status,
-        statusText: '',
-        headers: {},
-        config: {} as InternalAxiosRequestConfig,
-      }
-    : undefined;
-  return new AxiosError('Refresh failed', 'ERR', undefined, null, response);
+  setupAuthInterceptors(instance);
+  return { instance, adapter };
 }
 
 beforeEach(() => {
-  useAuthStore.setState({
-    accessToken: 'old-access',
-    refreshToken: 'old-refresh',
-  });
+  useAuthStore.setState({ accessToken: 'current-token' });
 });
 
 describe('setupAuthInterceptors', () => {
-  it('attaches the bearer token when signed in', async () => {
+  it('sends the current token as a Bearer header', async () => {
     const { instance, adapter } = createClient(() => 200);
 
     await instance.get('/me');
 
-    expect(authHeader(adapter.mock.calls[0][0])).toBe('Bearer old-access');
+    expect(adapter.mock.calls[0][0].headers.Authorization).toBe(
+      'Bearer current-token',
+    );
   });
 
-  it('sends no auth header when signed out', async () => {
-    useAuthStore.setState({ accessToken: null, refreshToken: null });
+  it('sends no Authorization header when signed out', async () => {
+    useAuthStore.setState({ accessToken: null });
     const { instance, adapter } = createClient(() => 200);
 
     await instance.get('/public');
 
-    expect(authHeader(adapter.mock.calls[0][0])).toBeUndefined();
+    expect(adapter.mock.calls[0][0].headers.Authorization).toBeUndefined();
   });
 
-  it('refreshes and retries with the new token when a request gets 401', async () => {
-    const { instance, refreshTokens } = createClient(acceptsOnly('new-access'));
-    refreshTokens.mockResolvedValue({
-      accessToken: 'new-access',
-      refreshToken: 'new-refresh',
-    });
+  it('signs out when the current token is rejected with 401', async () => {
+    const { instance } = createClient(() => 401);
 
-    const response = await instance.get('/me');
+    await expect(instance.get('/me')).rejects.toBeInstanceOf(AxiosError);
 
-    expect(response.status).toBe(200);
-    expect(refreshTokens).toHaveBeenCalledWith('old-refresh');
-    expect(useAuthStore.getState().accessToken).toBe('new-access');
-    expect(useAuthStore.getState().refreshToken).toBe('new-refresh');
-  });
-
-  it('refreshes only once when several requests get 401 at the same time', async () => {
-    const { instance, refreshTokens } = createClient(acceptsOnly('new-access'));
-    refreshTokens.mockResolvedValue({
-      accessToken: 'new-access',
-      refreshToken: 'new-refresh',
-    });
-
-    const responses = await Promise.all([
-      instance.get('/a'),
-      instance.get('/b'),
-      instance.get('/c'),
-    ]);
-
-    expect(responses.map((r) => r.status)).toEqual([200, 200, 200]);
-    expect(refreshTokens).toHaveBeenCalledTimes(1);
-  });
-
-  it('signs out when the backend rejects the refresh token', async () => {
-    const { instance, refreshTokens } = createClient(() => 401);
-    refreshTokens.mockRejectedValue(refreshError(401));
-
-    await expect(instance.get('/me')).rejects.toMatchObject({
-      response: { status: 401 },
-    });
     expect(useAuthStore.getState().accessToken).toBeNull();
-    expect(useAuthStore.getState().refreshToken).toBeNull();
   });
 
-  it('keeps the session when the refresh call fails with a network error', async () => {
-    const { instance, refreshTokens } = createClient(() => 401);
-    refreshTokens.mockRejectedValue(refreshError());
+  it('keeps the session when a 401 comes from an older token', async () => {
+    const { instance } = createClient((config) => {
+      // The user signs in again while this request is in flight.
+      useAuthStore.setState({ accessToken: 'newer-token' });
+      return config.headers.Authorization === 'Bearer current-token'
+        ? 401
+        : 200;
+    });
 
-    await expect(instance.get('/me')).rejects.toThrow('Refresh failed');
-    expect(useAuthStore.getState().accessToken).toBe('old-access');
+    await expect(instance.get('/me')).rejects.toBeInstanceOf(AxiosError);
+
+    expect(useAuthStore.getState().accessToken).toBe('newer-token');
   });
 
-  it('does not refresh when a signed-out request gets 401', async () => {
-    useAuthStore.setState({ accessToken: null, refreshToken: null });
-    const { instance, refreshTokens } = createClient(() => 401);
+  it('keeps the session and rethrows on other errors', async () => {
+    const { instance } = createClient(() => 403);
 
-    await expect(instance.post('/auth/login')).rejects.toMatchObject({
-      response: { status: 401 },
-    });
-    expect(refreshTokens).not.toHaveBeenCalled();
-  });
+    await expect(instance.get('/me')).rejects.toBeInstanceOf(AxiosError);
 
-  it('does not loop when the retried request gets 401 again', async () => {
-    const { instance, adapter, refreshTokens } = createClient(() => 401);
-    refreshTokens.mockResolvedValue({
-      accessToken: 'new-access',
-      refreshToken: 'new-refresh',
-    });
-
-    await expect(instance.get('/me')).rejects.toMatchObject({
-      response: { status: 401 },
-    });
-    expect(refreshTokens).toHaveBeenCalledTimes(1);
-    expect(adapter).toHaveBeenCalledTimes(2);
+    expect(useAuthStore.getState().accessToken).toBe('current-token');
   });
 });

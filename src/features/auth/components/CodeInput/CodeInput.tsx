@@ -16,6 +16,11 @@ import { Text } from '@/ui/components';
 
 import type { CodeBoxProps, CodeInputProps } from './types';
 
+const DISALLOWED = {
+  numeric: /\D/g,
+  alphanumeric: /\W/g,
+} as const;
+
 const SHAKE_OFFSET = 8;
 const SHAKE_STEP_MS = 50;
 const SHAKE_STEPS = 5;
@@ -32,6 +37,7 @@ export function CodeInput({
   value,
   onChangeText,
   length = 6,
+  inputMode = 'numeric',
   error = false,
   busy = false,
   autoFocus = false,
@@ -99,10 +105,12 @@ export function CodeInput({
         ref={setRefs}
         value={value}
         onChangeText={(text) =>
-          onChangeText(text.replace(/\D/g, '').slice(0, length))
+          onChangeText(text.replace(DISALLOWED[inputMode], '').slice(0, length))
         }
         maxLength={length}
-        keyboardType="number-pad"
+        keyboardType={inputMode === 'numeric' ? 'number-pad' : 'default'}
+        autoCapitalize="none"
+        autoCorrect={false}
         textContentType="oneTimeCode"
         autoComplete="one-time-code"
         autoFocus={autoFocus}
@@ -144,13 +152,17 @@ function CodeBox({ digit, label, active, errorProgress }: CodeBoxProps) {
 }
 
 const styles = StyleSheet.create((theme) => ({
+  // Boxes shrink to fit long codes (8 boxes on a small phone) and stay
+  // centred at full size for short ones.
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    gap: theme.spacing(2.5),
   },
   box: {
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    flex: 1,
+    maxWidth: theme.spacing(12),
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

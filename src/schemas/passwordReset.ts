@@ -1,16 +1,14 @@
 import { z } from 'zod';
 
-/** Messages are i18n keys — translate them where the error is shown. */
-export const forgotPasswordSchema = z.object({
-  login: z.string().trim().min(1, 'auth.errors.loginRequired'),
-});
+import { emailField, passwordField } from './authFields';
 
-/** Digits in the password-reset verification code. */
-export const RESET_CODE_LENGTH = 6;
+export const forgotPasswordSchema = z.object({
+  email: emailField,
+});
 
 export const newPasswordSchema = z
   .object({
-    password: z.string().min(1, 'auth.errors.passwordRequired'),
+    password: passwordField,
     confirmPassword: z.string().min(1, 'auth.errors.passwordRequired'),
   })
   .refine((v) => v.password === v.confirmPassword, {

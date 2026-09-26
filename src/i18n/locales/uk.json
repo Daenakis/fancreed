@@ -11,13 +11,11 @@
   "auth": {
     "signIn": "Увійти",
     "signOut": "Вийти",
-    "email": "Електронна пошта",
     "password": "Пароль",
     "welcomeTitle": "Ласкаво просимо",
     "welcomeSubtitle": "Увійдіть, щоб продовжити",
     "splashWelcome": "Ласкаво просимо!",
     "signInTitle": "Увійдіть у свій акаунт",
-    "loginPlaceholder": "Email або номер телефону",
     "forgotPassword": "Забули пароль?",
     "notRegistered": "Ще не зареєстровані?",
     "createAccount": "Створити акаунт",
@@ -27,7 +25,7 @@
     "namePlaceholder": "Ім’я",
     "haveAccount": "Вже маєте акаунт?",
     "forgotTitle": "Відновлення пароля",
-    "forgotSubtitle": "Введіть email або номер телефону, на який зареєстровано ваш акаунт",
+    "forgotSubtitle": "Введіть email, на який зареєстровано ваш акаунт",
     "resetPassword": "Скинути пароль",
     "codeTitle": "Код-підтвердження",
     "codeSubtitle": "Введіть код, що надійшов на вашу пошту",
@@ -46,12 +44,23 @@
     "save": "Зберегти",
     "rememberedPassword": "Згадали пароль?",
     "errors": {
-      "loginRequired": "Введіть email або номер телефону",
       "passwordRequired": "Введіть пароль",
       "nameRequired": "Введіть ім’я",
-      "invalidCode": "Невірний код. Перевірте та спробуйте ще раз",
-      "passwordsMismatch": "Паролі не збігаються"
-    }
+      "passwordsMismatch": "Паролі не збігаються",
+      "nameTooShort": "Ім’я має містити щонайменше {{min}} символи",
+      "nameTooLong": "Ім’я має містити не більше {{max}} символів",
+      "nameInvalid": "Використовуйте літери, цифри, пробіли та апострофи",
+      "passwordTooShort": "Пароль має містити щонайменше {{min}} символів",
+      "passwordTooLong": "Пароль має містити не більше {{max}} символів",
+      "emailRequired": "Введіть email",
+      "emailInvalid": "Введіть коректний email",
+      "passwordInvalid": "Використовуйте латинські літери, цифри та символи, без пробілів",
+      "codeRejected": "Код невірний або його термін дії минув. Поверніться та перевірте його"
+    },
+    "emailPlaceholder": "Email",
+    "activateTitle": "Підтвердження пошти",
+    "activateSubtitle": "Введіть 4-значний код, надісланий на {{email}}",
+    "backToSignIn": "Повернутися до"
   },
   "home": {
     "title": "Головна",
@@ -61,7 +70,16 @@
     "network": "Немає з'єднання з інтернетом",
     "unexpected": "Спробуйте ще раз. Якщо проблема не зникне, перезапустіть застосунок.",
     "unknown": "Щось пішло не так",
-    "tryAgain": "Спробувати знову"
+    "tryAgain": "Спробувати знову",
+    "api": {
+      "wrongPassword": "Невірний пароль",
+      "accountNotFound": "Акаунт з таким email не знайдено",
+      "userExists": "Акаунт з таким email вже існує",
+      "wrongCode": "Невірний код",
+      "codeExpired": "Термін дії коду минув. Запросіть новий",
+      "alreadyActivated": "Акаунт вже підтверджено",
+      "notActivated": "Спершу підтвердіть email"
+    }
   },
   "playground": {
     "title": "Пісочниця",

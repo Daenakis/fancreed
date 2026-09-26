@@ -1,17 +1,36 @@
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { useAuthStore } from '@/store';
+import { useRegisterMutation } from '@/hooks';
 
-import { AuthLayout, SignUpForm } from '../../components';
+import { toFormError } from '@/api';
+
+import { usePendingActivationStore } from '@/store';
+
+import type { SignUpFormInput } from '@/schemas';
+
+import { AuthLayout, SignUpForm, type SignUpFormProps } from '../../components';
 
 export function SignUpScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const signIn = useAuthStore((s) => s.signIn);
+  const register = useRegisterMutation();
+  const setPendingActivation = usePendingActivationStore((s) => s.setPending);
 
-  // TODO: real registration once the backend has a sign-up endpoint.
-  const handleSubmit = () => signIn('mock-access-token', 'mock-refresh-token');
+  const handleSubmit: SignUpFormProps['onSubmit'] = (values, setError) =>
+    register.mutate(values, {
+      onSuccess: () => {
+        setPendingActivation(values.email, values.password);
+        router.push('/activate');
+      },
+      onError: (error) => {
+        const { name, message } = toFormError<keyof SignUpFormInput>(error, {
+          USER_EXISTS: 'email',
+        });
+        setError(name, { message });
+      },
+    });
+
   // TODO: wire up when social sign-in exists.
   const notImplemented = () => {};
 
@@ -22,7 +41,11 @@ export function SignUpScreen() {
 
   return (
     <AuthLayout title={t('auth.signUpTitle')} onSocialPress={notImplemented}>
-      <SignUpForm onSubmit={handleSubmit} onSignIn={goToSignIn} />
+      <SignUpForm
+        onSubmit={handleSubmit}
+        onSignIn={goToSignIn}
+        submitting={register.isPending}
+      />
     </AuthLayout>
   );
 }

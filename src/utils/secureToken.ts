@@ -2,45 +2,18 @@ import * as SecureStore from 'expo-secure-store';
 
 import { STORAGE_KEYS } from '@/constants';
 
-export type Tokens = {
-  accessToken: string | null;
-  refreshToken: string | null;
-};
-
 /**
- * Loads access and refresh tokens from iOS Keychain / Android Keystore.
+ * Access token persistence in iOS Keychain / Android Keystore.
+ * The backend issues a single long-lived token (no refresh token).
  */
-export async function loadTokens(): Promise<Tokens> {
-  const [accessToken, refreshToken] = await Promise.all([
-    SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN),
-    SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN),
-  ]);
-
-  return {
-    accessToken,
-    refreshToken,
-  };
+export function loadToken(): Promise<string | null> {
+  return SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN);
 }
 
-/**
- * Persists tokens to SecureStore. Call on sign-in and token refresh.
- */
-export async function saveTokens(
-  accessToken: string,
-  refreshToken: string,
-): Promise<void> {
-  await Promise.all([
-    SecureStore.setItemAsync(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
-    SecureStore.setItemAsync(STORAGE_KEYS.REFRESH_TOKEN, refreshToken),
-  ]);
+export function saveToken(accessToken: string): Promise<void> {
+  return SecureStore.setItemAsync(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
 }
 
-/**
- * Removes tokens from SecureStore. Call on sign-out.
- */
-export async function clearTokens(): Promise<void> {
-  await Promise.all([
-    SecureStore.deleteItemAsync(STORAGE_KEYS.ACCESS_TOKEN),
-    SecureStore.deleteItemAsync(STORAGE_KEYS.REFRESH_TOKEN),
-  ]);
+export function clearToken(): Promise<void> {
+  return SecureStore.deleteItemAsync(STORAGE_KEYS.ACCESS_TOKEN);
 }

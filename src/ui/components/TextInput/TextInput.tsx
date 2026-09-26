@@ -12,7 +12,7 @@ import type { TextInputProps, TextInputVariant } from './types';
  * and a show/hide toggle for `secureTextEntry`.
  *
  * @example
- * <TextInput label={t('auth.email')} value={email} onChangeText={setEmail} />
+ * <TextInput label={t('auth.emailPlaceholder')} value={email} onChangeText={setEmail} />
  * <TextInput label={t('auth.password')} secureTextEntry error={errors.password?.message} />
  */
 export function TextInput({

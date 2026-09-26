@@ -1,4 +1,5 @@
 export {
+  ActivateScreen,
   ForgotPasswordScreen,
   NewPasswordScreen,
   SignInScreen,

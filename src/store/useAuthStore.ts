@@ -2,25 +2,25 @@ import { create } from 'zustand';
 
 import { queryClient } from '@/providers/queryClient';
 
-import { clearTokens, loadTokens, saveTokens } from '@/utils/secureToken';
+import { clearToken, loadToken, saveToken } from '@/utils/secureToken';
 import { storage } from '@/utils/storage';
 
 import { STORAGE_KEYS } from '@/constants';
 
 interface AuthState {
   accessToken: string | null;
-  refreshToken: string | null;
-  signIn: (accessToken: string, refreshToken: string) => Promise<void>;
+  signIn: (accessToken: string) => Promise<void>;
   signOut: () => Promise<void>;
-  setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()((set, get) => ({
+export const useAuthStore = create<AuthState>()((set) => ({
   accessToken: null,
-  refreshToken: null,
 
-  signIn: (accessToken, refreshToken) =>
-    get().setTokens(accessToken, refreshToken),
+  /** Persists the token to SecureStore, then marks the user signed in. */
+  signIn: async (accessToken) => {
+    await saveToken(accessToken);
+    set({ accessToken });
+  },
 
   /**
    * Clears the session. Memory is cleared first so Stack.Protected
@@ -28,40 +28,30 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
    * next user never sees the previous user's data.
    */
   signOut: async () => {
-    set({ accessToken: null, refreshToken: null });
+    set({ accessToken: null });
     queryClient.clear();
-    await clearTokens();
-  },
-
-  /**
-   * Persists tokens to SecureStore and updates memory.
-   * Used after sign-in and after a token refresh.
-   */
-  setTokens: async (accessToken, refreshToken) => {
-    await saveTokens(accessToken, refreshToken);
-    set({ accessToken, refreshToken });
+    await clearToken();
   },
 }));
 
 /**
- * Loads tokens from SecureStore and populates the auth store.
+ * Loads the token from SecureStore and populates the auth store.
  * Call once during app startup (in useAppReady) before rendering.
  *
  * iOS keeps Keychain items after the app is uninstalled, while MMKV is wiped.
- * A missing HAS_LAUNCHED flag therefore means a fresh install — leftover
- * tokens from a previous install are removed instead of auto-signing in.
+ * A missing HAS_LAUNCHED flag therefore means a fresh install — a leftover
+ * token from a previous install is removed instead of auto-signing in.
  */
 export async function loadAuthFromStorage(): Promise<void> {
   if (!storage.contains(STORAGE_KEYS.HAS_LAUNCHED)) {
-    await clearTokens();
+    await clearToken();
     storage.set(STORAGE_KEYS.HAS_LAUNCHED, true);
   }
 
-  const { accessToken, refreshToken } = await loadTokens();
-  useAuthStore.setState({ accessToken, refreshToken });
+  useAuthStore.setState({ accessToken: await loadToken() });
 }
 
-export const signIn = (accessToken: string, refreshToken: string) =>
-  useAuthStore.getState().signIn(accessToken, refreshToken);
+export const signIn = (accessToken: string) =>
+  useAuthStore.getState().signIn(accessToken);
 
 export const signOut = () => useAuthStore.getState().signOut();

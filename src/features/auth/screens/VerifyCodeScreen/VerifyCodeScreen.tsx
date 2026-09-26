@@ -1,14 +1,10 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AccessibilityInfo } from 'react-native';
 
-import {
-  useRequestPasswordResetMutation,
-  useVerifyResetCodeMutation,
-} from '@/hooks';
+import { useForgotPasswordMutation } from '@/hooks';
 
-import { RESET_CODE_LENGTH } from '@/schemas';
+import { RECOVERY_CODE_LENGTH } from '@/schemas';
 
 import {
   AuthFooterLink,
@@ -18,40 +14,21 @@ import {
 } from '../../components';
 
 /**
- * Step 2 of password recovery: the code is checked as soon as the last
- * digit is typed — no submit button.
+ * Step 2 of password recovery: collect the emailed code. The backend has no
+ * separate check — the code is verified together with the new password.
  */
 export function VerifyCodeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { login = '' } = useLocalSearchParams<{ login: string }>();
-  const verifyCode = useVerifyResetCodeMutation();
-  const resendCode = useRequestPasswordResetMutation();
+  const { email = '' } = useLocalSearchParams<{ email: string }>();
+  const resendCode = useForgotPasswordMutation();
   const [code, setCode] = useState('');
 
   const handleChange = (next: string) => {
-    // Ignore typing while a code is being checked (keeps the keyboard open,
-    // unlike disabling the input).
-    if (verifyCode.isPending) return;
-    verifyCode.reset();
     setCode(next);
-    if (next.length !== RESET_CODE_LENGTH) return;
-
-    verifyCode.mutate(
-      { login, code: next },
-      {
-        onSuccess: ({ resetToken }) =>
-          router.push({ pathname: '/new-password', params: { resetToken } }),
-        // Clear the boxes so a new code can be typed straight away; the
-        // red flash + shake is the visual cue, this is for screen readers.
-        onError: () => {
-          setCode('');
-          AccessibilityInfo.announceForAccessibility(
-            t('auth.errors.invalidCode'),
-          );
-        },
-      },
-    );
+    if (next.length === RECOVERY_CODE_LENGTH) {
+      router.push({ pathname: '/new-password', params: { email, code: next } });
+    }
   };
 
   return (
@@ -67,16 +44,15 @@ export function VerifyCodeScreen() {
         />
       }
     >
+      {/* TODO: switch to numeric once the real code format is confirmed. */}
       <CodeInput
         value={code}
-        length={RESET_CODE_LENGTH}
+        length={RECOVERY_CODE_LENGTH}
+        inputMode="alphanumeric"
         onChangeText={handleChange}
-        // TODO(backend): map real error codes (e.g. expired vs invalid).
-        error={verifyCode.isError}
-        busy={verifyCode.isPending}
         autoFocus
       />
-      <ResendCode onResend={() => resendCode.mutate({ login })} />
+      <ResendCode onResend={() => resendCode.mutate({ email })} />
     </AuthLayout>
   );
 }

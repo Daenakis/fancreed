@@ -4,39 +4,79 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text, TextInput } from '@/ui/components';
+import { TextInput } from '@/ui/components';
 
-import { useResetPasswordMutation } from '@/hooks';
+import { useLoginMutation, useRecoverPasswordMutation } from '@/hooks';
+
+import { getApiErrorCode, getApiErrorMessageKey } from '@/api';
+
+import { usePendingActivationStore } from '@/store';
 
 import { type NewPasswordFormValues, newPasswordSchema } from '@/schemas';
 
-import { AuthButton, AuthFooterLink, AuthLayout } from '../../components';
+import {
+  AuthButton,
+  AuthFooterLink,
+  AuthLayout,
+  FormError,
+} from '../../components';
+import { useFieldErrorText } from '../../hooks';
 
-/** Step 3 of password recovery: set the new password, then back to sign-in. */
+/** Step 3 of password recovery: set the new password, then sign in with it. */
 export function NewPasswordScreen() {
   const { t } = useTranslation();
+  const errorText = useFieldErrorText();
   const router = useRouter();
-  const { resetToken = '' } = useLocalSearchParams<{ resetToken: string }>();
-  const resetPassword = useResetPasswordMutation();
+  const { email = '', code = '' } = useLocalSearchParams<{
+    email: string;
+    code: string;
+  }>();
+  const recoverPassword = useRecoverPasswordMutation();
+  const login = useLoginMutation();
+  const setPendingActivation = usePendingActivationStore((s) => s.setPending);
   const {
     control,
     handleSubmit,
-    formState: { isValid, errors, dirtyFields },
+    trigger,
+    getFieldState,
+    setError,
+    formState: { isValid, errors },
   } = useForm<NewPasswordFormValues>({
     resolver: zodResolver(newPasswordSchema),
-    mode: 'onChange',
+    mode: 'onTouched',
     defaultValues: { password: '', confirmPassword: '' },
   });
 
-  // Only complain about a mismatch once the user has typed the repeat.
-  const mismatch =
-    dirtyFields.confirmPassword &&
-    errors.confirmPassword?.message === 'auth.errors.passwordsMismatch';
+  // After a successful reset the user is signed straight in.
+  const signInWithNewPassword = (password: string) =>
+    login.mutate(
+      { login: email, password },
+      {
+        onSuccess: ({ activated }) => {
+          if (activated) return;
+          setPendingActivation(email, password);
+          router.push({ pathname: '/activate', params: { resend: '1' } });
+        },
+        onError: () => router.dismissTo('/sign-in'),
+      },
+    );
 
   const onSubmit = ({ password }: NewPasswordFormValues) =>
-    resetPassword.mutate(
-      { resetToken, password },
-      { onSuccess: () => router.dismissTo('/sign-in') },
+    recoverPassword.mutate(
+      { email, code, password },
+      {
+        onSuccess: () => signInWithNewPassword(password),
+        onError: (error) => {
+          const codeRejected = ['WRONG_CODE', 'CODE_EXPIRED'].includes(
+            getApiErrorCode(error),
+          );
+          setError('root.server', {
+            message: codeRejected
+              ? 'auth.errors.codeRejected'
+              : getApiErrorMessageKey(error),
+          });
+        },
+      },
     );
 
   return (
@@ -55,13 +95,20 @@ export function NewPasswordScreen() {
       <Controller
         control={control}
         name="password"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
+            error={errorText(fieldState.error)}
             accessibilityLabel={t('auth.newPassword')}
             placeholder={t('auth.newPassword')}
             value={value}
-            onChangeText={onChange}
+            onChangeText={(text) => {
+              onChange(text);
+              // Keep the "passwords do not match" error in sync.
+              if (getFieldState('confirmPassword').isTouched) {
+                void trigger('confirmPassword');
+              }
+            }}
             onBlur={onBlur}
             secureTextEntry
             autoComplete="new-password"
@@ -72,9 +119,10 @@ export function NewPasswordScreen() {
       <Controller
         control={control}
         name="confirmPassword"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
+            error={errorText(fieldState.error)}
             accessibilityLabel={t('auth.repeatPassword')}
             placeholder={t('auth.repeatPassword')}
             value={value}
@@ -83,7 +131,6 @@ export function NewPasswordScreen() {
             secureTextEntry
             autoComplete="new-password"
             textContentType="newPassword"
-            error={mismatch ? t('auth.errors.passwordsMismatch') : undefined}
             containerStyle={styles.field}
           />
         )}
@@ -91,19 +138,11 @@ export function NewPasswordScreen() {
       <AuthButton
         title={t('auth.save')}
         disabled={!isValid}
-        loading={resetPassword.isPending}
+        loading={recoverPassword.isPending || login.isPending}
         onPress={handleSubmit(onSubmit)}
         style={styles.submit}
       />
-      {resetPassword.isError ? (
-        <Text
-          variant="bodySRegular"
-          color="destructiveMuted"
-          style={styles.error}
-        >
-          {t('errors.unknown')}
-        </Text>
-      ) : null}
+      <FormError message={errorText(errors.root?.server)} />
     </AuthLayout>
   );
 }
@@ -114,9 +153,5 @@ const styles = StyleSheet.create((theme) => ({
   },
   submit: {
     marginTop: theme.spacing(6),
-  },
-  error: {
-    marginTop: theme.spacing(3),
-    textAlign: 'center',
   },
 }));

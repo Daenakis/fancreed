@@ -1,3 +1,10 @@
-export * from './api';
+export { axiosInstance } from './client';
+export { authApi } from './endpoints';
+export {
+  API_ERROR_MESSAGE_KEYS,
+  type ApiErrorCode,
+  getApiErrorCode,
+  getApiErrorMessageKey,
+  toFormError,
+} from './errors';
 export { fetcher } from './fetcher';
-export { MOCK_INVALID_CODE, MockApiError, mockAuthApi } from './mockAuthApi';

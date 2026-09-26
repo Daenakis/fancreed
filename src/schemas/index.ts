@@ -1,15 +1,19 @@
+export {
+  ACTIVATION_CODE_LENGTH,
+  NAME_MAX_LENGTH,
+  NAME_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  RECOVERY_CODE_LENGTH,
+} from './authFields';
 export type { Env } from './env';
 export { envSchema } from './env';
 export type {
   ForgotPasswordFormValues,
   NewPasswordFormValues,
 } from './passwordReset';
-export {
-  forgotPasswordSchema,
-  newPasswordSchema,
-  RESET_CODE_LENGTH,
-} from './passwordReset';
+export { forgotPasswordSchema, newPasswordSchema } from './passwordReset';
 export type { SignInFormValues } from './signIn';
 export { signInSchema } from './signIn';
-export type { SignUpFormValues } from './signUp';
+export type { SignUpFormInput, SignUpFormValues } from './signUp';
 export { signUpSchema } from './signUp';

@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, type RenderOptions } from '@testing-library/react-native';
+import { AxiosError, type AxiosResponse } from 'axios';
 import type { ReactElement, ReactNode } from 'react';
 
 function createTestQueryClient() {
@@ -24,3 +25,14 @@ function renderWithProviders(ui: ReactElement, options?: RenderOptions) {
 
 export * from '@testing-library/react-native';
 export { renderWithProviders as render };
+
+/** Resolved axios response, for `jest.spyOn(authApi, …).mockResolvedValue`. */
+export const apiOk = <T,>(data: T) =>
+  ({ data, status: 200 }) as AxiosResponse<T>;
+
+/** Rejected axios error carrying a backend `{ message }` body. */
+export const apiFail = (status: number, message: string) =>
+  new AxiosError('Request failed', 'ERR_BAD_REQUEST', undefined, null, {
+    status,
+    data: { message, description: '' },
+  } as AxiosResponse);

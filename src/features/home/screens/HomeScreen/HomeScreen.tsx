@@ -5,12 +5,12 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Text } from '@/ui/components';
 
-import { useAuthStore } from '@/store';
+import { useLogoutMutation } from '@/hooks';
 
 export function HomeScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const signOut = useAuthStore((s) => s.signOut);
+  const logout = useLogoutMutation();
 
   return (
     <View style={styles.container}>
@@ -38,7 +38,7 @@ export function HomeScreen() {
           accessibilityRole="button"
           accessibilityLabel={t('auth.signOut')}
           style={styles.buttonDestructive}
-          onPress={signOut}
+          onPress={() => logout.mutate()}
         >
           <Text variant="bodyLMedium" color="destructiveForeground">
             {t('auth.signOut')}

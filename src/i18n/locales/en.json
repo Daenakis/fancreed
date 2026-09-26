@@ -11,13 +11,11 @@
   "auth": {
     "signIn": "Sign In",
     "signOut": "Sign Out",
-    "email": "Email",
     "password": "Password",
     "welcomeTitle": "Welcome",
     "welcomeSubtitle": "Sign in to continue",
     "splashWelcome": "Welcome!",
     "signInTitle": "Sign in to your account",
-    "loginPlaceholder": "Email or phone number",
     "forgotPassword": "Forgot password?",
     "notRegistered": "Not registered yet?",
     "createAccount": "Create account",
@@ -27,7 +25,7 @@
     "namePlaceholder": "Name",
     "haveAccount": "Already have an account?",
     "forgotTitle": "Password recovery",
-    "forgotSubtitle": "Enter the email or phone number your account is registered with",
+    "forgotSubtitle": "Enter the email your account is registered with",
     "resetPassword": "Reset password",
     "codeTitle": "Verification code",
     "codeSubtitle": "Enter the code we sent to your email",
@@ -44,12 +42,23 @@
     "save": "Save",
     "rememberedPassword": "Remembered your password?",
     "errors": {
-      "loginRequired": "Enter your email or phone number",
       "passwordRequired": "Enter your password",
       "nameRequired": "Enter your name",
-      "invalidCode": "Invalid code. Check it and try again",
-      "passwordsMismatch": "Passwords do not match"
-    }
+      "passwordsMismatch": "Passwords do not match",
+      "nameTooShort": "Name must be at least {{min}} characters",
+      "nameTooLong": "Name must be at most {{max}} characters",
+      "nameInvalid": "Use letters, digits, spaces and apostrophes",
+      "passwordTooShort": "Password must be at least {{min}} characters",
+      "passwordTooLong": "Password must be at most {{max}} characters",
+      "emailRequired": "Enter your email",
+      "emailInvalid": "Enter a valid email",
+      "passwordInvalid": "Use Latin letters, digits and symbols, no spaces",
+      "codeRejected": "The code is wrong or has expired. Go back and check it"
+    },
+    "emailPlaceholder": "Email",
+    "activateTitle": "Confirm your email",
+    "activateSubtitle": "Enter the 4-digit code we sent to {{email}}",
+    "backToSignIn": "Back to"
   },
   "home": {
     "title": "Home",
@@ -59,7 +68,16 @@
     "network": "No internet connection",
     "unknown": "Something went wrong",
     "unexpected": "Please try again. If the problem persists, restart the app.",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "api": {
+      "wrongPassword": "Wrong password",
+      "accountNotFound": "No account with this email",
+      "userExists": "An account with this email already exists",
+      "wrongCode": "Wrong code",
+      "codeExpired": "The code has expired. Request a new one",
+      "alreadyActivated": "This account is already confirmed",
+      "notActivated": "Confirm your email first"
+    }
   },
   "playground": {
     "title": "Playground",

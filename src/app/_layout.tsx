@@ -56,6 +56,7 @@ function RootNavigator() {
       <Stack.Protected guard={!isAuthenticated}>
         <Stack.Screen name="sign-in" />
         <Stack.Screen name="sign-up" />
+        <Stack.Screen name="activate" />
         <Stack.Screen name="forgot-password" />
         <Stack.Screen name="verify-code" />
         <Stack.Screen name="new-password" />

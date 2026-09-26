@@ -8,11 +8,13 @@ import { Text, TextInput } from '@/ui/components';
 
 import { type SignInFormValues, signInSchema } from '@/schemas';
 
+import { useFieldErrorText } from '../../hooks';
 import { AuthButton } from '../AuthButton';
 import { AuthFooterLink } from '../AuthFooterLink';
+import { FormError } from '../FormError';
 import type { SignInFormProps } from './types';
 
-/** Login + password form; the submit button unlocks once both are filled. */
+/** Email + password form; the submit button unlocks once both are valid. */
 export function SignInForm({
   onSubmit,
   onForgotPassword,
@@ -21,31 +23,36 @@ export function SignInForm({
   style,
 }: SignInFormProps) {
   const { t } = useTranslation();
+  const errorText = useFieldErrorText();
   const {
     control,
     handleSubmit,
-    formState: { isValid },
+    setError,
+    formState: { isValid, errors },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
-    mode: 'onChange',
+    mode: 'onTouched',
     defaultValues: { login: '', password: '' },
   });
+
+  const submit = handleSubmit((values) => onSubmit(values, setError));
 
   return (
     <View style={style}>
       <Controller
         control={control}
         name="login"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
-            accessibilityLabel={t('auth.loginPlaceholder')}
-            placeholder={t('auth.loginPlaceholder')}
+            error={errorText(fieldState.error)}
+            accessibilityLabel={t('auth.emailPlaceholder')}
+            placeholder={t('auth.emailPlaceholder')}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
             autoCapitalize="none"
-            autoComplete="username"
+            autoComplete="email"
             autoCorrect={false}
             keyboardType="email-address"
             textContentType="username"
@@ -56,9 +63,10 @@ export function SignInForm({
       <Controller
         control={control}
         name="password"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
+            error={errorText(fieldState.error)}
             accessibilityLabel={t('auth.password')}
             placeholder={t('auth.password')}
             value={value}
@@ -68,7 +76,7 @@ export function SignInForm({
             autoComplete="password"
             textContentType="password"
             returnKeyType="done"
-            onSubmitEditing={handleSubmit(onSubmit)}
+            onSubmitEditing={submit}
             containerStyle={styles.password}
           />
         )}
@@ -87,8 +95,9 @@ export function SignInForm({
         title={t('auth.signIn')}
         disabled={!isValid}
         loading={submitting}
-        onPress={handleSubmit(onSubmit)}
+        onPress={submit}
       />
+      <FormError message={errorText(errors.root?.server)} />
       <AuthFooterLink
         text={t('auth.notRegistered')}
         linkText={t('auth.createAccount')}

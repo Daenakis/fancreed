@@ -16,9 +16,15 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Text } from '@/ui/components';
 
-import { useAuthStore } from '@/store';
+import { useLoginMutation } from '@/hooks';
 
-import { AuthLayout, SignInForm } from '../../components';
+import { toFormError } from '@/api';
+
+import { usePendingActivationStore } from '@/store';
+
+import type { SignInFormValues } from '@/schemas';
+
+import { AuthLayout, SignInForm, type SignInFormProps } from '../../components';
 import {
   AUTH_LOGO,
   AUTH_LOGO_HEIGHT,
@@ -37,7 +43,8 @@ let introPlayed = false;
 export function SignInScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const signIn = useAuthStore((s) => s.signIn);
+  const login = useLoginMutation();
+  const setPendingActivation = usePendingActivationStore((s) => s.setPending);
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
@@ -79,9 +86,23 @@ export function SignInScreen() {
     opacity: interpolate(progress.value, [0.4, 1], [0, 1], 'clamp'),
   }));
 
-  // TODO: real login via useLoginMutation once the backend contract is confirmed
-  // (form field `login` = email or phone; LoginRequest has only `email`).
-  const handleSubmit = () => signIn('mock-access-token', 'mock-refresh-token');
+  // Activated accounts are signed in by the mutation (the navigator then
+  // switches to the app); unactivated ones go to email activation first.
+  const handleSubmit: SignInFormProps['onSubmit'] = (values, setError) =>
+    login.mutate(values, {
+      onSuccess: ({ activated }) => {
+        if (activated) return;
+        setPendingActivation(values.login, values.password);
+        router.push({ pathname: '/activate', params: { resend: '1' } });
+      },
+      onError: (error) => {
+        const { name, message } = toFormError<keyof SignInFormValues>(error, {
+          WRONG_PASSWORD: 'password',
+          ACCOUNT_NOT_FOUND: 'login',
+        });
+        setError(name, { message });
+      },
+    });
   // TODO: wire up when social sign-in exists.
   const notImplemented = () => {};
 
@@ -107,6 +128,7 @@ export function SignInScreen() {
     >
       <SignInForm
         onSubmit={handleSubmit}
+        submitting={login.isPending}
         onForgotPassword={() => router.push('/forgot-password')}
         onCreateAccount={() => router.push('/sign-up')}
       />

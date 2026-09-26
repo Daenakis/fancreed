@@ -11,13 +11,13 @@ const setup = () => {
   return { ...render(<SignInForm {...handlers} />), ...handlers };
 };
 
-const fill = async (
-  getByLabelText: (label: string) => Parameters<typeof fireEvent.changeText>[0],
-  login: string,
+const fill = (
+  utils: ReturnType<typeof setup>,
+  email: string,
   password: string,
 ) => {
-  fireEvent.changeText(getByLabelText('auth.loginPlaceholder'), login);
-  fireEvent.changeText(getByLabelText('auth.password'), password);
+  fireEvent.changeText(utils.getByLabelText('auth.emailPlaceholder'), email);
+  fireEvent.changeText(utils.getByLabelText('auth.password'), password);
 };
 
 describe('SignInForm', () => {
@@ -27,29 +27,29 @@ describe('SignInForm', () => {
     expect(getByRole('button', { name: 'auth.signIn' })).toBeDisabled();
   });
 
-  it('keeps submit disabled when the login is only whitespace', async () => {
-    const { getByLabelText, getByRole } = setup();
+  it('keeps submit disabled when the password is shorter than 6', async () => {
+    const utils = setup();
 
-    await fill(getByLabelText, '   ', 'secret');
+    fill(utils, 'user@mail.com', '12345');
 
     await waitFor(() =>
-      expect(getByRole('button', { name: 'auth.signIn' })).toBeDisabled(),
+      expect(utils.getByRole('button', { name: 'auth.signIn' })).toBeDisabled(),
     );
   });
 
-  it('submits trimmed values when both fields are filled', async () => {
-    const { getByLabelText, getByRole, onSubmit } = setup();
+  it('submits trimmed values when both fields are valid', async () => {
+    const utils = setup();
 
-    await fill(getByLabelText, '  user@mail.com ', 'secret');
+    fill(utils, '  user@mail.com ', 'secret1');
     await waitFor(() =>
-      expect(getByRole('button', { name: 'auth.signIn' })).toBeEnabled(),
+      expect(utils.getByRole('button', { name: 'auth.signIn' })).toBeEnabled(),
     );
-    fireEvent.press(getByRole('button', { name: 'auth.signIn' }));
+    fireEvent.press(utils.getByRole('button', { name: 'auth.signIn' }));
 
     await waitFor(() =>
-      expect(onSubmit).toHaveBeenCalledWith(
-        { login: 'user@mail.com', password: 'secret' },
-        undefined,
+      expect(utils.onSubmit).toHaveBeenCalledWith(
+        { login: 'user@mail.com', password: 'secret1' },
+        expect.any(Function),
       ),
     );
   });

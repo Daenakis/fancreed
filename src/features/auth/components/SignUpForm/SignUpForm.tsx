@@ -6,13 +6,19 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { TextInput } from '@/ui/components';
 
-import { type SignUpFormValues, signUpSchema } from '@/schemas';
+import {
+  type SignUpFormInput,
+  type SignUpFormValues,
+  signUpSchema,
+} from '@/schemas';
 
+import { useFieldErrorText } from '../../hooks';
 import { AuthButton } from '../AuthButton';
 import { AuthFooterLink } from '../AuthFooterLink';
+import { FormError } from '../FormError';
 import type { SignUpFormProps } from './types';
 
-/** Name + login + password form; submit unlocks once all are filled. */
+/** Name + email + password form; submit unlocks once all are valid. */
 export function SignUpForm({
   onSubmit,
   onSignIn,
@@ -20,24 +26,29 @@ export function SignUpForm({
   style,
 }: SignUpFormProps) {
   const { t } = useTranslation();
+  const errorText = useFieldErrorText();
   const {
     control,
     handleSubmit,
-    formState: { isValid },
-  } = useForm<SignUpFormValues>({
+    setError,
+    formState: { isValid, errors },
+  } = useForm<SignUpFormInput, unknown, SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onChange',
-    defaultValues: { name: '', login: '', password: '' },
+    mode: 'onTouched',
+    defaultValues: { name: '', email: '', password: '' },
   });
+
+  const submit = handleSubmit((values) => onSubmit(values, setError));
 
   return (
     <View style={style}>
       <Controller
         control={control}
         name="name"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
+            error={errorText(fieldState.error)}
             accessibilityLabel={t('auth.namePlaceholder')}
             placeholder={t('auth.namePlaceholder')}
             value={value}
@@ -52,12 +63,13 @@ export function SignUpForm({
       />
       <Controller
         control={control}
-        name="login"
-        render={({ field: { value, onChange, onBlur } }) => (
+        name="email"
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
-            accessibilityLabel={t('auth.loginPlaceholder')}
-            placeholder={t('auth.loginPlaceholder')}
+            error={errorText(fieldState.error)}
+            accessibilityLabel={t('auth.emailPlaceholder')}
+            placeholder={t('auth.emailPlaceholder')}
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -74,9 +86,10 @@ export function SignUpForm({
       <Controller
         control={control}
         name="password"
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field: { value, onChange, onBlur }, fieldState }) => (
           <TextInput
             variant="inverse"
+            error={errorText(fieldState.error)}
             accessibilityLabel={t('auth.password')}
             placeholder={t('auth.password')}
             value={value}
@@ -86,7 +99,7 @@ export function SignUpForm({
             autoComplete="new-password"
             textContentType="newPassword"
             returnKeyType="done"
-            onSubmitEditing={handleSubmit(onSubmit)}
+            onSubmitEditing={submit}
             containerStyle={styles.field}
           />
         )}
@@ -95,9 +108,10 @@ export function SignUpForm({
         title={t('auth.signUp')}
         disabled={!isValid}
         loading={submitting}
-        onPress={handleSubmit(onSubmit)}
+        onPress={submit}
         style={styles.submit}
       />
+      <FormError message={errorText(errors.root?.server)} />
       <AuthFooterLink
         text={t('auth.haveAccount')}
         linkText={t('auth.signIn')}

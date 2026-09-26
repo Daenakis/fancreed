@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
-/** Messages are i18n keys — translate them where the error is shown. */
+import { loginField, passwordField } from './authFields';
+
 export const signInSchema = z.object({
-  login: z.string().trim().min(1, 'auth.errors.loginRequired'),
-  password: z.string().min(1, 'auth.errors.passwordRequired'),
+  login: loginField,
+  password: passwordField,
 });
 
 export type SignInFormValues = z.infer<typeof signInSchema>;

@@ -7,6 +7,22 @@ const setup = () => {
   return { ...render(<SignUpForm {...handlers} />), ...handlers };
 };
 
+const typeAndLeave = (
+  utils: ReturnType<typeof setup>,
+  label: string,
+  text: string,
+) => {
+  const input = utils.getByLabelText(label);
+  fireEvent.changeText(input, text);
+  fireEvent(input, 'blur');
+};
+
+const fillValid = (utils: ReturnType<typeof setup>, name = 'Andriy') => {
+  typeAndLeave(utils, 'auth.namePlaceholder', name);
+  typeAndLeave(utils, 'auth.emailPlaceholder', 'user@mail.com');
+  typeAndLeave(utils, 'auth.password', 'secret1');
+};
+
 describe('SignUpForm', () => {
   it('disables the submit button when fields are empty', () => {
     const { getByRole } = setup();
@@ -14,32 +30,19 @@ describe('SignUpForm', () => {
     expect(getByRole('button', { name: 'auth.signUp' })).toBeDisabled();
   });
 
-  it('keeps submit disabled when the name is missing', async () => {
-    const { getByLabelText, getByRole } = setup();
+  it('submits normalised values when all fields are valid', async () => {
+    const utils = setup();
 
-    fireEvent.changeText(getByLabelText('auth.loginPlaceholder'), 'a@b.c');
-    fireEvent.changeText(getByLabelText('auth.password'), 'secret');
-
+    fillValid(utils, ' Андрій Ів’ян ');
     await waitFor(() =>
-      expect(getByRole('button', { name: 'auth.signUp' })).toBeDisabled(),
+      expect(utils.getByRole('button', { name: 'auth.signUp' })).toBeEnabled(),
     );
-  });
-
-  it('submits trimmed values when all fields are filled', async () => {
-    const { getByLabelText, getByRole, onSubmit } = setup();
-
-    fireEvent.changeText(getByLabelText('auth.namePlaceholder'), ' Andriy ');
-    fireEvent.changeText(getByLabelText('auth.loginPlaceholder'), 'a@b.c');
-    fireEvent.changeText(getByLabelText('auth.password'), 'secret');
-    await waitFor(() =>
-      expect(getByRole('button', { name: 'auth.signUp' })).toBeEnabled(),
-    );
-    fireEvent.press(getByRole('button', { name: 'auth.signUp' }));
+    fireEvent.press(utils.getByRole('button', { name: 'auth.signUp' }));
 
     await waitFor(() =>
-      expect(onSubmit).toHaveBeenCalledWith(
-        { name: 'Andriy', login: 'a@b.c', password: 'secret' },
-        undefined,
+      expect(utils.onSubmit).toHaveBeenCalledWith(
+        { name: "Андрій Ів'ян", email: 'user@mail.com', password: 'secret1' },
+        expect.any(Function),
       ),
     );
   });
@@ -50,5 +53,39 @@ describe('SignUpForm', () => {
     fireEvent.press(getByRole('link', { name: 'auth.signIn' }));
 
     expect(onSignIn).toHaveBeenCalledTimes(1);
+  });
+
+  describe('validation (backend rules)', () => {
+    it('shows no error while the user is still typing', () => {
+      const utils = setup();
+
+      fireEvent.changeText(utils.getByLabelText('auth.emailPlaceholder'), 'x');
+
+      expect(utils.queryByText(/auth.errors/)).toBeNull();
+    });
+
+    it.each([
+      ['auth.emailPlaceholder', 'user@', 'auth.errors.emailInvalid'],
+      [
+        'auth.emailPlaceholder',
+        'user+tag@mail.com',
+        'auth.errors.emailInvalid',
+      ],
+      ['auth.namePlaceholder', 'A', 'auth.errors.nameTooShort'],
+      ['auth.namePlaceholder', 'Andriy!', 'auth.errors.nameInvalid'],
+      ['auth.password', 'abc12', 'auth.errors.passwordTooShort'],
+      ['auth.password', 'a'.repeat(33), 'auth.errors.passwordTooLong'],
+      ['auth.password', 'pass word1', 'auth.errors.passwordInvalid'],
+      ['auth.password', 'пароль123', 'auth.errors.passwordInvalid'],
+    ])(
+      'shows an error when %s is "%s" and the field is left',
+      async (label, text, error) => {
+        const utils = setup();
+
+        typeAndLeave(utils, label, text);
+
+        expect(await utils.findByText(error)).toBeTruthy();
+      },
+    );
   });
 });

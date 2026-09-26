@@ -8,6 +8,11 @@ export type CodeInputProps = {
   onChangeText: (code: string) => void;
   /** Number of digit boxes. Defaults to 6. */
   length?: number;
+  /**
+   * `numeric` (default): digits only, number pad. `alphanumeric`: letters,
+   * digits and _, regular keyboard.
+   */
+  inputMode?: 'numeric' | 'alphanumeric';
   /** When this turns true the boxes flash red and the row shakes. */
   error?: boolean;
   /** Dims the boxes and drops the active highlight, e.g. while the code is checked. */
