@@ -8,9 +8,33 @@ export type Profile = {
   patronymic?: string | null;
   email: string;
   phone?: string | null;
+  /** `m`, `f` or `other`. */
+  sex?: ProfileSex | null;
+  /** Unix time in seconds. */
+  birthDay?: number | null;
+  /** Player `id` (api-football) of the fan's favourite. */
+  favoritePlayer?: number | null;
   role: string;
   smallPhoto?: string | null;
   origPhoto?: string | null;
+};
+
+export type ProfileSex = 'm' | 'f' | 'other';
+
+/** `POST profile/edit` — only the sent fields change. */
+export type EditProfileRequest = {
+  name?: string;
+  surname?: string;
+  patronymic?: string;
+  sex?: ProfileSex;
+  birthDay?: number;
+  favoritePlayer?: number;
+};
+
+/** `POST profile/setphoto` — the image as raw base64 (no data: prefix). */
+export type SetPhotoRequest = {
+  mimeType: 'image/jpeg';
+  data: string;
 };
 
 export type LoyaltyLevel = 'bronze' | 'silver' | 'gold' | 'emerald';

@@ -15,6 +15,8 @@ export type {
   NewPasswordFormValues,
 } from './passwordReset';
 export { forgotPasswordSchema, newPasswordSchema } from './passwordReset';
+export type { ProfileFormInput, ProfileFormValues } from './profile';
+export { profileSchema } from './profile';
 export type { SignInFormValues } from './signIn';
 export { signInSchema } from './signIn';
 export type { SignUpFormInput, SignUpFormValues } from './signUp';

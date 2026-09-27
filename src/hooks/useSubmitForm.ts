@@ -19,7 +19,7 @@ export function useSubmitForm<TInput extends FieldValues, TOutput = TInput>({
   requiredFields,
   ...options
 }: Omit<UseFormProps<TInput, unknown, TOutput>, 'mode' | 'reValidateMode'> & {
-  /** Fields that must have text to unlock the button. Defaults to all. */
+  /** Fields that must be filled (text, a date, a choice) to unlock the button. Defaults to all. */
   requiredFields?: Path<TInput>[];
 }) {
   const form = useForm<TInput, unknown, TOutput>({
@@ -31,8 +31,8 @@ export function useSubmitForm<TInput extends FieldValues, TOutput = TInput>({
   const checked = requiredFields
     ? requiredFields.map((name) => (values as Record<string, unknown>)?.[name])
     : Object.values(values ?? {});
-  const filled = checked.every(
-    (v) => typeof v !== 'string' || v.trim().length > 0,
+  const filled = checked.every((v) =>
+    typeof v === 'string' ? v.trim().length > 0 : v !== undefined && v !== null,
   );
 
   /** Press handler: validates, then calls `onValid` with the parsed values. */
@@ -41,11 +41,11 @@ export function useSubmitForm<TInput extends FieldValues, TOutput = TInput>({
 
   /** Wraps a field's onChange so typing clears that field's error. */
   const changeHandler =
-    (name: Path<TInput>, onChange: (text: string) => void) =>
-    (text: string) => {
+    <V = string>(name: Path<TInput>, onChange: (value: V) => void) =>
+    (value: V) => {
       if (form.getFieldState(name).error) form.clearErrors(name);
       if (form.formState.errors.root) form.clearErrors('root');
-      onChange(text);
+      onChange(value);
     };
 
   return { ...form, filled, submitWith, changeHandler };

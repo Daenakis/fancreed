@@ -1,5 +1,6 @@
 export * from './app';
 export * from './query';
+export { useFieldErrorText } from './useFieldErrorText';
 export { useLanguage } from './useLanguage';
 export { useNow } from './useNow';
 export {
