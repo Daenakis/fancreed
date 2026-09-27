@@ -24,6 +24,8 @@ export type ImageCardProps = {
   description?: string;
   /** Defaults to `photo`. */
   variant?: ImageCardVariant;
+  /** Shown on a green frame when there is no image, e.g. `lion` for a player. */
+  placeholderIcon?: IconName;
   /** Icon in a white circle over the image, e.g. `play` for videos. */
   overlayIcon?: IconName;
   /** Makes the card pressable. */

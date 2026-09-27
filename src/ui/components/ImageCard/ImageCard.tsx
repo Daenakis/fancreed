@@ -27,6 +27,7 @@ export function ImageCard({
   description,
   variant = 'photo',
   overlayIcon,
+  placeholderIcon,
   onPress,
   textColor = 'foreground',
   tileSurface = 'translucentSurface',
@@ -39,12 +40,23 @@ export function ImageCard({
 
   const content = (
     <>
-      <View style={styles.frame(variant, !source, tileSurface)}>
+      <View
+        style={[
+          styles.frame(variant, !source, tileSurface),
+          !source && placeholderIcon && styles.placeholder,
+        ]}
+      >
         {source ? (
           <Image
             source={source}
             resizeMode={article ? 'cover' : 'contain'}
             style={styles.image(variant)}
+          />
+        ) : placeholderIcon ? (
+          <Icon
+            name={placeholderIcon}
+            size={96}
+            color={theme.colors.brandBorder}
           />
         ) : null}
         {overlayIcon ? (
@@ -197,6 +209,11 @@ const styles = StyleSheet.create((theme) => ({
     maxWidth: '90%',
     marginTop: theme.spacing(1),
     textAlign: 'center',
+  },
+  placeholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.brand,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

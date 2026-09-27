@@ -130,4 +130,14 @@ describe('ImageCard', () => {
       'play',
     );
   });
+
+  it('shows the placeholder icon when there is no image', () => {
+    const { UNSAFE_getAllByType } = render(
+      <ImageCard title="New player" placeholderIcon="lion" />,
+    );
+
+    expect(UNSAFE_getAllByType(Icon).map((icon) => icon.props.name)).toContain(
+      'lion',
+    );
+  });
 });
