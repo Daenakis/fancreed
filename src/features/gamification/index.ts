@@ -1,1 +1,6 @@
-export { VotesBlock, type VotesBlockProps } from './components';
+export {
+  PredictionBlock,
+  type PredictionBlockProps,
+  VotesBlock,
+  type VotesBlockProps,
+} from './components';

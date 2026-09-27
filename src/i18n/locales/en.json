@@ -137,5 +137,13 @@
     "choose": "Choose",
     "share": "Share",
     "shareMessage": "Pick the player of the match {{home}} – {{away}} in the Fancreed app!"
+  },
+  "prediction": {
+    "title": "PREDICTION",
+    "send": "Send",
+    "share": "Share",
+    "shareMessage": "My prediction for {{home}} – {{away}}: {{homeGoals}}:{{awayGoals}}. What's yours? Predict in the Fancreed app!",
+    "homeGoals": "{{team}} goals",
+    "awayGoals": "{{team}} goals"
   }
 }

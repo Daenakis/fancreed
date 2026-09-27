@@ -1,5 +1,12 @@
 export { axiosInstance } from './client';
-export { authApi, leaguesApi, newsApi, votesApi } from './endpoints';
+export {
+  authApi,
+  fixturesApi,
+  leaguesApi,
+  newsApi,
+  predictionsApi,
+  votesApi,
+} from './endpoints';
 export {
   API_ERROR_MESSAGE_KEYS,
   type ApiErrorCode,
