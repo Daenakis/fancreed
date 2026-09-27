@@ -2,7 +2,8 @@
 
 /** `GET profile/` — flat user object (shape taken from the apidoc + old app). */
 export type Profile = {
-  _id: string;
+  /** Not sent by `GET profile/` (checked on the live API). */
+  _id?: string;
   name?: string | null;
   surname?: string | null;
   patronymic?: string | null;
