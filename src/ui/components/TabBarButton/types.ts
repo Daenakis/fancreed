@@ -12,5 +12,7 @@ export type TabBarButtonProps = Omit<PressableProps, 'children'> & {
   label: string;
   /** Set by the router's TabTrigger. */
   isFocused?: boolean;
+  /** Shows no tab as selected, e.g. on a detail screen above the tabs. */
+  inactive?: boolean;
   ref?: Ref<View>;
 };

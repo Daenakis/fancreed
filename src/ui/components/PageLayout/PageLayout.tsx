@@ -80,7 +80,7 @@ function HeaderButton({ icon, label, onPress, color }: HeaderButtonProps) {
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      hitSlop={8}
+      hitSlop={16}
       onPress={onPress}
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
     >

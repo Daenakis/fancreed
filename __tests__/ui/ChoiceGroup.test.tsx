@@ -109,4 +109,23 @@ describe('ChoiceGroup', () => {
     fireEvent.press(getByRole('tab', { name: 'Results' }));
     expect(onChange).toHaveBeenCalledWith('results');
   });
+
+  it('shows one radio row per option when variant is list', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <ChoiceGroup
+        variant="list"
+        options={[
+          { label: 'S', value: 'S' },
+          { label: 'M', value: 'M' },
+        ]}
+        value="M"
+        onChange={onChange}
+      />,
+    );
+
+    expect(getByRole('radio', { name: 'M' })).toBeChecked();
+    fireEvent.press(getByRole('radio', { name: 'S' }));
+    expect(onChange).toHaveBeenCalledWith('S');
+  });
 });

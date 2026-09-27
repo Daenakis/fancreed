@@ -1,6 +1,7 @@
 export { AddPhoto, type AddPhotoProps } from './AddPhoto';
 export { AppHeader, type AppHeaderProps } from './AppHeader';
 export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
+export { BottomSheet, type BottomSheetProps } from './BottomSheet';
 export {
   Button,
   type ButtonProps,
@@ -14,6 +15,7 @@ export {
   type ChoiceGroupVariant,
   type ChoiceOption,
 } from './ChoiceGroup';
+export { DateCalendar, type DateCalendarProps } from './DateCalendar';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { GoalsPicker, type GoalsPickerProps } from './GoalsPicker';
@@ -24,6 +26,8 @@ export {
   type ImageCardVariant,
 } from './ImageCard';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
+export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
+export { Notice, type NoticeProps } from './Notice';
 export { PageLayout, type PageLayoutProps } from './PageLayout';
 export { SectionTitle, type SectionTitleProps } from './SectionTitle';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';

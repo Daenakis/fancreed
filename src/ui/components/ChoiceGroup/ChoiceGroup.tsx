@@ -8,7 +8,8 @@ import type { ChoiceGroupProps, ChoiceItemProps, SegmentProps } from './types';
  * Pick exactly one option. `segmented` shows 2–3 joined buttons (selected
  * one filled green, like a selected outline Button); `radio` shows circles
  * with labels, two per row, for polls with more or longer answers; `tabs`
- * shows text tabs with a green underline under the selected one.
+ * shows text tabs with a green underline under the selected one; `list`
+ * shows one radio row per option (bottom-sheet pickers).
  *
  * @example
  * <ChoiceGroup options={genders} value={gender} onChange={setGender} caption={`${t('profile.gender')} *`} />
@@ -25,14 +26,21 @@ export function ChoiceGroup<T extends string | number>({
 }: ChoiceGroupProps<T>) {
   const radio = variant === 'radio';
   const tabs = variant === 'tabs';
+  const list = variant === 'list';
 
   return (
-    <View style={[styles.container(radio), style]}>
+    <View style={[styles.container(radio || list), style]}>
       <View
         accessibilityRole={tabs ? 'tablist' : 'radiogroup'}
         accessibilityLabel={caption}
         style={
-          radio ? styles.radioList : tabs ? styles.tabRow : styles.segmentRow
+          radio
+            ? styles.radioList
+            : tabs
+              ? styles.tabRow
+              : list
+                ? styles.list
+                : styles.segmentRow
         }
       >
         {options.map((option, i) => {
@@ -42,6 +50,7 @@ export function ChoiceGroup<T extends string | number>({
             onPress: () => onChange(option.value),
           };
           if (tabs) return <Tab key={String(option.value)} {...common} />;
+          if (list) return <ListItem key={String(option.value)} {...common} />;
           return radio ? (
             <RadioItem key={String(option.value)} {...common} />
           ) : (
@@ -101,6 +110,26 @@ function Tab({ label, selected, onPress }: ChoiceItemProps) {
   );
 }
 
+function ListItem({ label, selected, onPress }: ChoiceItemProps) {
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityLabel={label}
+      accessibilityState={{ checked: selected }}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.listItem(selected),
+        pressed && styles.pressed,
+      ]}
+    >
+      <View style={styles.smallCircle(selected)}>
+        {selected ? <View style={styles.dot} /> : null}
+      </View>
+      <Text variant="bodyMRegular">{label}</Text>
+    </Pressable>
+  );
+}
+
 function RadioItem({ label, selected, onPress }: ChoiceItemProps) {
   return (
     <Pressable
@@ -153,6 +182,29 @@ const styles = StyleSheet.create((theme) => ({
     paddingVertical: theme.spacing(2),
     borderBottomWidth: 2,
     borderColor: selected ? theme.colors.brand : 'transparent',
+  }),
+  list: {
+    gap: theme.spacing(2),
+  },
+  listItem: (selected: boolean) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing(2),
+    padding: theme.spacing(3),
+    borderRadius: theme.radius.md,
+    backgroundColor: selected
+      ? theme.colors.mintSurfaceStrong
+      : theme.colors.secondary,
+  }),
+  smallCircle: (selected: boolean) => ({
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: theme.radius.full,
+    borderColor: selected ? theme.colors.brand : theme.colors.mutedForeground,
+    backgroundColor: theme.colors.background,
   }),
   radioList: {
     flexDirection: 'row',

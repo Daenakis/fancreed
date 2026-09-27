@@ -27,4 +27,12 @@ describe('TabBarButton', () => {
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
+
+  it('shows no selection when inactive even if its tab is focused', () => {
+    const { getByRole } = render(
+      <TabBarButton icon="home" label="Home" isFocused inactive />,
+    );
+
+    expect(getByRole('tab', { name: 'Home' })).not.toBeSelected();
+  });
 });

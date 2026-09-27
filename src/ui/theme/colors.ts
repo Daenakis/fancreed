@@ -14,6 +14,7 @@ export const palette = {
   // Mint green
   mintGreen300: '#66CA96',
   mintGreen200: '#CCEDDC',
+  mintGreen175: '#D9EFE3',
   mintGreen150: '#EFF8F3',
   mintGreen100: '#F5FBF8',
   // Brand green (auth / splash backgrounds)
@@ -63,6 +64,7 @@ export const lightColors = {
   secondaryForeground: palette.black,
   // Light green cards (calendar matches, events)
   mintSurface: palette.mintGreen150,
+  mintSurfaceStrong: palette.mintGreen175,
   muted: palette.grey150,
   mutedForeground: palette.grey300,
   destructive: palette.red300,
@@ -121,6 +123,7 @@ export const darkColors = {
   secondaryForeground: palette.white,
   // No dark design yet — same as secondary.
   mintSurface: palette.grey400,
+  mintSurfaceStrong: palette.grey300,
   muted: palette.grey400,
   mutedForeground: palette.grey300,
   destructive: palette.red300,

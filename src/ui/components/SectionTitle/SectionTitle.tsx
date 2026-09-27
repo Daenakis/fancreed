@@ -7,11 +7,12 @@ import type { SectionTitleProps } from './types';
 export function SectionTitle({
   title,
   color = 'foreground',
+  variant = 'h3Medium',
   style,
 }: SectionTitleProps) {
   return (
     <Text
-      variant="h3Medium"
+      variant={variant}
       color={color}
       accessibilityRole="header"
       style={[styles.title, style]}

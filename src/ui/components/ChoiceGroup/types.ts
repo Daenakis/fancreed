@@ -12,8 +12,10 @@ export type ChoiceOption<T extends string | number> = {
  *   (poll answers).
  * - `tabs`: text tabs with an underline under the selected one (screen
  *   sections, e.g. upcoming matches / results).
+ * - `list`: one full-width radio row per option (bottom-sheet pickers, e.g.
+ *   clothing size).
  */
-export type ChoiceGroupVariant = 'segmented' | 'radio' | 'tabs';
+export type ChoiceGroupVariant = 'segmented' | 'radio' | 'tabs' | 'list';
 
 export type ChoiceGroupProps<T extends string | number> = {
   options: ChoiceOption<T>[];

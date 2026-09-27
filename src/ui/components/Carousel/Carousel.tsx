@@ -35,6 +35,8 @@ export function Carousel<T>({
   style,
 }: CarouselProps<T>) {
   const { width } = useWindowDimensions();
+  // Read once: a changed `initialIndex` must not jump a list the user swiped.
+  const [startIndex] = useState(initialIndex);
   const [index, setIndex] = useState(initialIndex);
   const itemWidth = Math.round(width * itemWidthRatio);
   const step = itemWidth + gap;
@@ -63,7 +65,7 @@ export function Carousel<T>({
         )}
         onMomentumScrollEnd={onScrollEnd}
         // Not initialScrollIndex: it ignores the side padding and lands off-centre.
-        contentOffset={{ x: step * initialIndex, y: 0 }}
+        contentOffset={{ x: step * startIndex, y: 0 }}
         getItemLayout={(_, i) => ({ length: step, offset: step * i, index: i })}
       />
       {showIndicator && data.length > 1 ? (

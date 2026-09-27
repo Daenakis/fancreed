@@ -12,10 +12,12 @@ export function TabBarButton({
   icon,
   activeIcon,
   label,
-  isFocused = false,
+  isFocused: focusedTab = false,
+  inactive = false,
   style,
   ...props
 }: TabBarButtonProps) {
+  const isFocused = focusedTab && !inactive;
   const { theme } = useUnistyles();
 
   return (
