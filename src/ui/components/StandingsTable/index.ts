@@ -1,2 +1,6 @@
 export { StandingsTable } from './StandingsTable';
-export type { StandingsRowData, StandingsTableProps } from './types';
+export type {
+  StandingsRowData,
+  StandingsTableProps,
+  StandingsTableVariant,
+} from './types';

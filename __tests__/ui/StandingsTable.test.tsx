@@ -62,4 +62,17 @@ describe('StandingsTable', () => {
 
     expect(getByText('Veres')).toBeTruthy();
   });
+
+  it('shows goals for-against and hides names when variant is full', () => {
+    const { getByText, queryByText } = render(
+      <StandingsTable
+        variant="full"
+        rows={[{ ...rows[0]!, goalsFor: 44, goalsAgainst: 15 }]}
+      />,
+    );
+
+    expect(getByText('44-15')).toBeTruthy();
+    expect(getByText('standings.goals')).toBeTruthy();
+    expect(queryByText(rows[0]!.teamName)).toBeNull();
+  });
 });

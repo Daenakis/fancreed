@@ -63,7 +63,8 @@ export function PageLayout({
       <View style={styles.sheet}>
         {scrollable ? (
           <ScrollView
-            contentContainerStyle={[styles.content, contentStyle]}
+            // Fills the screen so an EmptyState (flex: 1) centres in the free space.
+            contentContainerStyle={[styles.content, styles.fill, contentStyle]}
             showsVerticalScrollIndicator={false}
           >
             {children}
@@ -133,6 +134,6 @@ const styles = StyleSheet.create((theme) => ({
     paddingVertical: theme.spacing(4),
   },
   fill: {
-    flex: 1,
+    flexGrow: 1,
   },
 }));

@@ -30,6 +30,7 @@ export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
 export { Notice, type NoticeProps } from './Notice';
 export { PageLayout, type PageLayoutProps } from './PageLayout';
 export { SectionTitle, type SectionTitleProps } from './SectionTitle';
+export { Select, type SelectProps } from './Select';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export { SlideshowList, type SlideshowListProps } from './SlideshowList';
 export {
