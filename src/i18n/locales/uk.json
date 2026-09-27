@@ -201,16 +201,15 @@
     "events": "Івенти"
   },
   "club": {
-    "name": "Назва клубу *",
-    "visibility": "Хто може приєднатися",
-    "open": "Усі",
+    "name": "Назва",
+    "visibility": "Доступність",
+    "open": "Відкритий",
     "friends": "Друзі та родичі",
-    "address": "Адреса *",
-    "description": "Опис *",
-    "facebook": "Посилання на Facebook",
-    "instagram": "Посилання на Instagram",
-    "telegram": "Посилання на Telegram",
-    "save": "Зберегти",
+    "address": "Адреса",
+    "description": "Опис клубу",
+    "facebook": "Фейсбук",
+    "instagram": "Інстаграм",
+    "telegram": "Телеграм",
     "errors": {
       "nameLength": "Назва має містити 2–50 символів",
       "addressLength": "Адреса має містити 10–100 символів",
@@ -221,14 +220,53 @@
     "fanClubsTitle": "ФАН-КЛУБИ",
     "eventsTitle": "ПОДІЇ",
     "createClub": "Створити фан-клуб",
-    "createEvent": "Створити подію"
+    "createEvent": "Створити івент",
+    "namePlaceholder": "Назва клубу",
+    "descriptionPlaceholder": "Опис клубу",
+    "addSocials": "Додати соц. мережі",
+    "uploadPhoto": "Завантажити фото",
+    "changePhoto": "Змінити фото",
+    "create": "Створити",
+    "details": "Деталі клубу",
+    "members": "Кількість учасників",
+    "founder": "Засновник",
+    "socials": "Соц. мережі",
+    "events": "Івенти",
+    "join": "Приєднатися",
+    "leave": "Покинути",
+    "shareMessage": "Приєднуйся до фан-клубу «{{name}}» у застосунку Fancreed!",
+    "loadFailed": "Не вдалося завантажити клуб.",
+    "notFound": "Цього клубу більше немає."
   },
   "event": {
     "matchdayTitle": "МАТЧДЕЙ",
     "share": "Поділитись",
     "location": "Локація",
     "remind": "Нагадати",
-    "shareMessage": "{{title}} — {{date}}, {{location}}. Долучайся через застосунок Fancreed!"
+    "shareMessage": "{{title}} — {{date}}, {{location}}. Долучайся через застосунок Fancreed!",
+    "title": "Створити івент",
+    "kind": "Тип івенту",
+    "description": "Опис івенту",
+    "descriptionPlaceholder": "Опис івенту",
+    "address": "Адреса",
+    "date": "Дата",
+    "time": "Час",
+    "pickTime": "Оберіть час",
+    "match": "Асоційований матч",
+    "noMatch": "Без матчу",
+    "visibility": "Доступність",
+    "create": "Створити",
+    "details": "Деталі івенту",
+    "dateTime": "Дата, час",
+    "founder": "Засновник",
+    "members": "Кількість учасників",
+    "join": "Долучитися",
+    "leave": "Покинути",
+    "errors": {
+      "dateRequired": "Оберіть дату",
+      "datePast": "Дата не може бути в минулому",
+      "timeRequired": "Оберіть час"
+    }
   },
   "nav": {
     "menu": "Меню",
@@ -287,7 +325,13 @@
     "members_few": "{{count}} учасники",
     "members_many": "{{count}} учасників",
     "members_other": "{{count}} учасника",
-    "emptyText": "Для цього матчу поки немає івентів."
+    "emptyText": "Для цього матчу поки немає івентів.",
+    "kind": {
+      "party": "Вечірка",
+      "trip": "Поїздка",
+      "meeting": "Зустріч"
+    },
+    "associatedMatch": "Асоційований матч"
   },
   "dates": {
     "months": [

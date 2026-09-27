@@ -15,7 +15,11 @@ export function FanClubsBlock({
   style,
 }: FanClubsBlockProps) {
   const { t } = useTranslation();
-  const { data: clubs, isPending } = useClubsQuery();
+  const { data, isPending } = useClubsQuery();
+  // Friends-&-family clubs are invite-only: list them to their members only.
+  const clubs = data?.filter(
+    (c) => c.opened !== false || c.youMember || c.youOwner,
+  );
 
   if (isPending) return <LoadingMore loading />;
   if (!clubs?.length && !onCreateClub) return null;

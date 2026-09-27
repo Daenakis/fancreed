@@ -1,4 +1,3 @@
-import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +19,7 @@ import {
   useEditProfileMutation,
   useFanLevelQuery,
   useLogoutMutation,
+  usePickImage,
   useProfileQuery,
   useSetPhotoMutation,
 } from '@/hooks';
@@ -48,23 +48,16 @@ export function ProfileScreen() {
   const { data: level } = useFanLevelQuery();
   const editProfile = useEditProfileMutation();
   const setPhoto = useSetPhotoMutation();
+  const pickImage = usePickImage();
   const logout = useLogoutMutation();
   const [size, setSize] = useClothingSize();
   const [sizeOpen, setSizeOpen] = useState(false);
 
   const changePhoto = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [1, 1],
-      // Below 1 the picker re-encodes to JPEG — the only type setphoto accepts.
-      quality: 0.7,
-      base64: true,
-    });
-    const data = result.canceled ? undefined : result.assets[0]?.base64;
-    if (!data) return;
+    const image = await pickImage();
+    if (!image) return;
     setPhoto.mutate(
-      { mimeType: 'image/jpeg', data },
+      { mimeType: 'image/jpeg', data: image.base64 },
       { onError: () => Alert.alert(t('profile.photoFailed')) },
     );
   };

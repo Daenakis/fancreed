@@ -27,13 +27,11 @@ describe('MatchEventsScreen', () => {
     jest
       .spyOn(eventsApi, 'clubList')
       .mockResolvedValue(apiOk({ events: [event('a', 7), event('b', 8)] }));
-    const { findByText, queryByText, getByText } = render(
-      <MatchEventsScreen />,
-    );
+    const { findAllByText, getAllByText } = render(<MatchEventsScreen />);
 
-    expect(await findByText('Event a')).toBeTruthy();
-    expect(queryByText('Event b')).toBeNull();
-    expect(getByText('events.members')).toBeTruthy();
+    // Only event "a" belongs to match 7; rows show the kind name.
+    expect(await findAllByText('events.kind.party')).toHaveLength(1);
+    expect(getAllByText('events.members')).toHaveLength(1);
   });
 
   it('shows the empty state when the match has no events', async () => {

@@ -1,17 +1,18 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { ClubFormValues } from '@/schemas';
+import type { ClubFormState } from '../../hooks';
 
 export type ClubFormProps = {
-  /** Called with valid values when Save is pressed. */
-  onSubmit: (values: ClubFormValues) => void;
-  /** Picked logo (URL or local file URI). */
+  /** From `useClubForm()` — the screen submits it. */
+  form: ClubFormState;
+  /** Picked logo (local file URI or URL). */
   photo?: string | null;
-  /** Opens the photo picker; the tile is view-only without it. */
-  onPickPhoto?: () => void;
-  /** Shows a spinner on Save. Defaults to `false`. */
-  submitting?: boolean;
-  /** Server error under the Save button (already translated). */
-  errorMessage?: string;
+  /** Opens the photo picker. */
+  onPickPhoto: () => void;
   style?: StyleProp<ViewStyle>;
+};
+
+export type PhotoPickerProps = {
+  photo?: string | null;
+  onPress: () => void;
 };

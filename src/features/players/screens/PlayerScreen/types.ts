@@ -1,8 +1,3 @@
-export type InfoRowProps = {
-  label: string;
-  value: string;
-};
-
 export type StatTileProps = {
   value: number;
   label: string;

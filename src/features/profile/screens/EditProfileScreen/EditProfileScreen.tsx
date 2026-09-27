@@ -1,16 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
-import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
-  BottomSheet,
   Button,
   ChoiceGroup,
-  DateCalendar,
+  DateField,
   EmptyState,
   LoadingMore,
   Notice,
@@ -26,7 +24,7 @@ import {
   useSubmitForm,
 } from '@/hooks';
 
-import { formatDayMonthYear, goBack } from '@/utils';
+import { goBack } from '@/utils';
 
 import { getApiErrorMessageKey } from '@/api';
 
@@ -36,7 +34,7 @@ import {
   profileSchema,
 } from '@/schemas';
 
-import type { DateFieldProps, ProfileFormProps } from './types';
+import type { ProfileFormProps } from './types';
 
 // Most fans are adults — open the birthday calendar around 2000, not today.
 const BIRTHDAY_VIEW = new Date(2000, 0, 1);
@@ -149,6 +147,8 @@ function ProfileForm({ profile }: ProfileFormProps) {
             value={value}
             error={errorText(fieldState.error)}
             shakeKey={submitCount}
+            initialView={BIRTHDAY_VIEW}
+            maxDate={new Date()}
             onChange={changeHandler<Date>('birthDay', onChange)}
           />
         )}
@@ -192,51 +192,6 @@ function ProfileForm({ profile }: ProfileFormProps) {
         </Text>
       ) : null}
     </View>
-  );
-}
-
-/** Looks like a text field; opens the calendar in a bottom sheet. */
-function DateField({
-  label,
-  value,
-  error,
-  shakeKey,
-  onChange,
-}: DateFieldProps) {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-
-  return (
-    <>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={label}
-        accessibilityValue={{ text: value ? formatDayMonthYear(value) : '' }}
-        onPress={() => setOpen(true)}
-      >
-        {/* The field only displays the value; taps go to the Pressable. */}
-        <View pointerEvents="none">
-          <TextInput
-            label={label}
-            placeholder={t('profile.datePlaceholder')}
-            value={value ? formatDayMonthYear(value) : ''}
-            error={error}
-            shakeKey={shakeKey}
-          />
-        </View>
-      </Pressable>
-      <BottomSheet visible={open} onClose={() => setOpen(false)}>
-        <DateCalendar
-          value={value ?? null}
-          initialView={BIRTHDAY_VIEW}
-          maxDate={new Date()}
-          onChange={(date) => {
-            onChange(date);
-            setOpen(false);
-          }}
-        />
-      </BottomSheet>
-    </>
   );
 }
 

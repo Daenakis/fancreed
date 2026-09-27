@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native-unistyles';
 import {
   Button,
   EmptyState,
+  InfoRow,
   LoadingMore,
   PageLayout,
   SectionTitle,
@@ -16,7 +17,7 @@ import { usePlayerDetailsQuery, usePlayerQuery } from '@/hooks';
 
 import { goBack } from '@/utils';
 
-import type { InfoRowProps, StatTileProps } from './types';
+import type { StatTileProps } from './types';
 
 const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Attacker'];
 
@@ -139,15 +140,6 @@ export function PlayerScreen() {
   );
 }
 
-function InfoRow({ label, value }: InfoRowProps) {
-  return (
-    <View style={styles.row}>
-      <Text variant="bodySRegular">{label}</Text>
-      <Text variant="bodySSemibold">{value}</Text>
-    </View>
-  );
-}
-
 function StatTile({ value, label, caption }: StatTileProps) {
   return (
     <View
@@ -190,14 +182,6 @@ const styles = StyleSheet.create((theme) => ({
   },
   rows: {
     gap: theme.spacing(1),
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing(3),
-    paddingVertical: theme.spacing(2),
-    borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.secondary,
   },
   flush: {
     paddingHorizontal: 0,

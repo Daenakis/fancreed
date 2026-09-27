@@ -1,160 +1,203 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { ParseKeys } from 'i18next';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Image, Pressable, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import {
-  AddPhoto,
-  Button,
-  ChoiceGroup,
-  Text,
-  TextInput,
-} from '@/ui/components';
+import { Button, ChoiceGroup, Icon, Text, TextInput } from '@/ui/components';
 
-import { useSubmitForm } from '@/hooks';
+import type { ClubFormProps, PhotoPickerProps } from './types';
 
-import { type ClubFormValues, clubSchema } from '@/schemas';
-
-import type { ClubFormProps } from './types';
-
-const TEXT_FIELDS = [
-  { name: 'name', label: 'club.name' },
-  { name: 'address', label: 'club.address' },
-  { name: 'description', label: 'club.description', multiline: true },
-  { name: 'facebook', label: 'club.facebook', link: true },
-  { name: 'instagram', label: 'club.instagram', link: true },
-  { name: 'telegram', label: 'club.telegram', link: true },
+const SOCIALS = [
+  {
+    name: 'instagram',
+    label: 'club.instagram',
+    hint: 'https://www.instagram.com/',
+  },
+  { name: 'telegram', label: 'club.telegram', hint: 'https://t.me/' },
+  {
+    name: 'facebook',
+    label: 'club.facebook',
+    hint: 'https://www.facebook.com/',
+  },
 ] as const;
 
 /**
- * Create / edit a fan club: logo, name, who can join, address,
- * description and optional social links. Errors show when Save is pressed.
+ * Create-club fields (Figma): photo, name, who can join, address,
+ * description and optional social links behind "+ Add socials". The screen
+ * holds the form state (`useClubForm`) and the submit button.
  */
-export function ClubForm({
-  onSubmit,
-  photo,
-  onPickPhoto,
-  submitting = false,
-  errorMessage,
-  style,
-}: ClubFormProps) {
+export function ClubForm({ form, photo, onPickPhoto, style }: ClubFormProps) {
   const { t } = useTranslation();
+  const [showSocials, setShowSocials] = useState(false);
   const {
     control,
-    filled,
-    submitWith,
     changeHandler,
     formState: { submitCount },
-  } = useSubmitForm<ClubFormValues>({
-    resolver: zodResolver(clubSchema),
-    // Social links are optional.
-    requiredFields: ['name', 'address', 'description'],
-    defaultValues: {
-      name: '',
-      visibility: 'open',
-      address: '',
-      description: '',
-      facebook: '',
-      instagram: '',
-      telegram: '',
-    },
-  });
+  } = form;
+  const errorText = (message?: string) =>
+    message ? t(message as ParseKeys) : undefined;
+
+  const text = (
+    name: 'name' | 'address' | 'description',
+    label: string,
+    placeholder: string,
+    multiline = false,
+  ) => (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value, onChange, onBlur }, fieldState }) => (
+        <TextInput
+          label={label}
+          placeholder={placeholder}
+          value={value}
+          onChangeText={changeHandler(name, onChange)}
+          onBlur={onBlur}
+          multiline={multiline}
+          error={errorText(fieldState.error?.message)}
+          shakeKey={submitCount}
+        />
+      )}
+    />
+  );
 
   return (
     <View style={[styles.container, style]}>
-      <AddPhoto
-        photo={photo}
-        onPress={onPickPhoto ?? (() => {})}
-        disabled={!onPickPhoto}
-        style={styles.photo}
-      />
-      {TEXT_FIELDS.slice(0, 1).map((field) => (
-        <Controller
-          key={field.name}
-          control={control}
-          name={field.name}
-          render={({ field: { value, onChange, onBlur }, fieldState }) => (
-            <TextInput
-              label={t(field.label)}
-              value={value}
-              onChangeText={changeHandler(field.name, onChange)}
-              onBlur={onBlur}
-              error={
-                fieldState.error && t(fieldState.error.message as ParseKeys)
-              }
-              shakeKey={submitCount}
-            />
-          )}
-        />
-      ))}
+      <PhotoPicker photo={photo} onPress={onPickPhoto} />
+      {text('name', `${t('club.name')}*`, t('club.namePlaceholder'))}
       <Controller
         control={control}
         name="visibility"
         render={({ field: { value, onChange } }) => (
-          <ChoiceGroup
-            caption={t('club.visibility')}
-            value={value}
-            onChange={onChange}
-            options={[
-              { label: t('club.open'), value: 'open' },
-              { label: t('club.friends'), value: 'friends' },
-            ]}
-          />
+          <View style={styles.field}>
+            <Text variant="bodyMRegular">{t('club.visibility')}</Text>
+            <ChoiceGroup
+              value={value}
+              onChange={onChange}
+              options={[
+                { label: t('club.open'), value: 'open' },
+                { label: t('club.friends'), value: 'friends' },
+              ]}
+            />
+          </View>
         )}
       />
-      {TEXT_FIELDS.slice(1).map((field) => (
-        <Controller
-          key={field.name}
-          control={control}
-          name={field.name}
-          render={({ field: { value, onChange, onBlur }, fieldState }) => (
-            <TextInput
-              label={t(field.label)}
-              value={value}
-              onChangeText={changeHandler(field.name, onChange)}
-              onBlur={onBlur}
-              multiline={'multiline' in field}
-              autoCapitalize={'link' in field ? 'none' : 'sentences'}
-              keyboardType={'link' in field ? 'url' : 'default'}
-              placeholder={'link' in field ? 'https://' : undefined}
-              error={
-                fieldState.error && t(fieldState.error.message as ParseKeys)
-              }
-              shakeKey={submitCount}
-            />
-          )}
+      {text('address', `${t('club.address')}*`, t('club.address'))}
+      {text(
+        'description',
+        `${t('club.description')}*`,
+        t('club.descriptionPlaceholder'),
+        true,
+      )}
+      {showSocials ? (
+        SOCIALS.map((social) => (
+          <Controller
+            key={social.name}
+            control={control}
+            name={social.name}
+            render={({ field: { value, onChange, onBlur }, fieldState }) => (
+              <TextInput
+                label={t(social.label)}
+                placeholder={social.hint}
+                value={value}
+                onChangeText={changeHandler(social.name, onChange)}
+                onBlur={onBlur}
+                autoCapitalize="none"
+                keyboardType="url"
+                error={errorText(fieldState.error?.message)}
+                shakeKey={submitCount}
+              />
+            )}
+          />
+        ))
+      ) : (
+        <Button
+          variant="ghost"
+          icon="plus"
+          text={t('club.addSocials')}
+          textColor="brand"
+          onPress={() => setShowSocials(true)}
+          style={styles.addSocials}
         />
-      ))}
-      <Button
-        fullWidth
-        text={t('club.save')}
-        backgroundColor="primary"
-        textColor="primaryForeground"
-        loading={submitting}
-        disabled={!filled}
-        onPress={submitWith(onSubmit)}
-      />
-      {errorMessage ? (
-        <Text color="destructive" style={styles.error}>
-          {errorMessage}
-        </Text>
-      ) : null}
+      )}
     </View>
   );
 }
 
 ClubForm.displayName = 'ClubForm';
 
+/** "Upload photo" button, then the picked photo with a "Change photo" chip. */
+function PhotoPicker({ photo, onPress }: PhotoPickerProps) {
+  const { t } = useTranslation();
+  const { theme } = useUnistyles();
+
+  if (!photo) {
+    return (
+      <Button
+        variant="brandLine"
+        size="xs"
+        fullWidth
+        icon="upload"
+        text={t('club.uploadPhoto')}
+        onPress={onPress}
+      />
+    );
+  }
+
+  return (
+    <View style={styles.photoCard}>
+      <Image source={{ uri: photo }} resizeMode="cover" style={styles.photo} />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('club.changePhoto')}
+        onPress={onPress}
+        style={({ pressed }) => [styles.changeChip, pressed && styles.pressed]}
+      >
+        <Icon name="changeImage" size={16} color={theme.colors.brand} />
+        <Text variant="bodySRegular" color="brand">
+          {t('club.changePhoto')}
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create((theme) => ({
   container: {
     gap: theme.spacing(4),
   },
-  photo: {
-    alignSelf: 'center',
+  field: {
+    gap: theme.spacing(2),
   },
-  error: {
-    textAlign: 'center',
+  addSocials: {
+    alignSelf: 'flex-start',
+  },
+  photoCard: {
+    height: 250,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.muted,
+  },
+  photo: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
+  },
+  changeChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing(1.5),
+    marginBottom: theme.spacing(4),
+    paddingHorizontal: theme.spacing(3),
+    paddingVertical: theme.spacing(2),
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.background,
+  },
+  pressed: {
+    opacity: 0.7,
   },
 }));

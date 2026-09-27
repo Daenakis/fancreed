@@ -193,16 +193,15 @@
     "events": "Events"
   },
   "club": {
-    "name": "Club name *",
-    "visibility": "Who can join",
-    "open": "Anyone",
+    "name": "Name",
+    "visibility": "Access",
+    "open": "Open",
     "friends": "Friends & family",
-    "address": "Address *",
-    "description": "Description *",
-    "facebook": "Facebook link",
-    "instagram": "Instagram link",
-    "telegram": "Telegram link",
-    "save": "Save",
+    "address": "Address",
+    "description": "Club description",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
     "errors": {
       "nameLength": "Name must be 2–50 characters",
       "addressLength": "Address must be 10–100 characters",
@@ -213,14 +212,53 @@
     "fanClubsTitle": "FAN CLUBS",
     "eventsTitle": "EVENTS",
     "createClub": "Create a fan club",
-    "createEvent": "Create an event"
+    "createEvent": "Create event",
+    "namePlaceholder": "Club name",
+    "descriptionPlaceholder": "Club description",
+    "addSocials": "Add social links",
+    "uploadPhoto": "Upload photo",
+    "changePhoto": "Change photo",
+    "create": "Create",
+    "details": "Club details",
+    "members": "Members",
+    "founder": "Founder",
+    "socials": "Social media",
+    "events": "Events",
+    "join": "Join",
+    "leave": "Leave",
+    "shareMessage": "Join the fan club \"{{name}}\" in the Fancreed app!",
+    "loadFailed": "Couldn't load the club.",
+    "notFound": "This club no longer exists."
   },
   "event": {
     "matchdayTitle": "MATCHDAY",
     "share": "Share",
     "location": "Location",
     "remind": "Remind",
-    "shareMessage": "{{title}} — {{date}}, {{location}}. Join via the Fancreed app!"
+    "shareMessage": "{{title}} — {{date}}, {{location}}. Join via the Fancreed app!",
+    "title": "Create event",
+    "kind": "Event type",
+    "description": "Event description",
+    "descriptionPlaceholder": "Event description",
+    "address": "Address",
+    "date": "Date",
+    "time": "Time",
+    "pickTime": "Choose a time",
+    "match": "Associated match",
+    "noMatch": "No match",
+    "visibility": "Access",
+    "create": "Create",
+    "details": "Event details",
+    "dateTime": "Date, time",
+    "founder": "Organiser",
+    "members": "Members",
+    "join": "Join",
+    "leave": "Leave",
+    "errors": {
+      "dateRequired": "Choose a date",
+      "datePast": "The date can't be in the past",
+      "timeRequired": "Choose a time"
+    }
   },
   "nav": {
     "menu": "Menu",
@@ -277,7 +315,13 @@
   "events": {
     "members_one": "{{count}} fan",
     "members_other": "{{count}} fans",
-    "emptyText": "No fan events for this match yet."
+    "emptyText": "No fan events for this match yet.",
+    "kind": {
+      "party": "Party",
+      "trip": "Trip",
+      "meeting": "Meeting"
+    },
+    "associatedMatch": "Associated match"
   },
   "dates": {
     "months": [
