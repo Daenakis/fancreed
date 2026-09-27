@@ -9,6 +9,7 @@ export {
   playersApi,
   predictionsApi,
   profileApi,
+  quizApi,
   socialsApi,
   sponsorsApi,
   squadsApi,

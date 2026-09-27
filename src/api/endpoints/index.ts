@@ -7,6 +7,7 @@ export { newsApi } from './news';
 export { playersApi } from './players';
 export { predictionsApi } from './predictions';
 export { profileApi } from './profile';
+export { quizApi } from './quiz';
 export { socialsApi } from './socials';
 export { sponsorsApi } from './sponsors';
 export { squadsApi } from './squads';

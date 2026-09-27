@@ -9,6 +9,7 @@ export enum QueryKey {
   Players = 'players',
   Predictions = 'predictions',
   Profile = 'profile',
+  Quiz = 'quiz',
   Socials = 'socials',
   Sponsors = 'sponsors',
   Squads = 'squads',

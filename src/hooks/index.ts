@@ -1,5 +1,10 @@
 export * from './app';
 export * from './query';
+export {
+  type CalendarReminder,
+  type ReminderResult,
+  useCalendarReminder,
+} from './useCalendarReminder';
 export { useFieldErrorText } from './useFieldErrorText';
 export { useLanguage } from './useLanguage';
 export { useNow } from './useNow';
