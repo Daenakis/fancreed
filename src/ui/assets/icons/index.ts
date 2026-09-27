@@ -20,6 +20,7 @@ import Expand from './Expand';
 import EyeClose from './EyeClose';
 import EyeOpen from './EyeOpen';
 import Facebook from './Facebook';
+import FacebookMono from './FacebookMono';
 import Filters from './Filters';
 import Google from './Google';
 import Home from './Home';
@@ -86,6 +87,7 @@ export const ICONS = {
   eyeClose: EyeClose,
   eyeOpen: EyeOpen,
   facebook: Facebook,
+  facebookMono: FacebookMono,
   filters: Filters,
   google: Google,
   home: Home,
@@ -114,6 +116,7 @@ export const ICONS = {
   starFilled: StarFilled,
   support: Support,
   tShirt: TShirt,
+  table: Table,
   team: Team,
   telegram: Telegram,
   tiktok: Tiktok,
@@ -123,11 +126,10 @@ export const ICONS = {
   userPlus: UserPlus,
   verification: Verification,
   video: Video,
+  volleyball: Volleyball,
   website: Website,
   woman: Woman,
   xTwitter: XTwitter,
-  table: Table,
-  volleyball: Volleyball,
 } as const;
 
 export type IconName = keyof typeof ICONS;
