@@ -1,2 +1,1 @@
 export { HomeScreen } from './HomeScreen';
-export { StandingsScreen } from './StandingsScreen';

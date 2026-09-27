@@ -92,6 +92,23 @@ describe('MatchCard compact', () => {
   });
 });
 
+describe('MatchCard compact without actions', () => {
+  it('shows the given title and no buttons', () => {
+    const { getByText, queryByRole } = render(
+      <MatchCard
+        variant="compact"
+        match={match({})}
+        title="UPL 2025/26"
+        actions={false}
+        onOpenLink={jest.fn()}
+      />,
+    );
+
+    expect(getByText('UPL 2025/26')).toBeTruthy();
+    expect(queryByRole('button')).toBeNull();
+  });
+});
+
 describe('MatchCard full', () => {
   it('shows the countdown and opens tickets before kick-off', () => {
     const onOpenLink = jest.fn();

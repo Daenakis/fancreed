@@ -63,7 +63,7 @@ export function HomeScreen() {
         <FanShopBanner onPress={() => router.navigate('/shop')} />
         <FanCardBlock />
         <PredictionBlock />
-        <TableBlock onShowAll={() => router.push('/standings')} />
+        <TableBlock onShowAll={() => router.push('/tournament')} />
         <VideosBlock onOpenVideo={openLink} />
         <SquadBlock
           onOpenPlayer={(player) =>

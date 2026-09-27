@@ -1,0 +1,1 @@
+export { TournamentScreen } from './screens';

@@ -18,6 +18,10 @@ export type MatchCardProps = {
   onOpenLineup?: (match: Fixture) => void;
   /** "Video" opens the videos screen instead of the link. */
   onOpenVideos?: (match: Fixture) => void;
+  /** `compact`: heading instead of the league name, e.g. league + season. */
+  title?: string;
+  /** `compact`: shows the share icon and the Events/Video/Tickets row. Defaults to `true`. */
+  actions?: boolean;
   /** `compact`: "Events" opens the match's fan events; disabled without it. */
   onOpenEvents?: (match: Fixture) => void;
   style?: StyleProp<ViewStyle>;

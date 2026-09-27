@@ -62,7 +62,6 @@ export function LineupScreen() {
 
 const styles = StyleSheet.create((theme) => ({
   content: {
-    flexGrow: 1,
     paddingHorizontal: theme.spacing(4),
   },
   empty: {

@@ -58,7 +58,7 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
     transform: [{ translateX: offset.get() }],
   }));
 
-  const openScreen = (path: '/standings' | '/videos') => {
+  const openScreen = (path: '/tournament' | '/videos') => {
     onClose();
     router.push(path);
   };
@@ -88,7 +88,7 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
       key: 'tables',
       icon: 'table',
       label: t('menu.tables'),
-      onPress: () => openScreen('/standings'),
+      onPress: () => openScreen('/tournament'),
     },
     {
       key: 'videos',

@@ -18,13 +18,13 @@ describe('SideMenu', () => {
     expect(openURL).toHaveBeenCalledWith(CONFIG.LINKS.TEAM);
   });
 
-  it('closes the menu and opens the standings screen at once', () => {
+  it('closes the menu and opens the tournament screen at once', () => {
     const { getByRole } = render(<SideMenu visible onClose={onClose} />);
 
     fireEvent.press(getByRole('button', { name: 'menu.tables' }));
 
     expect(onClose).toHaveBeenCalled();
-    expect(router.push).toHaveBeenCalledWith('/standings');
+    expect(router.push).toHaveBeenCalledWith('/tournament');
   });
 
   it('says settings are coming soon', () => {

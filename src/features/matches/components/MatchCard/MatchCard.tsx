@@ -198,6 +198,8 @@ function CompactMatch({
   onOpenLink,
   onOpenEvents,
   onOpenVideos,
+  title,
+  actions = true,
   style,
 }: MatchVariantProps) {
   const { t, i18n } = useTranslation();
@@ -232,17 +234,23 @@ function CompactMatch({
   return (
     <View style={[styles.row, style]}>
       <View style={styles.rowHead}>
-        <Text variant="bodyMRegular" numberOfLines={1} style={styles.rowLeague}>
-          {match.league.name}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('match.share')}
-          hitSlop={8}
-          onPress={share}
+        <Text
+          variant={actions ? 'bodyMRegular' : 'bodyLRegular'}
+          numberOfLines={2}
+          style={styles.rowLeague}
         >
-          <Icon name="telegram" size={18} color={theme.colors.foreground} />
-        </Pressable>
+          {title ?? match.league.name}
+        </Text>
+        {actions ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('match.share')}
+            hitSlop={8}
+            onPress={share}
+          >
+            <Icon name="telegram" size={18} color={theme.colors.foreground} />
+          </Pressable>
+        ) : null}
       </View>
       <View style={styles.rowTeams}>
         <Image
@@ -252,17 +260,24 @@ function CompactMatch({
           style={styles.rowLogo}
         />
         {played ? (
-          <Text
-            variant="h1Semibold"
-            accessibilityLabel={t('match.score', {
-              home: match.homeTeam.name,
-              away: match.awayTeam.name,
-              homeGoals: match.goalsHomeTeam ?? 0,
-              awayGoals: match.goalsAwayTeam ?? 0,
-            })}
-          >
-            {match.goalsHomeTeam ?? 0} - {match.goalsAwayTeam ?? 0}
-          </Text>
+          <View style={styles.center}>
+            {actions ? null : (
+              <Text variant="bodySRegular">
+                {t(phase === 'live' ? 'match.live' : 'match.finished')}
+              </Text>
+            )}
+            <Text
+              variant="h1Semibold"
+              accessibilityLabel={t('match.score', {
+                home: match.homeTeam.name,
+                away: match.awayTeam.name,
+                homeGoals: match.goalsHomeTeam ?? 0,
+                awayGoals: match.goalsAwayTeam ?? 0,
+              })}
+            >
+              {match.goalsHomeTeam ?? 0} - {match.goalsAwayTeam ?? 0}
+            </Text>
+          </View>
         ) : (
           <View style={styles.center}>
             <Text variant="bodyMRegular">{day}</Text>
@@ -276,35 +291,37 @@ function CompactMatch({
           style={styles.rowLogo}
         />
       </View>
-      <View style={styles.rowActions}>
-        <Button
-          variant="brandLine"
-          size="xs"
-          text={t('match.events')}
-          disabled={!onOpenEvents}
-          onPress={() => onOpenEvents?.(match)}
-          style={styles.link}
-        />
-        <Button
-          variant="brandLine"
-          size="xs"
-          text={t('match.video')}
-          disabled={!video}
-          onPress={video}
-          style={styles.link}
-        />
-        {played ? null : (
+      {actions ? (
+        <View style={styles.rowActions}>
           <Button
+            variant="brandLine"
             size="xs"
-            backgroundColor="brand"
-            textColor="onBrand"
-            text={t('match.tickets')}
-            disabled={!match.ticketLink}
-            onPress={() => onOpenLink(match.ticketLink!)}
+            text={t('match.events')}
+            disabled={!onOpenEvents}
+            onPress={() => onOpenEvents?.(match)}
             style={styles.link}
           />
-        )}
-      </View>
+          <Button
+            variant="brandLine"
+            size="xs"
+            text={t('match.video')}
+            disabled={!video}
+            onPress={video}
+            style={styles.link}
+          />
+          {played ? null : (
+            <Button
+              size="xs"
+              backgroundColor="brand"
+              textColor="onBrand"
+              text={t('match.tickets')}
+              disabled={!match.ticketLink}
+              onPress={() => onOpenLink(match.ticketLink!)}
+              style={styles.link}
+            />
+          )}
+        </View>
+      ) : null}
     </View>
   );
 }

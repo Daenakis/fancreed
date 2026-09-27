@@ -16,4 +16,4 @@ export {
   VideosBlock,
   type VideosBlockProps,
 } from './components';
-export { HomeScreen, StandingsScreen } from './screens';
+export { HomeScreen } from './screens';

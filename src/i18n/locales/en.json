@@ -127,7 +127,8 @@
     "lost": "L",
     "points": "Pts",
     "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points",
-    "emptyText": "The table will appear once the season starts."
+    "emptyText": "The table will appear once the season starts.",
+    "goals": "Goals for-against"
   },
   "fanCard": {
     "title": "FAN CARD",
@@ -335,5 +336,13 @@
     "settings": "Settings",
     "feedback": "Feedback",
     "comingSoon": "Coming soon"
+  },
+  "tournament": {
+    "title": "Tournament & schedule",
+    "table": "Standings",
+    "calendar": "Fixtures",
+    "league": "Competition",
+    "noTable": "This competition has no table.",
+    "noMatches": "No matches in this competition yet."
   }
 }
