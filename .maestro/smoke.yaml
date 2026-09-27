@@ -1,4 +1,7 @@
-# Smoke test: sign-in → home → sign-out → back to sign-in
+# Smoke test: sign-in → home → profile → log out → back to sign-in.
+# Needs an activated account on the real backend, passed as env vars
+# (never commit credentials):
+#   maestro test -e EMAIL=you@example.com -e PASSWORD=secret .maestro/smoke.yaml
 appId: com.fancreed.app.dev # dev bundle id (see env.ts)
 ---
 # Launch the app from scratch so the auth state is cleared.
@@ -15,6 +18,9 @@ appId: com.fancreed.app.dev # dev bundle id (see env.ts)
       - tapOn:
           text: 'Continue'
           optional: true
+      - tapOn:
+          text: 'Close'
+          optional: true
 
 # Sign-in screen should be visible (after the logo intro).
 - extendedWaitUntil:
@@ -22,18 +28,30 @@ appId: com.fancreed.app.dev # dev bundle id (see env.ts)
     timeout: 15000
 
 # Fill the form — the button unlocks once both fields have a value.
-- tapOn: 'Email or phone number'
-- inputText: 'user@example.com'
+- tapOn: 'Email'
+- inputText: ${EMAIL}
 - tapOn: 'Sign in to your account' # dismiss the keyboard
 - tapOn: 'Password'
-- inputText: 'secret123'
+- inputText: ${PASSWORD}
 - tapOn: 'Sign in to your account'
 - tapOn: 'Sign In'
 
-# Home screen should now be visible — confirms the auth flow completed.
-- assertVisible: 'Home'
-- assertVisible: 'You are authenticated'
+# Home with live data — confirms the auth flow and the API work.
+- extendedWaitUntil:
+    visible: 'Latest news'
+    timeout: 15000
+- assertVisible: 'All news'
 
-# Sign out and verify we land back on the sign-in screen.
-- tapOn: 'Sign Out'
-- assertVisible: 'Sign in to your account'
+# Profile (deep link: the dev-menu gear covers the header avatar).
+- openLink: 'fancreed-dev://profile'
+- extendedWaitUntil:
+    visible: 'Favourite player'
+    timeout: 10000
+
+# Log out and verify we land back on the sign-in screen.
+- scrollUntilVisible:
+    element: 'Log out'
+- tapOn: 'Log out'
+- extendedWaitUntil:
+    visible: 'Sign in to your account'
+    timeout: 10000

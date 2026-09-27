@@ -28,15 +28,21 @@ maestro test .maestro/smoke.yaml
 yarn e2e
 ```
 
+The smoke flow signs in to the **real backend**, so it needs an activated account. Pass it as env vars — never commit credentials:
+
+```bash
+maestro test -e EMAIL=you@example.com -e PASSWORD=secret .maestro/smoke.yaml
+```
+
 ## Set the correct `appId`
 
 `.maestro/smoke.yaml` targets the dev build (`com.fancreed.app.dev`). If the bundle ids change, update `appId` there to match `BUNDLE_IDS.dev` in `env.ts`.
 
 ## Flows
 
-| File                  | What it covers            |
-| --------------------- | ------------------------- |
-| `.maestro/smoke.yaml` | Sign-in → Home → Sign-out |
+| File                  | What it covers                                 |
+| --------------------- | ---------------------------------------------- |
+| `.maestro/smoke.yaml` | Sign-in → Home (live news) → Profile → Log out |
 
 ## Docs
 
