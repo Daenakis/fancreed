@@ -10,8 +10,10 @@ export type ChoiceOption<T extends string | number> = {
  *   (gender, club visibility).
  * - `radio`: circle + label per option, two per row, labels may wrap
  *   (poll answers).
+ * - `tabs`: text tabs with an underline under the selected one (screen
+ *   sections, e.g. upcoming matches / results).
  */
-export type ChoiceGroupVariant = 'segmented' | 'radio';
+export type ChoiceGroupVariant = 'segmented' | 'radio' | 'tabs';
 
 export type ChoiceGroupProps<T extends string | number> = {
   options: ChoiceOption<T>[];

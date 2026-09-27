@@ -7,11 +7,13 @@ import type { ChoiceGroupProps, ChoiceItemProps, SegmentProps } from './types';
 /**
  * Pick exactly one option. `segmented` shows 2–3 joined buttons (selected
  * one filled green, like a selected outline Button); `radio` shows circles
- * with labels, two per row, for polls with more or longer answers.
+ * with labels, two per row, for polls with more or longer answers; `tabs`
+ * shows text tabs with a green underline under the selected one.
  *
  * @example
  * <ChoiceGroup options={genders} value={gender} onChange={setGender} caption={`${t('profile.gender')} *`} />
  * <ChoiceGroup variant="radio" options={answers} value={answer} onChange={setAnswer} />
+ * <ChoiceGroup variant="tabs" options={sections} value={section} onChange={setSection} />
  */
 export function ChoiceGroup<T extends string | number>({
   options,
@@ -22,13 +24,16 @@ export function ChoiceGroup<T extends string | number>({
   style,
 }: ChoiceGroupProps<T>) {
   const radio = variant === 'radio';
+  const tabs = variant === 'tabs';
 
   return (
     <View style={[styles.container(radio), style]}>
       <View
-        accessibilityRole="radiogroup"
+        accessibilityRole={tabs ? 'tablist' : 'radiogroup'}
         accessibilityLabel={caption}
-        style={radio ? styles.radioList : styles.segmentRow}
+        style={
+          radio ? styles.radioList : tabs ? styles.tabRow : styles.segmentRow
+        }
       >
         {options.map((option, i) => {
           const common = {
@@ -36,6 +41,7 @@ export function ChoiceGroup<T extends string | number>({
             selected: option.value === value,
             onPress: () => onChange(option.value),
           };
+          if (tabs) return <Tab key={String(option.value)} {...common} />;
           return radio ? (
             <RadioItem key={String(option.value)} {...common} />
           ) : (
@@ -72,6 +78,25 @@ function Segment({ label, selected, first, last, onPress }: SegmentProps) {
       ]}
     >
       <Text color={selected ? 'primaryForeground' : 'foreground'}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function Tab({ label, selected, onPress }: ChoiceItemProps) {
+  return (
+    <Pressable
+      accessibilityRole="tab"
+      accessibilityLabel={label}
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={({ pressed }) => [styles.tab(selected), pressed && styles.pressed]}
+    >
+      <Text
+        variant={selected ? 'bodySSemibold' : 'bodySRegular'}
+        color={selected ? 'foreground' : 'mutedForeground'}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -117,6 +142,17 @@ const styles = StyleSheet.create((theme) => ({
     borderTopRightRadius: last ? theme.radius.md : 0,
     borderBottomRightRadius: last ? theme.radius.md : 0,
     backgroundColor: selected ? theme.colors.primary : theme.colors.background,
+  }),
+  tabRow: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+  },
+  tab: (selected: boolean) => ({
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: theme.spacing(2),
+    borderBottomWidth: 2,
+    borderColor: selected ? theme.colors.brand : 'transparent',
   }),
   radioList: {
     flexDirection: 'row',

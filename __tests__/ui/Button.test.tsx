@@ -197,4 +197,13 @@ describe('Button', () => {
       color: colors.onBrand,
     });
   });
+
+  it('uses a green outline and dark label when variant is brandLine', () => {
+    const { getByRole, getByText } = render(
+      <Button variant="brandLine" size="xs" text="Events" />,
+    );
+
+    expect(styleOf(getByRole('button')).borderColor).toBe(colors.brand);
+    expect(styleOf(getByText('Events')).color).toBe(colors.foreground);
+  });
 });

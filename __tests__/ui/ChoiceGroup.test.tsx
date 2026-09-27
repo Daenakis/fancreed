@@ -90,4 +90,23 @@ describe('ChoiceGroup', () => {
       expect(onChange).toHaveBeenCalledWith(3);
     });
   });
+
+  it('shows tabs and marks the selected one when variant is tabs', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <ChoiceGroup
+        variant="tabs"
+        options={[
+          { label: 'Calendar', value: 'upcoming' },
+          { label: 'Results', value: 'results' },
+        ]}
+        value="upcoming"
+        onChange={onChange}
+      />,
+    );
+
+    expect(getByRole('tab', { name: 'Calendar' })).toBeSelected();
+    fireEvent.press(getByRole('tab', { name: 'Results' }));
+    expect(onChange).toHaveBeenCalledWith('results');
+  });
 });

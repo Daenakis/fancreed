@@ -17,6 +17,7 @@ import type { ColorToken } from '@/ui/theme';
  * - `brand`: for brand-green screens (auth) — white when active, dark green
  *   when disabled.
  * - `brandOutline`: white outline and label on brand-green cards.
+ * - `brandLine`: green outline, dark label on light cards (calendar).
  * - `ghost`: no background or border, e.g. small icon actions (Share, Remind).
  */
 export type ButtonVariant =
@@ -24,6 +25,7 @@ export type ButtonVariant =
   | 'outline'
   | 'brand'
   | 'brandOutline'
+  | 'brandLine'
   | 'ghost';
 
 export type ButtonSize = 'md' | 'sm' | 'xs';

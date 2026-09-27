@@ -33,6 +33,8 @@ function getColors(
       return { background: null, label: custom.label };
     case 'brandOutline':
       return { background: null, label: 'onBrand', border: 'onBrand' };
+    case 'brandLine':
+      return { background: null, label: 'foreground', border: 'brand' };
     case 'brand':
       return state.disabled
         ? { background: 'brandStrong', label: 'brandMutedForeground' }
