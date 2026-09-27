@@ -18,6 +18,10 @@ jest.mock('expo-image-picker', () => ({
   launchImageLibraryAsync: jest.fn(),
 }));
 
+jest.mock('expo-location', () => ({
+  geocodeAsync: jest.fn(),
+}));
+
 jest.mock(
   'react-native-safe-area-context',
   // eslint-disable-next-line @typescript-eslint/no-require-imports

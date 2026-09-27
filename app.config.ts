@@ -61,6 +61,16 @@ const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
     'expo-secure-store',
     'expo-status-bar',
     [
+      'expo-location',
+      {
+        // Only to turn a typed event address into map coordinates.
+        locationWhenInUsePermission:
+          'Fancreed uses your location to place fan-club event addresses on the map.',
+        isIosBackgroundLocationEnabled: false,
+        isAndroidBackgroundLocationEnabled: false,
+      },
+    ],
+    [
       'expo-image-picker',
       {
         // Profile photo only; no camera or microphone use.
