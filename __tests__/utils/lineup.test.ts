@@ -1,4 +1,4 @@
-import { pitchRows, shortName } from '@/utils';
+import { formationGrid, FORMATIONS, pitchRows, shortName } from '@/utils';
 
 import type { LineupPlayer } from '@/types/api';
 
@@ -49,5 +49,33 @@ describe('shortName', () => {
 
   it('returns a single-word name as is', () => {
     expect(shortName('Talles')).toBe('Talles');
+  });
+});
+
+describe('formationGrid', () => {
+  it('lists the goalkeeper and every line position', () => {
+    expect(formationGrid('4-4-2')).toEqual([
+      '1:1',
+      '2:1',
+      '2:2',
+      '2:3',
+      '2:4',
+      '3:1',
+      '3:2',
+      '3:3',
+      '3:4',
+      '4:1',
+      '4:2',
+    ]);
+  });
+
+  it('has eleven places for every offered formation', () => {
+    Object.keys(FORMATIONS).forEach((formation) =>
+      expect(formationGrid(formation)).toHaveLength(11),
+    );
+  });
+
+  it('is empty for an unknown formation', () => {
+    expect(formationGrid('9-9')).toEqual([]);
   });
 });
