@@ -5,7 +5,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '../Icon';
 import { Text } from '../Text';
-import type { GoalsPickerProps } from './types';
+import type { ArrowButtonProps, GoalsPickerProps } from './types';
 
 const MAX_GOALS = 9;
 
@@ -16,23 +16,21 @@ function step(value: number | null, delta: 1 | -1): number {
 }
 
 /**
- * One team's goals in a score prediction: a big digit with up/down arrows.
- * Shows "?" until the first press. Two of them make "? : ?".
+ * One team's goals in a score prediction: a big digit between up/down
+ * arrow buttons. Shows "?" until the first press. Two of them make "? : ?".
  *
  * @example
- * <GoalsPicker value={home} onChange={setHome} buttonsSide="left" accessibilityLabel={homeTeam} />
+ * <GoalsPicker value={home} onChange={setHome} color="onBrand" accessibilityLabel={homeTeam} />
  */
 export function GoalsPicker({
   value,
   onChange,
-  buttonsSide = 'right',
+  color = 'foreground',
   readOnly = false,
   accessibilityLabel,
   style,
 }: GoalsPickerProps) {
   const { t } = useTranslation();
-  const { theme } = useUnistyles();
-
   return (
     <View
       accessible
@@ -45,33 +43,29 @@ export function GoalsPicker({
       onAccessibilityAction={({ nativeEvent }) =>
         onChange(step(value, nativeEvent.actionName === 'increment' ? 1 : -1))
       }
-      style={[styles.row(buttonsSide), style]}
+      style={[styles.column, style]}
     >
+      {readOnly ? null : (
+        <ArrowButton
+          icon="arrowUp"
+          label={t('goals.more')}
+          onPress={() => onChange(step(value, 1))}
+        />
+      )}
       <View style={styles.count}>
         {/* Re-mounting on each value plays the entering animation. */}
         <Animated.View key={String(value)} entering={FadeInDown.duration(200)}>
-          <Text variant="displaySemibold">{value === null ? '?' : value}</Text>
+          <Text variant="h1Semibold" color={color}>
+            {value === null ? '?' : value}
+          </Text>
         </Animated.View>
       </View>
       {readOnly ? null : (
-        <View style={styles.arrows}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('goals.more')}
-            hitSlop={8}
-            onPress={() => onChange(step(value, 1))}
-          >
-            <Icon name="arrowUp" size={24} color={theme.colors.foreground} />
-          </Pressable>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('goals.less')}
-            hitSlop={8}
-            onPress={() => onChange(step(value, -1))}
-          >
-            <Icon name="arrowDown" size={24} color={theme.colors.foreground} />
-          </Pressable>
-        </View>
+        <ArrowButton
+          icon="arrowDown"
+          label={t('goals.less')}
+          onPress={() => onChange(step(value, -1))}
+        />
       )}
     </View>
   );
@@ -79,19 +73,40 @@ export function GoalsPicker({
 
 GoalsPicker.displayName = 'GoalsPicker';
 
+function ArrowButton({ icon, label, onPress }: ArrowButtonProps) {
+  const { theme } = useUnistyles();
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      hitSlop={4}
+      onPress={onPress}
+      style={({ pressed }) => [styles.arrow, pressed && styles.pressed]}
+    >
+      <Icon name={icon} size={20} color={theme.colors.brand} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create((theme) => ({
-  row: (buttonsSide: 'left' | 'right') => ({
-    flexDirection: buttonsSide === 'left' ? 'row-reverse' : 'row',
+  column: {
     alignItems: 'center',
-    height: 70,
-    gap: theme.spacing(2.5),
-  }),
+    gap: theme.spacing(1),
+  },
   count: {
     minWidth: theme.spacing(10),
     alignItems: 'center',
   },
-  arrows: {
-    height: '100%',
-    justifyContent: 'space-between',
+  arrow: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.background,
+  },
+  pressed: {
+    opacity: 0.7,
   },
 }));
