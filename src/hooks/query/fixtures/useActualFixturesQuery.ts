@@ -39,3 +39,17 @@ export function useNextMatchQuery() {
     }),
   });
 }
+
+/**
+ * Played matches that have a video, newest first.
+ * TODO(backend): no videos endpoint yet — built from the fixtures' video links.
+ */
+export function useLatestVideosQuery() {
+  return useQuery({
+    ...actualFixturesQueryOptions(),
+    select: ({ fixtures }) =>
+      fixtures
+        .filter((f) => f.status === 'Match Finished' && !!f.videoLink)
+        .sort((a, b) => b.event_date.localeCompare(a.event_date)),
+  });
+}

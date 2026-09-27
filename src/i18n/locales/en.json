@@ -73,7 +73,9 @@
     "linksTitle": "Links",
     "newsTitle": "Latest news",
     "allNews": "All news",
-    "fanShop": "Fan shop"
+    "fanShop": "Fan shop",
+    "videosTitle": "Latest videos",
+    "videoTitle": "{{league}}. {{home}} – {{away}} — {{homeGoals}}:{{awayGoals}}. Review"
   },
   "errors": {
     "network": "No internet connection",

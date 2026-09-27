@@ -19,6 +19,7 @@ import {
   PartnersBlock,
   SquadBlock,
   TableBlock,
+  VideosBlock,
 } from '../../components';
 
 // TODO: open links in an in-app browser once one is approved (expo-web-browser).
@@ -45,6 +46,7 @@ export function HomeScreen() {
       <PredictionBlock />
       {/* TODO: open the full table screen once it exists. */}
       <TableBlock onShowAll={() => {}} />
+      <VideosBlock onOpenVideo={openLink} />
       <SquadBlock
         onOpenPlayer={(player) => player.ruhLink && openLink(player.ruhLink)}
       />

@@ -75,7 +75,9 @@
     "linksTitle": "Посилання",
     "newsTitle": "Останні новини",
     "allNews": "Усі новини",
-    "fanShop": "Фаншоп"
+    "fanShop": "Фаншоп",
+    "videosTitle": "Останні відео",
+    "videoTitle": "{{league}}. {{home}} – {{away}} — {{homeGoals}}:{{awayGoals}}. Огляд матчу"
   },
   "errors": {
     "network": "Немає з'єднання з інтернетом",
