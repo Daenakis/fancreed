@@ -5,6 +5,8 @@ import { fetcher, predictionsApi } from '@/api';
 import { QueryKey } from '@/types';
 import type { MakePredictionRequest } from '@/types/api';
 
+import { useApiErrorAlert } from '../../useApiErrorAlert';
+
 export const makePredictionMutationOptions = () =>
   mutationOptions({
     mutationKey: [QueryKey.Predictions, 'make'],
@@ -13,5 +15,6 @@ export const makePredictionMutationOptions = () =>
   });
 
 export function useMakePredictionMutation() {
-  return useMutation(makePredictionMutationOptions());
+  const onError = useApiErrorAlert();
+  return useMutation({ ...makePredictionMutationOptions(), onError });
 }

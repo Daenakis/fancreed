@@ -8,6 +8,8 @@ import { clubsApi, fetcher } from '@/api';
 
 import { QueryKey } from '@/types';
 
+import { useApiErrorAlert } from '../../useApiErrorAlert';
+
 export const joinClubMutationOptions = () =>
   mutationOptions({
     mutationKey: [QueryKey.Clubs, 'join'],
@@ -22,9 +24,11 @@ export const leaveClubMutationOptions = () =>
 
 /** Joins an open fan club and refreshes club data. */
 export function useJoinClubMutation() {
+  const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...joinClubMutationOptions(),
+    onError,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
   });
@@ -32,9 +36,11 @@ export function useJoinClubMutation() {
 
 /** Leaves a fan club and refreshes club data. */
 export function useLeaveClubMutation() {
+  const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...leaveClubMutationOptions(),
+    onError,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
   });

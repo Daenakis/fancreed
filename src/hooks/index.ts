@@ -1,5 +1,6 @@
 export * from './app';
 export * from './query';
+export { useApiErrorAlert } from './useApiErrorAlert';
 export {
   type CalendarReminder,
   type ReminderResult,

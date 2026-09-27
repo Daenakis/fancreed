@@ -9,6 +9,8 @@ import { fetcher, votesApi } from '@/api';
 import { QueryKey } from '@/types';
 import type { MakeVoteRequest } from '@/types/api';
 
+import { useApiErrorAlert } from '../../useApiErrorAlert';
+
 export const makeVoteMutationOptions = () =>
   mutationOptions({
     mutationKey: [QueryKey.Votes, 'make'],
@@ -17,9 +19,11 @@ export const makeVoteMutationOptions = () =>
 
 /** Votes, then refreshes the list so percentages and `youVoted` update. */
 export function useMakeVoteMutation() {
+  const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...makeVoteMutationOptions(),
+    onError,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [QueryKey.Votes] }),
   });

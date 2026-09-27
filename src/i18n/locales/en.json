@@ -90,7 +90,12 @@
       "wrongCode": "Wrong code",
       "codeExpired": "The code has expired. Request a new one",
       "alreadyActivated": "This account is already confirmed",
-      "notActivated": "Confirm your email first"
+      "notActivated": "Confirm your email first",
+      "clubExists": "You already own a fan club — one per fan",
+      "entranceClosed": "Joining is closed",
+      "matchStarted": "The match has already started",
+      "eventTooEarly": "This time has already passed",
+      "eventBeforeMatch": "The event can start at most 4 hours before the match"
     }
   },
   "playground": {

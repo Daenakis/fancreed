@@ -11,6 +11,8 @@ import { clubsApi, fetcher } from '@/api';
 import { QueryKey } from '@/types';
 import type { CreateClubEventRequest } from '@/types/api';
 
+import { useApiErrorAlert } from '../../useApiErrorAlert';
+
 type CreateClubEventParams = {
   clubId: string;
   event: CreateClubEventRequest;
@@ -68,9 +70,11 @@ export function useCreateClubEventMutation() {
 
 /** Joins a club event and refreshes club data. */
 export function useJoinClubEventMutation() {
+  const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...joinClubEventMutationOptions(),
+    onError,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
   });
@@ -78,9 +82,11 @@ export function useJoinClubEventMutation() {
 
 /** Leaves a club event and refreshes club data. */
 export function useLeaveClubEventMutation() {
+  const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...leaveClubEventMutationOptions(),
+    onError,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
   });

@@ -18,6 +18,13 @@ describe('getApiErrorCode', () => {
     ['Account already confirmed', 'ALREADY_ACTIVATED'],
     ['Account not verified', 'NOT_ACTIVATED'],
     ['Bad request', 'BAD_REQUEST'],
+    ['Club already exists', 'CLUB_EXISTS'],
+    ['Entrance is now closed', 'ENTRANCE_CLOSED'],
+    ['Match has been started', 'MATCH_STARTED'],
+    [
+      'Start date must be minimum 4 hours before start of the match',
+      'EVENT_BEFORE_MATCH',
+    ],
   ])('maps the backend message "%s" to %s', (message, code) => {
     expect(getApiErrorCode(apiError(400, message))).toBe(code);
   });

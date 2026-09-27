@@ -92,7 +92,12 @@
       "wrongCode": "Невірний код",
       "codeExpired": "Термін дії коду минув. Запросіть новий",
       "alreadyActivated": "Акаунт вже підтверджено",
-      "notActivated": "Спершу підтвердіть email"
+      "notActivated": "Спершу підтвердіть email",
+      "clubExists": "У вас уже є фан-клуб — один на вболівальника",
+      "entranceClosed": "Приєднання закрито",
+      "matchStarted": "Матч уже почався",
+      "eventTooEarly": "Цей час уже минув",
+      "eventBeforeMatch": "Івент може починатися щонайраніше за 4 години до матчу"
     }
   },
   "playground": {

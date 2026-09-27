@@ -11,6 +11,11 @@ export type ApiErrorCode =
   | 'CODE_EXPIRED'
   | 'ALREADY_ACTIVATED'
   | 'NOT_ACTIVATED'
+  | 'CLUB_EXISTS'
+  | 'ENTRANCE_CLOSED'
+  | 'MATCH_STARTED'
+  | 'EVENT_TOO_EARLY'
+  | 'EVENT_BEFORE_MATCH'
   | 'BAD_REQUEST'
   | 'NETWORK'
   | 'UNKNOWN';
@@ -25,6 +30,12 @@ const MESSAGE_CODES: Record<string, ApiErrorCode> = {
   'Account already confirmed': 'ALREADY_ACTIVATED',
   'Your account needs to be verified': 'NOT_ACTIVATED',
   'Account not verified': 'NOT_ACTIVATED',
+  'Club already exists': 'CLUB_EXISTS',
+  'Entrance is now closed': 'ENTRANCE_CLOSED',
+  'Match has been started': 'MATCH_STARTED',
+  'Start date must be minimum 4 hours before now date': 'EVENT_TOO_EARLY',
+  'Start date must be minimum 4 hours before start of the match':
+    'EVENT_BEFORE_MATCH',
   'Bad request': 'BAD_REQUEST',
 };
 
@@ -37,6 +48,11 @@ export const API_ERROR_MESSAGE_KEYS = {
   CODE_EXPIRED: 'errors.api.codeExpired',
   ALREADY_ACTIVATED: 'errors.api.alreadyActivated',
   NOT_ACTIVATED: 'errors.api.notActivated',
+  CLUB_EXISTS: 'errors.api.clubExists',
+  ENTRANCE_CLOSED: 'errors.api.entranceClosed',
+  MATCH_STARTED: 'errors.api.matchStarted',
+  EVENT_TOO_EARLY: 'errors.api.eventTooEarly',
+  EVENT_BEFORE_MATCH: 'errors.api.eventBeforeMatch',
   BAD_REQUEST: 'errors.unknown',
   NETWORK: 'errors.network',
   UNKNOWN: 'errors.unknown',
