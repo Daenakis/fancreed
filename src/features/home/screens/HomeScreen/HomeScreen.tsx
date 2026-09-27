@@ -1,83 +1,64 @@
-import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text } from '@/ui/components';
+import { SocialLinks } from '@/ui/components';
 
-import { useLogoutMutation } from '@/hooks';
+import { useSocialsQuery } from '@/hooks';
 
+import { CONFIG } from '@/config';
+
+import { PredictionBlock } from '@/features/gamification';
+
+import {
+  MatchesBlock,
+  NewsBlock,
+  PartnersBlock,
+  SquadBlock,
+  TableBlock,
+} from '../../components';
+
+// TODO: open links in an in-app browser once one is approved (expo-web-browser).
+const openLink = (url: string) => void Linking.openURL(url);
+
+/** Home tab: the club's matches, news, predictions, table, squad and links. */
 export function HomeScreen() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const logout = useLogoutMutation();
+  const { data: socials } = useSocialsQuery();
 
   return (
-    <View style={styles.container}>
-      <Text
-        variant="h1Semibold"
-        accessibilityRole="header"
-        style={styles.title}
-      >
-        {t('home.title')}
-      </Text>
-      <Text color="mutedForeground" style={styles.subtitle}>
-        {t('home.subtitle')}
-      </Text>
-      <View style={styles.buttons}>
-        <Pressable
-          accessibilityRole="button"
-          style={styles.button}
-          onPress={() => router.push('/(app)/playground')}
-        >
-          <Text variant="bodyLMedium" color="primaryForeground">
-            {t('playground.title')}
-          </Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('auth.signOut')}
-          style={styles.buttonDestructive}
-          onPress={() => logout.mutate()}
-        >
-          <Text variant="bodyLMedium" color="destructiveForeground">
-            {t('auth.signOut')}
-          </Text>
-        </Pressable>
-      </View>
-    </View>
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
+      <MatchesBlock onOpenLink={openLink} />
+      <NewsBlock
+        onOpenPost={(post) => openLink(`${CONFIG.LINKS.NEWS_POST}${post.slug}`)}
+      />
+      <PredictionBlock />
+      {/* TODO: open the full table screen once it exists. */}
+      <TableBlock onShowAll={() => {}} />
+      <SquadBlock
+        onOpenPlayer={(player) => player.ruhLink && openLink(player.ruhLink)}
+      />
+      <SocialLinks
+        title={t('home.linksTitle')}
+        links={socials ?? []}
+        onOpen={(link) => openLink(link.url)}
+      />
+      <PartnersBlock onOpenPartner={(partner) => openLink(partner.url)} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
+  scroll: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: theme.spacing(6),
     backgroundColor: theme.colors.background,
   },
-  title: {
-    marginBottom: theme.spacing(2),
-  },
-  subtitle: {
-    marginBottom: theme.spacing(8),
-  },
-  buttons: {
-    gap: theme.spacing(3),
-  },
-  button: {
-    paddingHorizontal: theme.spacing(8),
-    paddingVertical: theme.spacing(3.5),
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.md,
-    alignItems: 'center',
-  },
-  buttonDestructive: {
-    paddingHorizontal: theme.spacing(8),
-    paddingVertical: theme.spacing(3.5),
-    backgroundColor: theme.colors.destructive,
-    borderRadius: theme.radius.md,
-    alignItems: 'center',
+  content: {
+    paddingVertical: theme.spacing(4),
+    gap: theme.spacing(6),
   },
 }));

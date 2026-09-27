@@ -21,3 +21,17 @@ export type CreateClubRequest = {
   /** Sent with create by the old app; not in the apidoc. */
   logo?: ClubLogoUpload;
 };
+
+export type Club = {
+  _id: string;
+  name: string;
+  /** Club logo URL. */
+  origPhoto?: string | null;
+  address?: string;
+  description?: string;
+  opened?: boolean;
+};
+
+export type ClubsListResponse = {
+  clubs: Club[];
+};

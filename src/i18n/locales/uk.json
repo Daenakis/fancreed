@@ -70,7 +70,8 @@
     "allTable": "Уся таблиця",
     "squadTitle": "СКЛАД",
     "showMore": "Детальніше",
-    "partnersTitle": "НАШІ ПАРТНЕРИ"
+    "partnersTitle": "НАШІ ПАРТНЕРИ",
+    "linksTitle": "Посилання"
   },
   "errors": {
     "network": "Немає з'єднання з інтернетом",
@@ -186,7 +187,11 @@
       "descriptionLength": "Опис має містити 3–500 символів",
       "textInvalid": "Містить недопустимі символи",
       "linkInvalid": "Вставте повне посилання, наприклад https://…"
-    }
+    },
+    "fanClubsTitle": "ФАН-КЛУБИ",
+    "eventsTitle": "ПОДІЇ",
+    "createClub": "Створити фан-клуб",
+    "createEvent": "Створити подію"
   },
   "event": {
     "matchdayTitle": "МАТЧДЕЙ",
@@ -194,5 +199,15 @@
     "location": "Локація",
     "remind": "Нагадати",
     "shareMessage": "{{title}} — {{date}}, {{location}}. Долучайся через застосунок Fancreed!"
+  },
+  "nav": {
+    "menu": "Меню",
+    "profile": "Профіль",
+    "home": "Головна",
+    "gamification": "Фан-зона",
+    "calendar": "Календар",
+    "shop": "Магазин",
+    "comingSoon": "Незабаром",
+    "comingSoonText": "Цей розділ уже в роботі."
   }
 }

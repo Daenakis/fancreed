@@ -68,7 +68,8 @@
     "allTable": "Full table",
     "squadTitle": "LINE-UP",
     "showMore": "Show more",
-    "partnersTitle": "PARTNERS"
+    "partnersTitle": "PARTNERS",
+    "linksTitle": "Links"
   },
   "errors": {
     "network": "No internet connection",
@@ -184,7 +185,11 @@
       "descriptionLength": "Description must be 3–500 characters",
       "textInvalid": "Contains characters that aren't allowed",
       "linkInvalid": "Paste the full link, e.g. https://…"
-    }
+    },
+    "fanClubsTitle": "FAN CLUBS",
+    "eventsTitle": "EVENTS",
+    "createClub": "Create a fan club",
+    "createEvent": "Create an event"
   },
   "event": {
     "matchdayTitle": "MATCHDAY",
@@ -192,5 +197,15 @@
     "location": "Location",
     "remind": "Remind",
     "shareMessage": "{{title}} — {{date}}, {{location}}. Join via the Fancreed app!"
+  },
+  "nav": {
+    "menu": "Menu",
+    "profile": "Profile",
+    "home": "Home",
+    "gamification": "Fan zone",
+    "calendar": "Calendar",
+    "shop": "Shop",
+    "comingSoon": "Coming soon",
+    "comingSoonText": "This section is on its way."
   }
 }

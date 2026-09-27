@@ -1,19 +1,6 @@
 import { Stack } from 'expo-router';
-import { useUnistyles } from 'react-native-unistyles';
 
+/** Signed-in app: the tab shell plus screens pushed on top of it. */
 export default function AppLayout() {
-  const { theme } = useUnistyles();
-
-  return (
-    <Stack
-      screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.background },
-        headerTintColor: theme.colors.foreground,
-        headerTitleStyle: {
-          fontFamily: theme.typography.h4Semibold.fontFamily,
-        },
-        contentStyle: { backgroundColor: theme.colors.background },
-      }}
-    />
-  );
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

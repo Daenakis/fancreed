@@ -1,4 +1,5 @@
 export { AddPhoto, type AddPhotoProps } from './AddPhoto';
+export { AppHeader, type AppHeaderProps } from './AppHeader';
 export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
 export {
   Button,
@@ -13,6 +14,7 @@ export {
   type ChoiceGroupVariant,
   type ChoiceOption,
 } from './ChoiceGroup';
+export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { GoalsPicker, type GoalsPickerProps } from './GoalsPicker';
 export { Icon, type IconProps } from './Icon';
@@ -34,6 +36,7 @@ export {
   StandingsTable,
   type StandingsTableProps,
 } from './StandingsTable';
+export { TabBarButton, type TabBarButtonProps } from './TabBarButton';
 export { Text, type TextProps } from './Text';
 export {
   TextInput,

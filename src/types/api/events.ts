@@ -13,3 +13,14 @@ export type AppEvent = {
 export type EventsListResponse = {
   events: AppEvent[];
 };
+
+export type ClubEventKind = 'trip' | 'meeting' | 'party';
+
+export type ClubEvent = AppEvent & {
+  kind?: ClubEventKind;
+  club?: { _id: string; name?: string };
+};
+
+export type ClubEventsListResponse = {
+  events: ClubEvent[];
+};

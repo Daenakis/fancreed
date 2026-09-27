@@ -7,5 +7,6 @@ export * from './leagues';
 export * from './news';
 export * from './players';
 export * from './predictions';
+export * from './socials';
 export * from './sponsors';
 export * from './votes';

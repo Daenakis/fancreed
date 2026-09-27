@@ -7,6 +7,7 @@ export {
   leaguesApi,
   newsApi,
   predictionsApi,
+  socialsApi,
   sponsorsApi,
   squadsApi,
   votesApi,

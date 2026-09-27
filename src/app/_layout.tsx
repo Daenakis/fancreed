@@ -45,6 +45,11 @@ function RootLayout() {
   );
 }
 
+/**
+ * Signed-in users get the app (tabs); everyone else the auth flow. The token
+ * is restored from SecureStore before the first render (useAppReady), so a
+ * stored session opens straight on Home.
+ */
 function RootNavigator() {
   const isAuthenticated = useAuthStore((s) => !!s.accessToken);
 
@@ -54,12 +59,7 @@ function RootNavigator() {
         <Stack.Screen name="(app)" />
       </Stack.Protected>
       <Stack.Protected guard={!isAuthenticated}>
-        <Stack.Screen name="sign-in" />
-        <Stack.Screen name="sign-up" />
-        <Stack.Screen name="activate" />
-        <Stack.Screen name="forgot-password" />
-        <Stack.Screen name="verify-code" />
-        <Stack.Screen name="new-password" />
+        <Stack.Screen name="(auth)" />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
     </Stack>

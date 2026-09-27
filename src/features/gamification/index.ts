@@ -1,4 +1,8 @@
 export {
+  ClubEventsBlock,
+  type ClubEventsBlockProps,
+  FanClubsBlock,
+  type FanClubsBlockProps,
   MatchdayBlock,
   type MatchdayBlockProps,
   PredictionBlock,

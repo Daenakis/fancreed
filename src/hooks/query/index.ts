@@ -5,6 +5,7 @@ export * from './fixtures';
 export * from './leagues';
 export * from './news';
 export * from './predictions';
+export * from './socials';
 export * from './sponsors';
 export * from './squads';
 export * from './votes';
