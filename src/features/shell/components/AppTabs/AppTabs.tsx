@@ -13,6 +13,15 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { TabBarButton } from '@/ui/components';
 
+import { getItem, setItem } from '@/utils';
+
+import { useSplashStore } from '@/store';
+
+import { STORAGE_KEYS } from '@/constants';
+
+import { CONFIG } from '@/config';
+
+import { OnboardingTour } from '../OnboardingTour';
 import type { AppTab, TabIndicatorProps } from './types';
 
 /** Slide between tabs: the same time for any distance, so far is faster. */
@@ -72,6 +81,18 @@ export function AppTabs() {
   // Detail screens (e.g. /news/…) show no tab as selected.
   const onTabRoot = TABS.some((tab) => tab.href === pathname);
   const [barWidth, setBarWidth] = useState(0);
+  // First-run tour: on Home, once the welcome splash is gone, until finished
+  // once on this device — or on every launch of a dev build on a simulator.
+  const [tourDone, setTourDone] = useState(
+    () =>
+      !CONFIG.DEV_SIMULATOR &&
+      getItem<boolean>(STORAGE_KEYS.ONBOARDING_DONE) === true,
+  );
+  const splashShown = useSplashStore((s) => !!s.splash);
+  const finishTour = () => {
+    setItem(STORAGE_KEYS.ONBOARDING_DONE, true);
+    setTourDone(true);
+  };
 
   return (
     <Tabs style={styles.root}>
@@ -100,6 +121,9 @@ export function AppTabs() {
           />
         </View>
       </TabList>
+      {!tourDone && !splashShown && pathname === '/' ? (
+        <OnboardingTour onDone={finishTour} />
+      ) : null}
     </Tabs>
   );
 }

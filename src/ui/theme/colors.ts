@@ -27,6 +27,7 @@ export const palette = {
   whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
   // Shadows
   blackAlpha25: 'rgba(0, 0, 0, 0.25)',
+  blackAlpha45: 'rgba(0, 0, 0, 0.45)',
   // Fan card metallic gradients (edge → light → warm → shade) + ink per level
   bronze100: '#EBD8C3',
   bronze200: '#E4D5C7',
@@ -82,6 +83,8 @@ export const lightColors = {
   socialSurface: palette.white,
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
+  /** Dims the app behind a guided tour (onboarding). */
+  scrim: palette.blackAlpha45,
   translucentSurface: palette.whiteAlpha50,
   // Dark card surfaces that stay dark in both themes (fan card)
   inverseSurface: palette.black,
@@ -141,6 +144,8 @@ export const darkColors = {
   socialSurface: palette.white,
   socialForeground: palette.black,
   shadow: palette.blackAlpha25,
+  /** Dims the app behind a guided tour (onboarding). */
+  scrim: palette.blackAlpha45,
   translucentSurface: palette.whiteAlpha50,
   // Dark card surfaces that stay dark in both themes (fan card)
   inverseSurface: palette.black,

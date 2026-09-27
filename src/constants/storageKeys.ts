@@ -7,4 +7,6 @@ export const STORAGE_KEYS = {
   THEME: 'app-theme',
   /** Set on first launch (plain MMKV) — detects reinstalls, see loadAuthFromStorage */
   HAS_LAUNCHED: 'app-has-launched',
+  /** Set once the Home tour (onboarding) was finished on this device (plain MMKV) */
+  ONBOARDING_DONE: 'app-onboarding-done',
 } as const;
