@@ -3,6 +3,7 @@ export * from './query';
 export { useFieldErrorText } from './useFieldErrorText';
 export { useLanguage } from './useLanguage';
 export { useNow } from './useNow';
+export { type PickedImage, usePickImage } from './usePickImage';
 export {
   SHAKE_STEP_MS,
   SHAKE_STEPS,

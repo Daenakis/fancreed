@@ -8,6 +8,8 @@ export {
 } from './authFields';
 export type { ClubFormValues } from './club';
 export { clubSchema } from './club';
+export type { ClubEventFormInput, ClubEventFormValues } from './clubEvent';
+export { clubEventSchema } from './clubEvent';
 export type { Env } from './env';
 export { envSchema } from './env';
 export type {
