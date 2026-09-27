@@ -5,11 +5,7 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { AppHeader, TabBarButton } from '@/ui/components';
-
-import { useLogoutMutation } from '@/hooks';
-
-import { CLUB_LOGO } from '@/constants';
+import { TabBarButton } from '@/ui/components';
 
 import type { AppTab } from './types';
 
@@ -44,27 +40,18 @@ const TABS: AppTab[] = [
 ];
 
 /**
- * Signed-in shell: header on top, the active tab's screen, custom tab bar
- * at the bottom (expo-router headless tabs). Home is the start tab.
+ * Signed-in shell: the active tab's screen with a custom tab bar at the
+ * bottom (expo-router headless tabs). Home is the start tab.
  */
 export function AppTabs() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const logout = useLogoutMutation();
   const pathname = usePathname();
-  // Detail screens (e.g. /news/…) bring their own header.
+  // Detail screens (e.g. /news/…) show no tab as selected.
   const onTabRoot = TABS.some((tab) => tab.href === pathname);
 
   return (
     <Tabs style={styles.root}>
-      {/* Menu and profile have no screens yet (waiting for Figma). */}
-      {onTabRoot ? (
-        <AppHeader
-          logo={CLUB_LOGO}
-          // Dev-only way out while there's no profile screen.
-          onProfileLongPress={__DEV__ ? () => logout.mutate() : undefined}
-        />
-      ) : null}
       <TabSlot />
       <TabList asChild>
         <View style={styles.tabBar(insets.bottom)}>
@@ -74,6 +61,7 @@ export function AppTabs() {
                 icon={tab.icon}
                 activeIcon={tab.activeIcon}
                 label={t(tab.label)}
+                inactive={!onTabRoot}
               />
             </TabTrigger>
           ))}

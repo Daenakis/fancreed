@@ -16,13 +16,26 @@ import { useSquadQuery } from '@/hooks';
 import type { SquadBlockProps } from './types';
 
 /**
- * Home-screen line-up: swipe through the club's players; "Show more" opens
- * the centred player's page. Hidden when the squad is empty.
+ * The club's players to swipe through; the button acts on the centred one
+ * ("Show more" by default, e.g. "Make favourite" via `renderAction`).
+ * `boxed` puts it on a light-green card. Hidden when the squad is empty.
  */
-export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
+export function SquadBlock({
+  onOpenPlayer,
+  title,
+  initialPlayerId,
+  renderAction,
+  boxed = false,
+  style,
+}: SquadBlockProps) {
   const { t } = useTranslation();
   const { data: players, isPending } = useSquadQuery();
-  const [index, setIndex] = useState(0);
+  const initialIndex = Math.max(
+    0,
+    players?.findIndex((p) => String(p._id) === initialPlayerId) ?? 0,
+  );
+  const [picked, setIndex] = useState<number | null>(null);
+  const index = picked ?? initialIndex;
 
   if (isPending) return <LoadingMore loading />;
   if (!players?.length) return null;
@@ -30,10 +43,15 @@ export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
   const current = players[index];
 
   return (
-    <View style={style}>
-      <SectionTitle title={t('home.squadTitle')} />
+    <View style={[boxed && styles.box, style]}>
+      <SectionTitle
+        title={title ?? t('home.squadTitle')}
+        variant={boxed ? 'bodyLMedium' : undefined}
+        style={boxed ? styles.boxTitle : undefined}
+      />
       <Carousel
         data={players}
+        initialIndex={initialIndex}
         itemWidthRatio={0.35}
         keyExtractor={(player) => player._id}
         onIndexChange={setIndex}
@@ -49,16 +67,21 @@ export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
           />
         )}
       />
-      <Button
-        size="xs"
-        fullWidth
-        backgroundColor="brand"
-        textColor="onBrand"
-        text={t('home.showMore')}
-        style={styles.inset}
-        disabled={!current}
-        onPress={() => current && onOpenPlayer(current)}
-      />
+      <View style={boxed ? styles.boxAction : styles.inset}>
+        {renderAction && current ? (
+          renderAction(current)
+        ) : (
+          <Button
+            size="xs"
+            fullWidth
+            backgroundColor="brand"
+            textColor="onBrand"
+            text={t('home.showMore')}
+            disabled={!current || !onOpenPlayer}
+            onPress={() => current && onOpenPlayer?.(current)}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -71,6 +94,18 @@ const styles = StyleSheet.create((theme) => ({
   },
   inset: {
     marginHorizontal: theme.spacing(5),
+  },
+  box: {
+    overflow: 'hidden',
+    paddingVertical: theme.spacing(3),
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.mintSurface,
+  },
+  boxTitle: {
+    paddingHorizontal: theme.spacing(3),
+  },
+  boxAction: {
+    marginHorizontal: theme.spacing(3),
   },
   card: {
     width: '100%',

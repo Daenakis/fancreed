@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Linking, ScrollView } from 'react-native';
+import { Linking, ScrollView, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import { SocialLinks } from '@/ui/components';
@@ -10,6 +10,7 @@ import { useSocialsQuery } from '@/hooks';
 import { CONFIG } from '@/config';
 
 import { PredictionBlock } from '@/features/gamification';
+import { ShellHeader } from '@/features/shell';
 
 import {
   FanCardBlock,
@@ -31,50 +32,63 @@ export function HomeScreen() {
   const { data: socials } = useSocialsQuery();
 
   return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      <MatchesBlock
-        onOpenLink={openLink}
-        onOpenLineup={(match) =>
-          router.push({
-            pathname: '/matches/[id]/lineup',
-            params: { id: match._id },
-          })
-        }
-        onOpenVideos={(match) =>
-          router.push({ pathname: '/videos', params: { match: match._id } })
-        }
-      />
-      <NewsBlock
-        onOpenPost={(post) =>
-          router.push({ pathname: '/news/[slug]', params: { slug: post.slug } })
-        }
-        onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
-      />
-      <FanShopBanner onPress={() => router.navigate('/shop')} />
-      <FanCardBlock />
-      <PredictionBlock />
-      <TableBlock onShowAll={() => router.push('/standings')} />
-      <VideosBlock onOpenVideo={openLink} />
-      <SquadBlock
-        onOpenPlayer={(player) =>
-          router.push({ pathname: '/players/[id]', params: { id: player._id } })
-        }
-      />
-      <SocialLinks
-        title={t('home.linksTitle')}
-        links={socials ?? []}
-        onOpen={(link) => openLink(link.url)}
-      />
-      <PartnersBlock onOpenPartner={(partner) => openLink(partner.url)} />
-    </ScrollView>
+    <View style={styles.root}>
+      <ShellHeader />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <MatchesBlock
+          onOpenLink={openLink}
+          onOpenLineup={(match) =>
+            router.push({
+              pathname: '/matches/[id]/lineup',
+              params: { id: match._id },
+            })
+          }
+          onOpenVideos={(match) =>
+            router.push({ pathname: '/videos', params: { match: match._id } })
+          }
+        />
+        <NewsBlock
+          onOpenPost={(post) =>
+            router.push({
+              pathname: '/news/[slug]',
+              params: { slug: post.slug },
+            })
+          }
+          onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
+        />
+        <FanShopBanner onPress={() => router.navigate('/shop')} />
+        <FanCardBlock />
+        <PredictionBlock />
+        <TableBlock onShowAll={() => router.push('/standings')} />
+        <VideosBlock onOpenVideo={openLink} />
+        <SquadBlock
+          onOpenPlayer={(player) =>
+            router.push({
+              pathname: '/players/[id]',
+              params: { id: player._id },
+            })
+          }
+        />
+        <SocialLinks
+          title={t('home.linksTitle')}
+          links={socials ?? []}
+          onOpen={(link) => openLink(link.url)}
+        />
+        <PartnersBlock onOpenPartner={(partner) => openLink(partner.url)} />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
+  root: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
   scroll: {
     flex: 1,
     backgroundColor: theme.colors.background,

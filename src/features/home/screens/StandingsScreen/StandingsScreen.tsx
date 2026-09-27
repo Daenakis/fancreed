@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
@@ -11,6 +10,8 @@ import {
 
 import { useStandingsQuery } from '@/hooks';
 
+import { goBack } from '@/utils';
+
 /** The full league table of the main team, our club highlighted. */
 export function StandingsScreen() {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ export function StandingsScreen() {
   return (
     <PageLayout
       title={t('home.tableTitle')}
-      onBack={router.back}
+      onBack={goBack}
       contentStyle={styles.content}
     >
       {isPending ? (

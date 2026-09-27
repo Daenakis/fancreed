@@ -11,6 +11,7 @@ import { useFixturesTableQuery } from '@/hooks';
 import { matchPhase } from '@/utils';
 
 import { MatchCard } from '@/features/matches';
+import { ShellHeader } from '@/features/shell';
 
 import type { CalendarSection } from './types';
 
@@ -34,6 +35,7 @@ export function CalendarScreen() {
 
   return (
     <View style={styles.root}>
+      <ShellHeader />
       <ChoiceGroup
         variant="tabs"
         options={[

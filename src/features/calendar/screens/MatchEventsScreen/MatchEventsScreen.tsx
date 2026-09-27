@@ -1,10 +1,12 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
 import { EmptyState, LoadingMore, PageLayout } from '@/ui/components';
 
 import { useClubEventsQuery } from '@/hooks';
+
+import { goBack } from '@/utils';
 
 import { EventRow } from '../../components';
 
@@ -18,7 +20,7 @@ export function MatchEventsScreen() {
   return (
     <PageLayout
       title={t('match.events')}
-      onBack={router.back}
+      onBack={goBack}
       contentStyle={styles.content}
     >
       {isPending ? (
