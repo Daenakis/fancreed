@@ -196,7 +196,8 @@
     "minutes_one": "{{count}} хв",
     "minutes_few": "{{count}} хв",
     "minutes_many": "{{count}} хв",
-    "minutes_other": "{{count}} хв"
+    "minutes_other": "{{count}} хв",
+    "events": "Івенти"
   },
   "club": {
     "name": "Назва клубу *",
@@ -273,5 +274,18 @@
     "assists": "Асисти",
     "seasonStat": "{{season}}\nсезон {{value}}",
     "buyShirt": "Придбати футболку"
+  },
+  "calendar": {
+    "upcoming": "Календар матчів",
+    "results": "Результати",
+    "emptyUpcoming": "Найближчих матчів поки немає.",
+    "emptyResults": "Результатів поки немає."
+  },
+  "events": {
+    "members_one": "{{count}} учасник",
+    "members_few": "{{count}} учасники",
+    "members_many": "{{count}} учасників",
+    "members_other": "{{count}} учасника",
+    "emptyText": "Для цього матчу поки немає івентів."
   }
 }

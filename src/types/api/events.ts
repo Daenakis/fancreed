@@ -19,6 +19,10 @@ export type ClubEventKind = 'trip' | 'meeting' | 'party';
 export type ClubEvent = AppEvent & {
   kind?: ClubEventKind;
   club?: { _id: string; name?: string };
+  /** Match the event is organised around (fixture `_id`). */
+  fixture?: number | null;
+  /** Joined fans (shape not in the apidoc — only the count is used). */
+  members?: unknown[];
 };
 
 export type ClubEventsListResponse = {

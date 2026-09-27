@@ -1,2 +1,2 @@
 export { AppTabs } from './components';
-export { CalendarScreen, GamificationScreen, ShopScreen } from './screens';
+export { GamificationScreen, ShopScreen } from './screens';

@@ -188,7 +188,8 @@
     "hours_one": "{{count}} h",
     "hours_other": "{{count}} h",
     "minutes_one": "{{count}} min",
-    "minutes_other": "{{count}} min"
+    "minutes_other": "{{count}} min",
+    "events": "Events"
   },
   "club": {
     "name": "Club name *",
@@ -265,5 +266,16 @@
     "assists": "Assists",
     "seasonStat": "{{season}}\nseason {{value}}",
     "buyShirt": "Buy the shirt"
+  },
+  "calendar": {
+    "upcoming": "Match calendar",
+    "results": "Results",
+    "emptyUpcoming": "No upcoming matches yet.",
+    "emptyResults": "No results yet."
+  },
+  "events": {
+    "members_one": "{{count}} fan",
+    "members_other": "{{count}} fans",
+    "emptyText": "No fan events for this match yet."
   }
 }
