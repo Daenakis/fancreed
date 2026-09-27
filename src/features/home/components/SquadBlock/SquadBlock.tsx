@@ -4,11 +4,11 @@ import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
-  BlockHeader,
   Button,
   Carousel,
   ImageCard,
   LoadingMore,
+  SectionTitle,
 } from '@/ui/components';
 
 import { useSquadQuery } from '@/hooks';
@@ -30,25 +30,32 @@ export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
   const current = players[index];
 
   return (
-    <View style={[styles.container, style]}>
-      <BlockHeader title={t('home.squadTitle')} />
+    <View style={style}>
+      <SectionTitle title={t('home.squadTitle')} />
       <Carousel
         data={players}
         itemWidthRatio={0.35}
         keyExtractor={(player) => player._id}
         onIndexChange={setIndex}
         style={styles.carousel}
-        renderItem={(player) => (
+        showIndicator={false}
+        renderItem={(player, i) => (
           <ImageCard
             image={player.actualPhoto ?? player.photo}
+            placeholderIcon="lion"
             title={player.actualName ?? player.name}
+            textColor={i === index ? 'foreground' : 'mutedForeground'}
             style={styles.card}
           />
         )}
       />
       <Button
-        size="sm"
+        size="xs"
+        fullWidth
+        backgroundColor="brand"
+        textColor="onBrand"
         text={t('home.showMore')}
+        style={styles.inset}
         disabled={!current?.ruhLink}
         onPress={() => current && onOpenPlayer(current)}
       />
@@ -59,13 +66,11 @@ export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
 SquadBlock.displayName = 'SquadBlock';
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    alignItems: 'center',
-    paddingBottom: theme.spacing(4),
-  },
   carousel: {
-    alignSelf: 'stretch',
-    marginVertical: theme.spacing(3),
+    marginBottom: theme.spacing(4),
+  },
+  inset: {
+    marginHorizontal: theme.spacing(5),
   },
   card: {
     width: '100%',
