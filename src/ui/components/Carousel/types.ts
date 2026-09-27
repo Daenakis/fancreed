@@ -13,7 +13,7 @@ export type CarouselProps<T> = {
   gap?: number;
   /** Page dots under the carousel. Defaults to `true`. */
   showIndicator?: boolean;
-  /** Theme colour of the current dot. Defaults to `foreground`. */
+  /** Theme colour of the current dot. Defaults to `brand`. */
   indicatorColor?: ColorToken;
   /** Page shown first. Defaults to 0. */
   initialIndex?: number;

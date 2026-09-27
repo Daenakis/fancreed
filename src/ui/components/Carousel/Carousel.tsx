@@ -29,7 +29,7 @@ export function Carousel<T>({
   itemWidthRatio = 0.8,
   gap = 12,
   showIndicator = true,
-  indicatorColor = 'foreground',
+  indicatorColor = 'brand',
   initialIndex = 0,
   onIndexChange,
   style,
@@ -62,7 +62,8 @@ export function Carousel<T>({
           <View style={{ width: itemWidth }}>{renderItem(item, i)}</View>
         )}
         onMomentumScrollEnd={onScrollEnd}
-        initialScrollIndex={initialIndex}
+        // Not initialScrollIndex: it ignores the side padding and lands off-centre.
+        contentOffset={{ x: step * initialIndex, y: 0 }}
         getItemLayout={(_, i) => ({ length: step, offset: step * i, index: i })}
       />
       {showIndicator && data.length > 1 ? (
