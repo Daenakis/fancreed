@@ -35,6 +35,7 @@ export function HomeScreen() {
       <MatchesBlock onOpenLink={openLink} />
       <NewsBlock
         onOpenPost={(post) => openLink(`${CONFIG.LINKS.NEWS_POST}${post.slug}`)}
+        onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
       />
       <PredictionBlock />
       {/* TODO: open the full table screen once it exists. */}

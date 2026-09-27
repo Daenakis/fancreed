@@ -1,19 +1,30 @@
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
-import { ImageCard, LoadingMore, SlideshowList } from '@/ui/components';
+import {
+  Button,
+  Carousel,
+  ImageCard,
+  LoadingMore,
+  SectionTitle,
+} from '@/ui/components';
 
 import { useNewsQuery } from '@/hooks';
 
 import type { NewsBlockProps } from './types';
 
-/** Article card width (ImageCard `article`) — used for scroll positions. */
-const CARD_WIDTH = 280;
-
 /**
- * Home-screen news: latest posts as a self-advancing row of article cards.
- * Hidden when there are no posts.
+ * Home-screen news: "Latest news" title, swipeable article cards and an
+ * "All news" button. Hidden when there are no posts.
  */
-export function NewsBlock({ onOpenPost, count = 10, style }: NewsBlockProps) {
+export function NewsBlock({
+  onOpenPost,
+  onShowAll,
+  count = 10,
+  style,
+}: NewsBlockProps) {
+  const { t } = useTranslation();
   const { data: posts, isPending } = useNewsQuery(count);
 
   if (isPending) return <LoadingMore loading />;
@@ -21,26 +32,39 @@ export function NewsBlock({ onOpenPost, count = 10, style }: NewsBlockProps) {
 
   return (
     <View style={style}>
-      <SlideshowList
+      <SectionTitle title={t('home.newsTitle')} />
+      <Carousel
         data={posts}
+        itemWidthRatio={0.9}
         keyExtractor={(post) => String(post.id)}
-        getItemLayout={(_, index) => ({
-          length: CARD_WIDTH,
-          offset: CARD_WIDTH * index,
-          index,
-        })}
-        renderItem={({ item }) => (
+        renderItem={(post) => (
           <ImageCard
             variant="article"
-            image={item.image}
-            title={item.title}
-            description={item.description}
-            onPress={() => onOpenPost(item)}
+            image={post.image}
+            title={post.title}
+            description={post.description}
+            onPress={() => onOpenPost(post)}
           />
         )}
+      />
+      <Button
+        text={t('home.allNews')}
+        backgroundColor="brand"
+        textColor="onBrand"
+        size="xs"
+        fullWidth
+        onPress={onShowAll}
+        style={styles.all}
       />
     </View>
   );
 }
 
 NewsBlock.displayName = 'NewsBlock';
+
+const styles = StyleSheet.create((theme) => ({
+  all: {
+    marginTop: theme.spacing(4),
+    marginHorizontal: theme.spacing(5),
+  },
+}));

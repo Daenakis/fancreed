@@ -69,7 +69,9 @@
     "squadTitle": "LINE-UP",
     "showMore": "Show more",
     "partnersTitle": "PARTNERS",
-    "linksTitle": "Links"
+    "linksTitle": "Links",
+    "newsTitle": "Latest news",
+    "allNews": "All news"
   },
   "errors": {
     "network": "No internet connection",
@@ -157,16 +159,26 @@
       "finished": "MATCH ENDED",
       "postponed": "MATCH POSTPONED"
     },
-    "days": "{{count}} DAYS",
-    "hours": "{{count}} H",
-    "minutes": "{{count}} MIN",
     "round": "Round {{round}}",
     "tickets": "Tickets",
     "review": "Review",
     "video": "Video",
     "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
     "share": "Share",
-    "shareMessage": "{{home}} – {{away}}, {{date}}. Follow the match in the Fancreed app!"
+    "shareMessage": "{{home}} – {{away}}, {{date}}. Follow the match in the Fancreed app!",
+    "timeLeft": "Time left",
+    "finished": "Match finished",
+    "live": "Live",
+    "women": "Women",
+    "lineup": "Line-up",
+    "preview": "Preview",
+    "photo": "Photo",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "hours_one": "{{count}} h",
+    "hours_other": "{{count}} h",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min"
   },
   "club": {
     "name": "Club name *",

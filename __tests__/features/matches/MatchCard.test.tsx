@@ -72,3 +72,60 @@ describe('MatchCard compact', () => {
     expect(share).toHaveBeenCalledWith({ message: 'match.shareMessage' });
   });
 });
+
+describe('MatchCard full', () => {
+  it('shows the countdown and opens tickets before kick-off', () => {
+    const onOpenLink = jest.fn();
+    const { getByText, getByRole } = render(
+      <MatchCard
+        match={match({ ticketLink: 'https://t' })}
+        onOpenLink={onOpenLink}
+      />,
+    );
+
+    expect(getByText('match.timeLeft')).toBeTruthy();
+    fireEvent.press(getByRole('button', { name: 'match.tickets' }));
+
+    expect(onOpenLink).toHaveBeenCalledWith('https://t');
+  });
+
+  it('disables links the match has no URL for', () => {
+    const { getByRole } = render(
+      <MatchCard match={match({})} onOpenLink={jest.fn()} />,
+    );
+
+    expect(getByRole('button', { name: 'match.lineup' })).toBeDisabled();
+    expect(getByRole('button', { name: 'match.tickets' })).toBeDisabled();
+  });
+
+  it('shows the score and review link after the match', () => {
+    const { getByText, getByRole } = render(
+      <MatchCard
+        match={match({
+          status: 'Match Finished',
+          goalsHomeTeam: 2,
+          goalsAwayTeam: 1,
+          overviewLink: 'https://r',
+        })}
+        onOpenLink={jest.fn()}
+      />,
+    );
+
+    expect(getByText('match.finished')).toBeTruthy();
+    expect(getByText('2 - 1')).toBeTruthy();
+    expect(getByRole('button', { name: 'match.review' })).toBeEnabled();
+  });
+
+  it('shows the women badge for a women league', () => {
+    const { getByText } = render(
+      <MatchCard
+        match={match({
+          league: { id: 1, name: 'Women League', logo: '', round: '' },
+        })}
+        onOpenLink={jest.fn()}
+      />,
+    );
+
+    expect(getByText('match.women')).toBeTruthy();
+  });
+});

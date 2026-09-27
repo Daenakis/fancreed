@@ -22,6 +22,7 @@ export function MatchesBlock({ onOpenLink, style }: MatchesBlockProps) {
     <Carousel
       data={fixtures}
       initialIndex={initialMatchIndex(fixtures)}
+      itemWidthRatio={0.9}
       keyExtractor={(match) => String(match._id)}
       renderItem={(match) => (
         <MatchCard match={match} onOpenLink={onOpenLink} />

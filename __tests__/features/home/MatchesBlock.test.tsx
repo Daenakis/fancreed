@@ -39,8 +39,8 @@ describe('MatchesBlock', () => {
     );
 
     expect(await findByLabelText('match.score')).toBeTruthy();
-    expect(getByText('match.status.finished')).toBeTruthy();
-    fireEvent.press(getByRole('link', { name: 'match.review' }));
+    expect(getByText('match.finished')).toBeTruthy();
+    fireEvent.press(getByRole('button', { name: 'match.review' }));
     expect(onOpenLink).toHaveBeenCalledWith('https://club/review');
   });
 
@@ -50,21 +50,21 @@ describe('MatchesBlock', () => {
       <MatchesBlock onOpenLink={jest.fn()} />,
     );
 
-    expect(await findByText('match.status.upcoming')).toBeTruthy();
-    expect(getByRole('link', { name: 'match.tickets' })).toBeTruthy();
+    expect(await findByText('match.timeLeft')).toBeTruthy();
+    expect(getByRole('button', { name: 'match.tickets' })).toBeEnabled();
     expect(queryByLabelText('match.score')).toBeNull();
   });
 
-  it('hides links the match does not have', async () => {
+  it('disables links the match does not have', async () => {
     mockFixtures([
       match({ status: 'Match Finished', goalsHomeTeam: 0, goalsAwayTeam: 0 }),
     ]);
-    const { findByLabelText, queryByRole } = render(
+    const { findByLabelText, getAllByRole } = render(
       <MatchesBlock onOpenLink={jest.fn()} />,
     );
 
     await findByLabelText('match.score');
-    expect(queryByRole('link')).toBeNull();
+    getAllByRole('button').forEach((button) => expect(button).toBeDisabled());
   });
 
   it('renders nothing without fixtures', async () => {
@@ -76,11 +76,11 @@ describe('MatchesBlock', () => {
 
   it('hides the countdown when kick-off time has already passed', async () => {
     mockFixtures([match({ event_date: '2020-01-01T10:00:00+00:00' })]);
-    const { findByText, queryByText } = render(
+    const { findByRole, queryByText } = render(
       <MatchesBlock onOpenLink={jest.fn()} />,
     );
 
-    await findByText('match.status.upcoming');
-    expect(queryByText(/match.minutes/)).toBeNull();
+    await findByRole('button', { name: 'match.tickets' });
+    expect(queryByText('match.timeLeft')).toBeNull();
   });
 });

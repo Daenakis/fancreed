@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Image, Pressable, Share, View } from 'react-native';
+import { Image, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, Text } from '@/ui/components';
@@ -9,15 +9,17 @@ import { useNow } from '@/hooks';
 import { countdownTo, matchPhase, roundNumber } from '@/utils';
 
 import type {
+  ChipProps,
   MatchCardProps,
-  MatchLinkProps,
+  MatchLinkItem,
   MatchVariantProps,
   TeamProps,
 } from './types';
 
 /**
- * One match. `full`: league, date and round on top; team logos around the
- * score (or a countdown before kick-off); links to tickets / review / video.
+ * One match. `full`: green home-screen card — league and round on top, team
+ * crests around the kick-off time (or the score), a countdown before
+ * kick-off and a row of links (disabled when the match has no URL for them).
  * `compact`: calendar row with team names, score or date/time and icon
  * actions (tickets, share, video).
  */
@@ -35,26 +37,58 @@ function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
   const { t, i18n } = useTranslation();
   const now = useNow();
   const phase = matchPhase(match.status);
+  const played = phase === 'live' || phase === 'finished';
   const countdown = countdownTo(match.event_date, now);
   const hasTimeLeft = countdown.days + countdown.hours + countdown.minutes > 0;
   const elapsed = match.fixture?.status.elapsed;
-  const date = new Intl.DateTimeFormat(i18n.language, {
+  const kickOff = new Date(match.event_date);
+  const day = new Intl.DateTimeFormat(i18n.language, {
     day: 'numeric',
     month: 'long',
+  }).format(kickOff);
+  const time = new Intl.DateTimeFormat(i18n.language, {
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(match.event_date));
+  }).format(kickOff);
+  // TODO(backend): no women's flag on fixtures yet — guessed from the league name.
+  const women = /women|жін/i.test(match.league.name);
+  // TODO(backend): no line-up link on fixtures yet, so "Line-up" stays disabled.
+  const links: MatchLinkItem[] = played
+    ? [
+        { label: t('match.review'), url: match.overviewLink },
+        { label: t('match.lineup'), url: null },
+        { label: t('match.photo'), url: match.photoLink },
+        { label: t('match.video'), url: match.videoLink },
+      ]
+    : [
+        { label: t('match.lineup'), url: null },
+        { label: t('match.preview'), url: match.previewLink },
+        { label: t('match.video'), url: match.videoLink },
+        { label: t('match.tickets'), url: match.ticketLink, primary: true },
+      ];
 
   return (
     <View style={[styles.card, style]}>
+      {women ? (
+        <View style={styles.badge}>
+          <Text variant="bodySSemibold" color="onHighlight">
+            {t('match.women')}
+          </Text>
+        </View>
+      ) : null}
       <View style={styles.top}>
-        <Text variant="bodySSemibold" numberOfLines={2} style={styles.side}>
-          {match.league.name}
-        </Text>
-        <Text variant="bodyLMedium" style={styles.date}>
-          {date}
-        </Text>
-        <Text variant="bodySSemibold" style={styles.side}>
+        <Image
+          source={{ uri: match.league.logo }}
+          resizeMode="contain"
+          style={styles.leagueLogo}
+        />
+        <Text
+          variant="bodySRegular"
+          color="onBrand"
+          numberOfLines={1}
+          style={styles.league}
+        >
+          {match.league.name} |{' '}
           {t('match.round', { round: roundNumber(match.round) })}
         </Text>
       </View>
@@ -66,42 +100,32 @@ function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
           style={styles.teamLogo}
         />
         <View style={styles.center}>
-          <Image
-            source={{ uri: match.league.logo }}
-            resizeMode="contain"
-            style={styles.leagueLogo}
-          />
-          <Text variant="bodySSemibold" style={styles.centered}>
-            {t(`match.status.${phase}`)}
+          <Text variant="bodyMRegular" color="onBrand" style={styles.centered}>
+            {played
+              ? t(phase === 'live' ? 'match.live' : 'match.finished')
+              : day}
           </Text>
-          <View style={styles.separator} />
-          {phase === 'live' || phase === 'finished' ? (
+          {played ? (
             <Text
-              variant="h2Medium"
+              variant="h1Semibold"
+              color="onBrand"
               accessibilityLabel={t('match.score', {
                 home: match.homeTeam.name,
                 away: match.awayTeam.name,
                 homeGoals: match.goalsHomeTeam ?? 0,
                 awayGoals: match.goalsAwayTeam ?? 0,
               })}
-              style={styles.centered}
             >
-              {match.goalsHomeTeam ?? 0} : {match.goalsAwayTeam ?? 0}
+              {match.goalsHomeTeam ?? 0} - {match.goalsAwayTeam ?? 0}
             </Text>
-          ) : null}
+          ) : (
+            <Text variant="h1Semibold" color="onBrand">
+              {time}
+            </Text>
+          )}
           {phase === 'live' && elapsed ? (
-            <Text variant="h4Semibold" color="destructive">
+            <Text variant="bodyMSemibold" color="onBrand">
               {elapsed}&apos;
-            </Text>
-          ) : null}
-          {/* No countdown once kick-off time has passed (stale "Not Started"). */}
-          {phase === 'upcoming' && hasTimeLeft ? (
-            <Text variant="bodyMSemibold" style={styles.centered}>
-              {countdown.days > 0
-                ? `${t('match.days', { count: countdown.days })}\n`
-                : ''}
-              {t('match.hours', { count: countdown.hours })}{' '}
-              {t('match.minutes', { count: countdown.minutes })}
             </Text>
           ) : null}
         </View>
@@ -112,44 +136,45 @@ function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
           style={styles.teamLogo}
         />
       </View>
+      {/* No countdown once kick-off time has passed (stale "Not Started"). */}
+      {phase === 'upcoming' && hasTimeLeft ? (
+        <View style={styles.countdown}>
+          <Text variant="bodySRegular" color="onBrand">
+            {t('match.timeLeft')}
+          </Text>
+          <View style={styles.chips}>
+            {countdown.days > 0 ? (
+              <Chip text={t('match.days', { count: countdown.days })} />
+            ) : null}
+            <Chip text={t('match.hours', { count: countdown.hours })} />
+            <Chip text={t('match.minutes', { count: countdown.minutes })} />
+          </View>
+        </View>
+      ) : null}
       <View style={styles.links}>
-        {phase === 'upcoming' ? (
-          <MatchLink
-            label={t('match.tickets')}
-            url={match.ticketLink}
-            onOpenLink={onOpenLink}
+        {links.map(({ label, url, primary }) => (
+          <Button
+            key={label}
+            variant={primary ? 'brand' : 'brandOutline'}
+            size="xs"
+            text={label}
+            disabled={!url}
+            onPress={() => url && onOpenLink(url)}
+            style={styles.link}
           />
-        ) : (
-          <>
-            <MatchLink
-              label={t('match.review')}
-              url={match.overviewLink}
-              onOpenLink={onOpenLink}
-            />
-            <MatchLink
-              label={t('match.video')}
-              url={match.videoLink}
-              onOpenLink={onOpenLink}
-            />
-          </>
-        )}
+        ))}
       </View>
     </View>
   );
 }
 
-/** A link under the card; hidden when the match has no URL for it. */
-function MatchLink({ label, url, onOpenLink }: MatchLinkProps) {
-  if (!url) return null;
+function Chip({ text }: ChipProps) {
   return (
-    <Pressable
-      accessibilityRole="link"
-      accessibilityLabel={label}
-      hitSlop={8}
-      onPress={() => onOpenLink(url)}
-    >
-      <Text variant="h4Semibold">{label}</Text>
-    </Pressable>
+    <View style={styles.chip}>
+      <Text variant="bodySSemibold" color="onBrand">
+        {text}
+      </Text>
+    </View>
   );
 }
 
@@ -252,22 +277,32 @@ function Team({ name, logo }: TeamProps) {
 const styles = StyleSheet.create((theme) => ({
   card: {
     borderRadius: theme.radius.lg,
-    backgroundColor: theme.colors.secondary,
-    paddingVertical: theme.spacing(3),
-    paddingHorizontal: theme.spacing(2),
-    gap: theme.spacing(2),
+    backgroundColor: theme.colors.brand,
+    padding: theme.spacing(4),
+    gap: theme.spacing(4),
   },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing(2),
   },
-  side: {
-    flex: 1,
-    textAlign: 'center',
+  leagueLogo: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
   },
-  date: {
-    flex: 2,
-    textAlign: 'center',
+  league: {
+    flexShrink: 1,
+  },
+  // Hangs from the card's top edge.
+  badge: {
+    alignSelf: 'center',
+    marginTop: -theme.spacing(4),
+    marginBottom: -theme.spacing(2),
+    paddingHorizontal: theme.spacing(4),
+    paddingVertical: theme.spacing(0.5),
+    borderBottomLeftRadius: theme.radius.sm,
+    borderBottomRightRadius: theme.radius.sm,
+    backgroundColor: theme.colors.highlight,
   },
   middle: {
     flexDirection: 'row',
@@ -275,25 +310,36 @@ const styles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
   },
   teamLogo: {
-    width: theme.spacing(18),
-    height: theme.spacing(18),
+    width: theme.spacing(14),
+    height: theme.spacing(14),
   },
   center: {
     flex: 1,
     alignItems: 'center',
-    gap: theme.spacing(1),
-  },
-  leagueLogo: {
-    width: 55,
-    height: 55,
-  },
-  separator: {
-    alignSelf: 'stretch',
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: theme.colors.foreground,
   },
   centered: {
     textAlign: 'center',
+  },
+  countdown: {
+    alignItems: 'center',
+    gap: theme.spacing(2),
+  },
+  chips: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+  },
+  chip: {
+    paddingHorizontal: theme.spacing(3),
+    paddingVertical: theme.spacing(1),
+    borderRadius: theme.radius.full,
+    backgroundColor: theme.colors.brandSurface,
+  },
+  links: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+  },
+  link: {
+    flex: 1,
   },
   row: {
     alignItems: 'center',
@@ -322,10 +368,5 @@ const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: theme.spacing(6),
-  },
-  links: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    minHeight: theme.spacing(6),
   },
 }));

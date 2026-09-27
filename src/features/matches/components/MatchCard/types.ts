@@ -17,10 +17,16 @@ export type MatchCardProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export type MatchLinkProps = {
+/** One button in the full card's link row. */
+export type MatchLinkItem = {
   label: string;
   url?: string | null;
-  onOpenLink: (url: string) => void;
+  /** The filled (white) button, e.g. tickets. */
+  primary?: boolean;
+};
+
+export type ChipProps = {
+  text: string;
 };
 
 export type MatchVariantProps = Omit<MatchCardProps, 'variant'>;

@@ -20,7 +20,9 @@ export type Fixture = {
   /** Live details; `elapsed` = minutes played. */
   fixture?: { status: { short: string; elapsed: number | null } };
   ticketLink?: string | null;
+  previewLink?: string | null;
   overviewLink?: string | null;
+  photoLink?: string | null;
   videoLink?: string | null;
 };
 

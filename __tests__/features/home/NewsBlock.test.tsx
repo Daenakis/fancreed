@@ -34,7 +34,7 @@ describe('NewsBlock', () => {
       .spyOn(newsApi, 'list')
       .mockResolvedValue(apiOk(response([post(1), post(2)])));
     const { findByText } = render(
-      <NewsBlock onOpenPost={jest.fn()} count={5} />,
+      <NewsBlock onOpenPost={jest.fn()} onShowAll={jest.fn()} count={5} />,
     );
 
     expect(await findByText('Title 1')).toBeTruthy();
@@ -44,16 +44,32 @@ describe('NewsBlock', () => {
   it('opens the pressed post', async () => {
     jest.spyOn(newsApi, 'list').mockResolvedValue(apiOk(response([post(1)])));
     const onOpenPost = jest.fn();
-    const { findByRole } = render(<NewsBlock onOpenPost={onOpenPost} />);
+    const { findByRole } = render(
+      <NewsBlock onOpenPost={onOpenPost} onShowAll={jest.fn()} />,
+    );
 
     fireEvent.press(await findByRole('button', { name: 'Title 1' }));
 
     expect(onOpenPost).toHaveBeenCalledWith(post(1));
   });
 
+  it('opens the full list from the all-news button', async () => {
+    jest.spyOn(newsApi, 'list').mockResolvedValue(apiOk(response([post(1)])));
+    const onShowAll = jest.fn();
+    const { findByRole } = render(
+      <NewsBlock onOpenPost={jest.fn()} onShowAll={onShowAll} />,
+    );
+
+    fireEvent.press(await findByRole('button', { name: 'home.allNews' }));
+
+    expect(onShowAll).toHaveBeenCalledTimes(1);
+  });
+
   it('renders nothing when there are no posts', async () => {
     jest.spyOn(newsApi, 'list').mockResolvedValue(apiOk(response([])));
-    const { toJSON } = render(<NewsBlock onOpenPost={jest.fn()} />);
+    const { toJSON } = render(
+      <NewsBlock onOpenPost={jest.fn()} onShowAll={jest.fn()} />,
+    );
 
     await waitFor(() => expect(toJSON()).toBeNull());
   });

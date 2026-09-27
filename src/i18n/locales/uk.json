@@ -71,7 +71,9 @@
     "squadTitle": "СКЛАД",
     "showMore": "Детальніше",
     "partnersTitle": "НАШІ ПАРТНЕРИ",
-    "linksTitle": "Посилання"
+    "linksTitle": "Посилання",
+    "newsTitle": "Останні новини",
+    "allNews": "Усі новини"
   },
   "errors": {
     "network": "Немає з'єднання з інтернетом",
@@ -159,16 +161,32 @@
       "finished": "МАТЧ ЗАВЕРШЕНО",
       "postponed": "МАТЧ ВІДКЛАДЕНО"
     },
-    "days": "{{count}} ДНІВ",
-    "hours": "{{count}} ГОД",
-    "minutes": "{{count}} ХВ",
     "round": "{{round}} тур",
     "tickets": "Квитки",
-    "review": "Огляд",
+    "review": "Звіт",
     "video": "Відео",
     "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
     "share": "Поділитись",
-    "shareMessage": "{{home}} – {{away}}, {{date}}. Стеж за матчем у застосунку Fancreed!"
+    "shareMessage": "{{home}} – {{away}}, {{date}}. Стеж за матчем у застосунку Fancreed!",
+    "timeLeft": "До матчу залишилось",
+    "finished": "Матч завершився",
+    "live": "Матч триває",
+    "women": "Жінки",
+    "lineup": "Склад",
+    "preview": "Превʼю",
+    "photo": "Фото",
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дні",
+    "days_many": "{{count}} днів",
+    "days_other": "{{count}} дня",
+    "hours_one": "{{count}} год",
+    "hours_few": "{{count}} год",
+    "hours_many": "{{count}} год",
+    "hours_other": "{{count}} год",
+    "minutes_one": "{{count}} хв",
+    "minutes_few": "{{count}} хв",
+    "minutes_many": "{{count}} хв",
+    "minutes_other": "{{count}} хв"
   },
   "club": {
     "name": "Назва клубу *",
