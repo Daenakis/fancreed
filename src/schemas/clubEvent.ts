@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-// Same characters the backend allows in addresses (`clubs/.../locations`).
-const TEXT_PATTERN = /^[\wа-яА-Я\sіІєЄґҐїЇ'!"№;%:?*()\-+=.,/]+$/;
+// Same characters the backend allows in event locations
+// (`clubs/.../locations`) — stricter than club addresses: no ! № % ? * =.
+const TEXT_PATTERN = /^[\wа-яА-Я\sіІєЄґҐїЇ'";:()\-+.,/\\]+$/;
 
 const startOfToday = () => {
   const now = new Date();

@@ -34,9 +34,6 @@ import {
   clubEventSchema,
 } from '@/schemas';
 
-// The backend only takes [\wа-яА-Я\s] in titles (no і/ї/є), and the app shows
-// the localised kind anyway — so the title is the Latin kind name.
-const TITLES = { party: 'Party', trip: 'Trip', meeting: 'Meeting' } as const;
 const EVENT_HOURS = 2;
 
 /**
@@ -93,7 +90,8 @@ export function CreateClubEventScreen() {
         event: {
           type: 'club',
           kind: values.kind,
-          title: TITLES[values.kind],
+          // The form has no title field: the localised kind names the event.
+          title: t(`events.kind.${values.kind}`),
           description: values.description,
           startDate,
           endDate: startDate + EVENT_HOURS * 3600,

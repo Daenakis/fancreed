@@ -23,7 +23,7 @@ export const clubsApi = {
     axiosInstance.get<T.ClubEventsListResponse>(
       `clubs/${clubId}/events/list/${index}`,
     ),
-  // The apidoc names the field `events` for a single event.
+  // The live API returns `event`; the apidoc names it `events` — accept both.
   event: (clubId: string, eventId: string) =>
     axiosInstance.get<{ event?: T.ClubEvent; events?: T.ClubEvent }>(
       `clubs/${clubId}/events/one/${eventId}`,
