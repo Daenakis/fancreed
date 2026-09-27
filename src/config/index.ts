@@ -9,8 +9,12 @@ export const CONFIG = {
   NAME: Env.EXPO_PUBLIC_NAME,
   VERSION: Env.EXPO_PUBLIC_VERSION,
   LINKS: {
-    /** Club site article: base + post slug. */
+    /** Club site article: base + post slug (the base alone is the news list). */
     NEWS_POST: 'https://fcruhlviv.com/posts/',
+    /** Club site pages opened from the menu. */
+    TEAM: 'https://fcruhlviv.com/team/80',
+    TEAM_U19: 'https://fcruhlviv.com/team/120',
+    ACADEMY: 'https://fcruhlviv.com/academy',
   },
 } as const;
 

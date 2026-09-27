@@ -323,5 +323,17 @@
     "verified": "Verified account",
     "changePhoto": "Change photo",
     "photoFailed": "Couldn't upload the photo. Please try again."
+  },
+  "menu": {
+    "title": "Menu",
+    "news": "News",
+    "team": "Team",
+    "u19": "U-19",
+    "tables": "Tables",
+    "videos": "Videos",
+    "academy": "Academy",
+    "settings": "Settings",
+    "feedback": "Feedback",
+    "comingSoon": "Coming soon"
   }
 }
