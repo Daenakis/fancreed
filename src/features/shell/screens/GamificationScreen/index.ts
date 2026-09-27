@@ -1,1 +1,0 @@
-export { GamificationScreen } from './GamificationScreen';

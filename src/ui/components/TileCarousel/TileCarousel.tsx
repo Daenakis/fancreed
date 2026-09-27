@@ -22,6 +22,7 @@ export function TileCarousel<T extends TileItem>({
   addLabel,
   pageSize = 3,
   hideCaptions = false,
+  placeholderIcon,
   textColor = 'foreground',
   tileSurface,
   style,
@@ -62,6 +63,7 @@ export function TileCarousel<T extends TileItem>({
                 image={tile.image}
                 title={tile.title}
                 hideCaption={hideCaptions}
+                placeholderIcon={placeholderIcon}
                 textColor={textColor}
                 tileSurface={tileSurface}
                 onPress={() => onPressItem(tile)}

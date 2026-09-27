@@ -1,5 +1,6 @@
 import type { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 
+import type { IconName } from '@/ui/assets/icons';
 import type { ColorToken } from '@/ui/theme';
 
 export type TileItem = {
@@ -20,6 +21,8 @@ export type TileCarouselProps<T extends TileItem> = {
   pageSize?: number;
   /** Tile frame background. Defaults to `translucentSurface`. */
   tileSurface?: ColorToken;
+  /** Green tile with this icon when an item has no image (e.g. `lion`). */
+  placeholderIcon?: IconName;
   /** Logos only: captions become screen-reader labels. Defaults to `false`. */
   hideCaptions?: boolean;
   /** Theme colour of the captions. Defaults to `foreground`. */
