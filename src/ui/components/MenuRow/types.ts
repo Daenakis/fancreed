@@ -12,6 +12,8 @@ export type MenuRowProps = {
   value?: string;
   /** Defaults to `default`. */
   tone?: MenuRowTone;
+  /** Arrow on the right for rows that open a screen or page. */
+  chevron?: boolean;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
 };

@@ -1,6 +1,8 @@
 import { fireEvent, render } from '@tests/test-utils';
+import { StyleSheet, type TextStyle } from 'react-native';
 
 import { PageLayout, Text } from '@/ui/components';
+import { lightTheme } from '@/ui/theme/unistyles';
 
 describe('PageLayout', () => {
   it('shows the title as a header and the content', () => {
@@ -38,5 +40,17 @@ describe('PageLayout', () => {
     );
 
     expect(queryByRole('button')).toBeNull();
+  });
+
+  it('uses a dark title on a white header when tone is plain', () => {
+    const { getByRole } = render(
+      <PageLayout title="Menu" tone="plain">
+        <Text>Rows</Text>
+      </PageLayout>,
+    );
+
+    expect(
+      (StyleSheet.flatten(getByRole('header').props.style) as TextStyle).color,
+    ).toBe(lightTheme.colors.foreground);
   });
 });

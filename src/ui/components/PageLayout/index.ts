@@ -1,2 +1,2 @@
 export { PageLayout } from './PageLayout';
-export type { PageLayoutProps } from './types';
+export type { PageLayoutProps, PageLayoutTone } from './types';

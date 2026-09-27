@@ -3,12 +3,20 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { IconName } from '@/ui/assets/icons';
 
+/**
+ * - `brand` (default): green header, content on a white sheet.
+ * - `plain`: white header with dark text (menu).
+ */
+export type PageLayoutTone = 'brand' | 'plain';
+
 export type PageLayoutProps = {
   title: string;
   /** Back arrow; hidden without it. */
   onBack?: () => void;
   /** Share icon on the right; hidden without it. */
   onShare?: () => void;
+  /** Defaults to `brand`. */
+  tone?: PageLayoutTone;
   /** Wraps the content in a ScrollView. Defaults to `true`. */
   scrollable?: boolean;
   children: ReactNode;

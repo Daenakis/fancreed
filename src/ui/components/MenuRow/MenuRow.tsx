@@ -11,6 +11,7 @@ export function MenuRow({
   icon,
   value,
   tone = 'default',
+  chevron = false,
   onPress,
   style,
 }: MenuRowProps) {
@@ -41,6 +42,13 @@ export function MenuRow({
         {label}
       </Text>
       {value ? <Text variant="bodyMRegular">{value}</Text> : null}
+      {chevron ? (
+        <Icon
+          name="arrowRight"
+          size={16}
+          color={theme.colors.mutedForeground}
+        />
+      ) : null}
     </Pressable>
   );
 }

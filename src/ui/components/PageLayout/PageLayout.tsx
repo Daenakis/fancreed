@@ -5,7 +5,11 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '../Icon';
 import { Text } from '../Text';
-import type { HeaderButtonProps, PageLayoutProps } from './types';
+import type {
+  HeaderButtonProps,
+  PageLayoutProps,
+  PageLayoutTone,
+} from './types';
 
 /**
  * Detail screen frame: green header (back, centred title, share) with the
@@ -20,6 +24,7 @@ export function PageLayout({
   title,
   onBack,
   onShare,
+  tone = 'brand',
   scrollable = true,
   children,
   contentStyle,
@@ -27,19 +32,21 @@ export function PageLayout({
   const { t } = useTranslation();
   const { theme } = useUnistyles();
   const insets = useSafeAreaInsets();
+  const plain = tone === 'plain';
+  const onHeader = plain ? theme.colors.foreground : theme.colors.onBrand;
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root(tone)}>
       <View style={styles.header(insets.top)}>
         <HeaderButton
           icon="arrowLeft"
           label={t('common.back')}
           onPress={onBack}
-          color={theme.colors.onBrand}
+          color={onHeader}
         />
         <Text
-          variant="bodyMMedium"
-          color="onBrand"
+          variant={plain ? 'bodyLMedium' : 'bodyMMedium'}
+          color={plain ? 'foreground' : 'onBrand'}
           numberOfLines={1}
           accessibilityRole="header"
           style={styles.title}
@@ -50,7 +57,7 @@ export function PageLayout({
           icon="telegram"
           label={t('common.share')}
           onPress={onShare}
-          color={theme.colors.onBrand}
+          color={onHeader}
         />
       </View>
       <View style={styles.sheet}>
@@ -90,10 +97,11 @@ function HeaderButton({ icon, label, onPress, color }: HeaderButtonProps) {
 }
 
 const styles = StyleSheet.create((theme) => ({
-  root: {
+  root: (tone: PageLayoutTone) => ({
     flex: 1,
-    backgroundColor: theme.colors.brand,
-  },
+    backgroundColor:
+      tone === 'plain' ? theme.colors.background : theme.colors.brand,
+  }),
   header: (topInset: number) => ({
     flexDirection: 'row',
     alignItems: 'center',
