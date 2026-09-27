@@ -7,7 +7,8 @@
     "back": "Back",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "slideOf": "Slide {{current}} of {{total}}"
+    "slideOf": "Slide {{current}} of {{total}}",
+    "close": "Close"
   },
   "auth": {
     "signIn": "Sign In",
@@ -71,7 +72,8 @@
     "partnersTitle": "PARTNERS",
     "linksTitle": "Links",
     "newsTitle": "Latest news",
-    "allNews": "All news"
+    "allNews": "All news",
+    "fanShop": "Fan shop"
   },
   "errors": {
     "network": "No internet connection",
@@ -125,14 +127,17 @@
   },
   "fanCard": {
     "title": "FAN CARD",
-    "season": "Season",
-    "empty": "Fill in all the fields in your profile to get full access to the FanCard",
+    "fullTitle": "FAN ID PROFILE CARD",
+    "season": "Season {{season}}",
+    "empty": "Fill in all fields in your Profile to unlock the FanCard",
     "toProfile": "Go to Profile",
-    "level": "{{level}} CLUB",
+    "level": "{{level}} club",
+    "toNextLevel": "To {{level}} status: {{points}}/{{total}} points",
+    "cardId": "RUH CARD ID {{id}}",
     "flipHint": "Tap to show the barcode",
-    "bronze": "BRONZE",
-    "silver": "SILVER",
-    "gold": "GOLD"
+    "bronze": "Bronze",
+    "silver": "Silver",
+    "gold": "Gold"
   },
   "goals": {
     "more": "One more goal",

@@ -7,7 +7,8 @@
     "back": "Назад",
     "showPassword": "Показати пароль",
     "hidePassword": "Сховати пароль",
-    "slideOf": "Слайд {{current}} з {{total}}"
+    "slideOf": "Слайд {{current}} з {{total}}",
+    "close": "Закрити"
   },
   "auth": {
     "signIn": "Увійти",
@@ -73,7 +74,8 @@
     "partnersTitle": "НАШІ ПАРТНЕРИ",
     "linksTitle": "Посилання",
     "newsTitle": "Останні новини",
-    "allNews": "Усі новини"
+    "allNews": "Усі новини",
+    "fanShop": "Фаншоп"
   },
   "errors": {
     "network": "Немає з'єднання з інтернетом",
@@ -127,14 +129,17 @@
   },
   "fanCard": {
     "title": "FAN CARD",
-    "season": "Сезон",
+    "fullTitle": "FAN ID PROFILE CARD",
+    "season": "Сезон {{season}}",
     "empty": "Заповніть усі поля у Профілі для повного доступу до FanCard",
     "toProfile": "Перейти у Профіль",
-    "level": "{{level}} CLUB",
+    "level": "{{level}} club",
+    "toNextLevel": "До статусу {{level}}: {{points}}/{{total}} очок",
+    "cardId": "RUH CARD ID {{id}}",
     "flipHint": "Натисніть, щоб показати штрихкод",
-    "bronze": "BRONZE",
-    "silver": "SILVER",
-    "gold": "GOLD"
+    "bronze": "Bronze",
+    "silver": "Silver",
+    "gold": "Gold"
   },
   "goals": {
     "more": "На гол більше",

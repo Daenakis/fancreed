@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Linking, ScrollView } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
@@ -11,6 +12,8 @@ import { CONFIG } from '@/config';
 import { PredictionBlock } from '@/features/gamification';
 
 import {
+  FanCardBlock,
+  FanShopBanner,
   MatchesBlock,
   NewsBlock,
   PartnersBlock,
@@ -37,6 +40,8 @@ export function HomeScreen() {
         onOpenPost={(post) => openLink(`${CONFIG.LINKS.NEWS_POST}${post.slug}`)}
         onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
       />
+      <FanShopBanner onPress={() => router.navigate('/shop')} />
+      <FanCardBlock />
       <PredictionBlock />
       {/* TODO: open the full table screen once it exists. */}
       <TableBlock onShowAll={() => {}} />
