@@ -65,7 +65,7 @@
   "home": {
     "title": "Home",
     "subtitle": "You are authenticated",
-    "tableTitle": "STANDINGS",
+    "tableTitle": "Standings",
     "allTable": "Full table",
     "squadTitle": "LINE-UP",
     "showMore": "Show more",
@@ -116,13 +116,13 @@
     "change": "Change photo"
   },
   "standings": {
-    "place": "#",
-    "club": "Club",
+    "place": "Pos",
+    "club": "Team",
     "played": "P",
     "won": "W",
     "drawn": "D",
     "lost": "L",
-    "points": "PTS",
+    "points": "Pts",
     "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points"
   },
   "fanCard": {

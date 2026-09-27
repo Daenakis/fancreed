@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
-  BlockHeader,
   Button,
   LoadingMore,
+  SectionTitle,
   StandingsTable,
 } from '@/ui/components';
 
@@ -16,8 +16,8 @@ import { rowsAroundTeam } from '@/utils';
 import type { TableBlockProps } from './types';
 
 /**
- * Home-screen table preview: our club's row with the team above and below,
- * plus a button to the full table. Hidden when there's no table to show.
+ * Home-screen table preview: "Standings" title, our club's row with the team
+ * above and below, and a button to the full table. Hidden when there's no table to show.
  */
 export function TableBlock({ onShowAll, style }: TableBlockProps) {
   const { t } = useTranslation();
@@ -30,23 +30,21 @@ export function TableBlock({ onShowAll, style }: TableBlockProps) {
   if (!rows.length) return null;
 
   return (
-    <View style={[styles.container, style]}>
-      <BlockHeader
-        title={t('home.tableTitle')}
-        backgroundColor="background"
-        textColor="foreground"
-      />
+    <View style={style}>
+      <SectionTitle title={t('home.tableTitle')} />
       <StandingsTable
         rows={rows}
         highlightTeamId={data.ourTeamId}
         style={styles.table}
       />
       <Button
-        size="sm"
+        size="xs"
+        fullWidth
         text={t('home.allTable')}
-        backgroundColor="primary"
-        textColor="primaryForeground"
+        backgroundColor="brand"
+        textColor="onBrand"
         onPress={onShowAll}
+        style={styles.inset}
       />
     </View>
   );
@@ -55,12 +53,11 @@ export function TableBlock({ onShowAll, style }: TableBlockProps) {
 TableBlock.displayName = 'TableBlock';
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    alignItems: 'center',
-    paddingBottom: theme.spacing(4),
-  },
   table: {
-    alignSelf: 'stretch',
-    marginVertical: theme.spacing(2.5),
+    marginHorizontal: theme.spacing(5),
+    marginBottom: theme.spacing(4),
+  },
+  inset: {
+    marginHorizontal: theme.spacing(5),
   },
 }));
