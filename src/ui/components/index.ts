@@ -40,3 +40,8 @@ export {
   type TextInputProps,
   type TextInputVariant,
 } from './TextInput';
+export {
+  TileCarousel,
+  type TileCarouselProps,
+  type TileItem,
+} from './TileCarousel';

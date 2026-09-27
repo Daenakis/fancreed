@@ -69,7 +69,8 @@
     "tableTitle": "ТУРНІРНЕ СТАНОВИЩЕ",
     "allTable": "Уся таблиця",
     "squadTitle": "СКЛАД",
-    "showMore": "Детальніше"
+    "showMore": "Детальніше",
+    "partnersTitle": "НАШІ ПАРТНЕРИ"
   },
   "errors": {
     "network": "Немає з'єднання з інтернетом",

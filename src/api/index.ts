@@ -5,6 +5,7 @@ export {
   leaguesApi,
   newsApi,
   predictionsApi,
+  sponsorsApi,
   squadsApi,
   votesApi,
 } from './endpoints';

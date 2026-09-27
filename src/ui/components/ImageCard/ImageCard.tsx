@@ -1,6 +1,8 @@
 import { Image, Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
+import type { ColorToken } from '@/ui/theme';
+
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { ImageCardProps, ImageCardVariant } from './types';
@@ -25,6 +27,7 @@ export function ImageCard({
   variant = 'photo',
   onPress,
   textColor = 'foreground',
+  tileSurface = 'translucentSurface',
   style,
 }: ImageCardProps) {
   const { theme } = useUnistyles();
@@ -34,7 +37,7 @@ export function ImageCard({
 
   const content = (
     <>
-      <View style={styles.frame(variant, !source)}>
+      <View style={styles.frame(variant, !source, tileSurface)}>
         {source ? (
           <Image
             source={source}
@@ -129,7 +132,11 @@ const styles = StyleSheet.create((theme) => ({
           width: variant === 'tile' ? 100 : theme.spacing(28),
           alignItems: 'center',
         },
-  frame: (variant: ImageCardVariant, empty: boolean) =>
+  frame: (
+    variant: ImageCardVariant,
+    empty: boolean,
+    tileSurface: ColorToken,
+  ) =>
     variant === 'tile'
       ? {
           width: '100%',
@@ -137,7 +144,7 @@ const styles = StyleSheet.create((theme) => ({
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: theme.radius.lg,
-          backgroundColor: theme.colors.translucentSurface,
+          backgroundColor: theme.colors[tileSurface],
         }
       : {
           width: '100%',

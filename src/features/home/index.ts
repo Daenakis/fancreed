@@ -3,6 +3,8 @@ export {
   type MatchesBlockProps,
   NewsBlock,
   type NewsBlockProps,
+  PartnersBlock,
+  type PartnersBlockProps,
   SquadBlock,
   type SquadBlockProps,
   TableBlock,

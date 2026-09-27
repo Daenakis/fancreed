@@ -67,7 +67,8 @@
     "tableTitle": "STANDINGS",
     "allTable": "Full table",
     "squadTitle": "LINE-UP",
-    "showMore": "Show more"
+    "showMore": "Show more",
+    "partnersTitle": "PARTNERS"
   },
   "errors": {
     "network": "No internet connection",

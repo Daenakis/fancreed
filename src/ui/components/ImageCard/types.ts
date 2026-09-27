@@ -26,6 +26,8 @@ export type ImageCardProps = {
   variant?: ImageCardVariant;
   /** Makes the card pressable. */
   onPress?: () => void;
+  /** `tile` only: frame background. Defaults to `translucentSurface` (for coloured backgrounds). */
+  tileSurface?: ColorToken;
   /** Theme colour of the captions. Defaults to `foreground`. */
   textColor?: ColorToken;
   style?: StyleProp<ViewStyle>;
