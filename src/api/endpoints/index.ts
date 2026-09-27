@@ -5,6 +5,7 @@ export { fixturesApi } from './fixtures';
 export { leaguesApi } from './leagues';
 export { newsApi } from './news';
 export { predictionsApi } from './predictions';
+export { profileApi } from './profile';
 export { socialsApi } from './socials';
 export { sponsorsApi } from './sponsors';
 export { squadsApi } from './squads';
