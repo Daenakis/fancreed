@@ -1,4 +1,4 @@
-import { rowsAroundTeam, toStandingsRow } from '@/utils';
+import { leagueTitle, rowsAroundTeam, toStandingsRow } from '@/utils';
 
 import type { StandingEntry } from '@/types/api';
 
@@ -7,7 +7,13 @@ const entry: StandingEntry = {
   team: { id: 7, name: 'Шахтар', logo: 'https://x/7.png' },
   points: 35,
   goalsDiff: 20,
-  all: { played: 16, win: 10, draw: 5, lose: 1 },
+  all: {
+    played: 16,
+    win: 10,
+    draw: 5,
+    lose: 1,
+    goals: { for: 30, against: 10 },
+  },
 };
 
 describe('toStandingsRow', () => {
@@ -22,6 +28,8 @@ describe('toStandingsRow', () => {
       drawn: 5,
       lost: 1,
       points: 35,
+      goalsFor: 30,
+      goalsAgainst: 10,
     });
   });
 });
@@ -44,5 +52,19 @@ describe('rowsAroundTeam', () => {
 
   it('returns nothing when the team is not in the table', () => {
     expect(rowsAroundTeam(rows, 99)).toEqual([]);
+  });
+});
+
+describe('leagueTitle', () => {
+  it('adds the season span', () => {
+    expect(leagueTitle('Premier League', 2025)).toBe('Premier League 2025/26');
+  });
+
+  it('uses the year alone for friendlies', () => {
+    expect(leagueTitle('Friendlies Clubs', 2026)).toBe('Friendlies Clubs 2026');
+  });
+
+  it('pads the end year across a century', () => {
+    expect(leagueTitle('Cup', 2099)).toBe('Cup 2099/00');
   });
 });

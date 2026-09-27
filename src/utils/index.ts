@@ -18,7 +18,7 @@ export {
 } from './matches';
 export { goBack } from './navigation';
 export { shouldRetryQuery } from './shouldRetryQuery';
-export { rowsAroundTeam, toStandingsRow } from './standings';
+export { leagueTitle, rowsAroundTeam, toStandingsRow } from './standings';
 export {
   getItem,
   removeItem,
