@@ -1,3 +1,9 @@
+export {
+  type CalendarDay,
+  calendarDays,
+  formatDayMonthYear,
+  isSameDay,
+} from './calendar';
 export { toCreateClubRequest } from './clubs';
 export { eventDate, mapsUrl } from './events';
 export { type HtmlBlock, htmlToBlocks } from './html';
@@ -10,6 +16,7 @@ export {
   matchPhase,
   roundNumber,
 } from './matches';
+export { goBack } from './navigation';
 export { shouldRetryQuery } from './shouldRetryQuery';
 export { rowsAroundTeam, toStandingsRow } from './standings';
 export {
