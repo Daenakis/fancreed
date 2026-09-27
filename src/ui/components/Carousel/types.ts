@@ -15,6 +15,8 @@ export type CarouselProps<T> = {
   showIndicator?: boolean;
   /** Theme colour of the current dot. Defaults to `foreground`. */
   indicatorColor?: ColorToken;
+  /** Page shown first. Defaults to 0. */
+  initialIndex?: number;
   /** Called when the user lands on another page. */
   onIndexChange?: (index: number) => void;
   style?: StyleProp<ViewStyle>;

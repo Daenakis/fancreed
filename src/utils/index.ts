@@ -1,3 +1,11 @@
+export {
+  type Countdown,
+  countdownTo,
+  initialMatchIndex,
+  type MatchPhase,
+  matchPhase,
+  roundNumber,
+} from './matches';
 export { shouldRetryQuery } from './shouldRetryQuery';
 export { rowsAroundTeam, toStandingsRow } from './standings';
 export {

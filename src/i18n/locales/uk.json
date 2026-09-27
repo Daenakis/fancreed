@@ -147,5 +147,21 @@
     "shareMessage": "Мій прогноз на матч {{home}} – {{away}}: {{homeGoals}}:{{awayGoals}}. А твій? Прогнозуй у застосунку Fancreed!",
     "homeGoals": "Голи {{team}}",
     "awayGoals": "Голи {{team}}"
+  },
+  "match": {
+    "status": {
+      "upcoming": "ДО МАТЧУ ЗАЛИШИЛОСЬ",
+      "live": "МАТЧ ТРИВАЄ",
+      "finished": "МАТЧ ЗАВЕРШЕНО",
+      "postponed": "МАТЧ ВІДКЛАДЕНО"
+    },
+    "days": "{{count}} ДНІВ",
+    "hours": "{{count}} ГОД",
+    "minutes": "{{count}} ХВ",
+    "round": "{{round}} тур",
+    "tickets": "Квитки",
+    "review": "Огляд",
+    "video": "Відео",
+    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}"
   }
 }

@@ -30,11 +30,12 @@ export function Carousel<T>({
   gap = 12,
   showIndicator = true,
   indicatorColor = 'foreground',
+  initialIndex = 0,
   onIndexChange,
   style,
 }: CarouselProps<T>) {
   const { width } = useWindowDimensions();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(initialIndex);
   const itemWidth = Math.round(width * itemWidthRatio);
   const step = itemWidth + gap;
   const sidePadding = (width - itemWidth) / 2;
@@ -61,6 +62,8 @@ export function Carousel<T>({
           <View style={{ width: itemWidth }}>{renderItem(item, i)}</View>
         )}
         onMomentumScrollEnd={onScrollEnd}
+        initialScrollIndex={initialIndex}
+        getItemLayout={(_, i) => ({ length: step, offset: step * i, index: i })}
       />
       {showIndicator && data.length > 1 ? (
         <SliderIndicator

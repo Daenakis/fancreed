@@ -1,4 +1,6 @@
 export {
+  MatchesBlock,
+  type MatchesBlockProps,
   NewsBlock,
   type NewsBlockProps,
   TableBlock,

@@ -145,5 +145,21 @@
     "shareMessage": "My prediction for {{home}} – {{away}}: {{homeGoals}}:{{awayGoals}}. What's yours? Predict in the Fancreed app!",
     "homeGoals": "{{team}} goals",
     "awayGoals": "{{team}} goals"
+  },
+  "match": {
+    "status": {
+      "upcoming": "TIME LEFT",
+      "live": "LIVE",
+      "finished": "MATCH ENDED",
+      "postponed": "MATCH POSTPONED"
+    },
+    "days": "{{count}} DAYS",
+    "hours": "{{count}} H",
+    "minutes": "{{count}} MIN",
+    "round": "Round {{round}}",
+    "tickets": "Tickets",
+    "review": "Review",
+    "video": "Video",
+    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}"
   }
 }

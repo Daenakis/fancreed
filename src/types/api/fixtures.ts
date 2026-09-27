@@ -14,6 +14,14 @@ export type Fixture = {
   goalsHomeTeam: number | null;
   goalsAwayTeam: number | null;
   league: { id: number; name: string; logo: string; round: string };
+  /** e.g. "Regular Season - 19". */
+  round: string;
+  venue?: { name: string; city: string } | null;
+  /** Live details; `elapsed` = minutes played. */
+  fixture?: { status: { short: string; elapsed: number | null } };
+  ticketLink?: string | null;
+  overviewLink?: string | null;
+  videoLink?: string | null;
 };
 
 export type ActualFixturesResponse = {

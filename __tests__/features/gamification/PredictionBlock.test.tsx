@@ -24,6 +24,7 @@ const fixture = (
   goalsHomeTeam: null,
   goalsAwayTeam: null,
   league: { id: 333, name: 'UPL', logo: 'https://x/l.png', round: '20' },
+  round: 'Regular Season - 20',
 });
 
 const mockFixtures = (fixtures: Fixture[]) =>

@@ -11,7 +11,7 @@ import {
   Text,
 } from '@/ui/components';
 
-import { useActualFixturesQuery, useMakePredictionMutation } from '@/hooks';
+import { useMakePredictionMutation, useNextMatchQuery } from '@/hooks';
 
 import type { PredictionBlockProps, TeamLogoProps } from './types';
 
@@ -21,7 +21,7 @@ import type { PredictionBlockProps, TeamLogoProps } from './types';
  */
 export function PredictionBlock({ style }: PredictionBlockProps) {
   const { t } = useTranslation();
-  const { data, isPending } = useActualFixturesQuery();
+  const { data, isPending } = useNextMatchQuery();
   const makePrediction = useMakePredictionMutation();
   const [home, setHome] = useState<number | null>(null);
   const [away, setAway] = useState<number | null>(null);
