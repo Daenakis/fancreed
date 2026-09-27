@@ -50,9 +50,9 @@ describe('PredictionBlock', () => {
       fixture(1, 'Match Finished', OUR_TEAM, 10),
       fixture(2, 'Not Started', 20, OUR_TEAM),
     ]);
-    const { findByText } = render(<PredictionBlock />);
+    const { findByLabelText } = render(<PredictionBlock />);
 
-    expect(await findByText('Team 20')).toBeTruthy();
+    expect(await findByLabelText('Team 20')).toBeTruthy();
   });
 
   it('keeps Send disabled until both scores are picked', async () => {
@@ -72,7 +72,7 @@ describe('PredictionBlock', () => {
       .spyOn(Share, 'share')
       .mockResolvedValue({ action: 'sharedAction' });
     const utils = render(<PredictionBlock />);
-    await utils.findByText('Team 20');
+    await utils.findByLabelText('Team 20');
 
     pick(utils, 'prediction.homeGoals', 2); // home (opponent) → 1
     pick(utils, 'prediction.awayGoals', 3); // away (us) → 2

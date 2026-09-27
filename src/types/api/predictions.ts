@@ -7,3 +7,13 @@ export type MakePredictionRequest = {
   /** Goals predicted for the opponent. */
   enemy: number;
 };
+
+/**
+ * Sponsor odds shown after a prediction is sent.
+ * TODO(backend): no endpoint yet — mocked in `predictionsApi.odds`.
+ */
+export type MatchOdds = {
+  /** Sponsor name, matched against the sponsors list for the logo. */
+  sponsor: string;
+  odds: { label: string; value: string }[];
+};

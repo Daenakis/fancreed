@@ -4,34 +4,45 @@ import { Image, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
-  BlockHeader,
   Button,
   GoalsPicker,
   LoadingMore,
+  SectionTitle,
   Text,
 } from '@/ui/components';
 
-import { useMakePredictionMutation, useNextMatchQuery } from '@/hooks';
+import {
+  useMakePredictionMutation,
+  useMatchOddsQuery,
+  useNextMatchQuery,
+  useSponsorsQuery,
+} from '@/hooks';
 
 import type { PredictionBlockProps, TeamLogoProps } from './types';
 
 /**
- * Score prediction for the next match: pick home and away goals, send.
- * Locks once sent (then offers Share). Hidden when no match is upcoming.
+ * "Match prediction" for the next match on a green card: pick home and away
+ * goals, vote. Once sent the score locks, the sponsor's odds show and the
+ * button turns into Share. Hidden when no match is upcoming.
  */
 export function PredictionBlock({ style }: PredictionBlockProps) {
   const { t } = useTranslation();
   const { data, isPending } = useNextMatchQuery();
+  const match = data?.next;
+  const { data: odds } = useMatchOddsQuery(match?._id);
+  const { data: sponsors } = useSponsorsQuery();
   const makePrediction = useMakePredictionMutation();
   const [home, setHome] = useState<number | null>(null);
   const [away, setAway] = useState<number | null>(null);
 
   if (isPending) return <LoadingMore loading />;
-  const match = data?.next;
   if (!match) return null;
 
   const sent = makePrediction.isSuccess;
   const ourTeamIsHome = match.homeTeam.id === match._teamId;
+  const sponsor = sponsors?.find(
+    (s) => s.name.toLowerCase() === odds?.sponsor.toLowerCase(),
+  );
 
   const send = () => {
     if (home === null || away === null) return;
@@ -53,50 +64,76 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
     });
 
   return (
-    <View style={[styles.container, style]}>
-      <BlockHeader title={t('prediction.title')} />
-      <View style={styles.row}>
-        <TeamLogo uri={match.homeTeam.logo} name={match.homeTeam.name} />
-        <View style={styles.center}>
+    <View style={style}>
+      <SectionTitle title={t('prediction.title')} />
+      <View style={styles.card}>
+        {sponsor ? (
           <Image
-            source={{ uri: match.league.logo }}
+            source={{ uri: sponsor.image }}
             resizeMode="contain"
-            style={styles.leagueLogo}
+            accessibilityLabel={sponsor.name}
+            style={styles.sponsor}
           />
+        ) : null}
+        {sent && odds ? (
+          <View style={styles.odds}>
+            {odds.odds.map((odd) => (
+              <View key={odd.label} style={styles.odd}>
+                <Text variant="bodySRegular" color="brandMutedForeground">
+                  {odd.label}
+                </Text>
+                <Text variant="bodySSemibold" color="onBrand">
+                  {odd.value}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+        <View style={styles.row}>
+          <TeamLogo uri={match.homeTeam.logo} name={match.homeTeam.name} />
           <View style={styles.score}>
             <GoalsPicker
               value={home}
               onChange={setHome}
-              buttonsSide="left"
+              color="onBrand"
               readOnly={sent}
               accessibilityLabel={t('prediction.homeGoals', {
                 team: match.homeTeam.name,
               })}
             />
-            <Text variant="h1Semibold">:</Text>
+            <Text variant="h1Semibold" color="onBrand">
+              :
+            </Text>
             <GoalsPicker
               value={away}
               onChange={setAway}
+              color="onBrand"
               readOnly={sent}
               accessibilityLabel={t('prediction.awayGoals', {
                 team: match.awayTeam.name,
               })}
             />
           </View>
+          <TeamLogo uri={match.awayTeam.logo} name={match.awayTeam.name} />
         </View>
-        <TeamLogo uri={match.awayTeam.logo} name={match.awayTeam.name} />
+        {sent ? (
+          <Button
+            variant="brand"
+            fullWidth
+            text={t('prediction.share')}
+            onPress={share}
+          />
+        ) : (
+          <Button
+            variant="brand"
+            fullWidth
+            text={t('prediction.send')}
+            disabled={home === null || away === null}
+            loading={makePrediction.isPending}
+            onPress={send}
+          />
+        )}
       </View>
-      {sent ? (
-        <Button size="sm" text={t('prediction.share')} onPress={share} />
-      ) : (
-        <Button
-          size="sm"
-          text={t('prediction.send')}
-          disabled={home === null || away === null}
-          loading={makePrediction.isPending}
-          onPress={send}
-        />
-      )}
     </View>
   );
 }
@@ -105,54 +142,53 @@ PredictionBlock.displayName = 'PredictionBlock';
 
 function TeamLogo({ uri, name }: TeamLogoProps) {
   return (
-    <View style={styles.team}>
-      <Image
-        source={{ uri }}
-        resizeMode="contain"
-        accessibilityLabel={name}
-        style={styles.teamLogo}
-      />
-      <Text variant="bodySSemibold" numberOfLines={2} style={styles.teamName}>
-        {name}
-      </Text>
-    </View>
+    <Image
+      source={{ uri }}
+      resizeMode="contain"
+      accessibilityLabel={name}
+      style={styles.teamLogo}
+    />
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
+  card: {
+    marginHorizontal: theme.spacing(5),
+    padding: theme.spacing(4),
+    gap: theme.spacing(4),
     alignItems: 'center',
-    paddingBottom: theme.spacing(4),
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.brand,
+  },
+  sponsor: {
+    width: 140,
+    height: theme.spacing(8),
+  },
+  odds: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+  },
+  odd: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+    paddingHorizontal: theme.spacing(3),
+    paddingVertical: theme.spacing(1),
+    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.brandSurface,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     alignSelf: 'stretch',
-    paddingHorizontal: theme.spacing(2),
-    paddingVertical: theme.spacing(3),
-  },
-  team: {
-    flex: 1,
-    alignItems: 'center',
-    gap: theme.spacing(1),
   },
   teamLogo: {
-    width: theme.spacing(16),
-    height: theme.spacing(16),
-  },
-  teamName: {
-    textAlign: 'center',
-  },
-  center: {
-    alignItems: 'center',
-  },
-  leagueLogo: {
-    width: 55,
-    height: 55,
+    width: theme.spacing(14),
+    height: theme.spacing(14),
   },
   score: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing(1),
+    gap: theme.spacing(2),
   },
 }));
