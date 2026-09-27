@@ -7,6 +7,8 @@ import { EmptyState, LoadingMore, PageLayout } from '@/ui/components';
 
 import { useFixtureQuery } from '@/hooks';
 
+import { goBack } from '@/utils';
+
 import { Pitch } from '../../components';
 
 /** A match's starting XI of our club on a pitch; empty until announced. */
@@ -29,7 +31,7 @@ export function LineupScreen() {
   return (
     <PageLayout
       title={t('lineup.title')}
-      onBack={router.back}
+      onBack={goBack}
       onShare={lineup ? share : undefined}
       scrollable={!!lineup}
       contentStyle={styles.content}

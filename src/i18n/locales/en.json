@@ -277,5 +277,51 @@
     "members_one": "{{count}} fan",
     "members_other": "{{count}} fans",
     "emptyText": "No fan events for this match yet."
+  },
+  "dates": {
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+  },
+  "profile": {
+    "title": "My profile",
+    "editTitle": "Edit profile",
+    "edit": "Edit profile",
+    "fillNotice": "Fill in your profile to activate the fan card and join the loyalty programme.",
+    "requiredNotice": "To activate the fan card and join the loyalty programme, fill in the required fields (marked with an asterisk).",
+    "favoritePlayer": "Favourite player",
+    "makeFavorite": "Make favourite player",
+    "size": "Clothing size",
+    "logout": "Log out",
+    "name": "First name",
+    "surname": "Last name",
+    "patronymic": "Patronymic",
+    "birthDay": "Date of birth",
+    "datePlaceholder": "00/00/0000",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "email": "Email",
+    "loadFailed": "Couldn't load your profile.",
+    "errors": {
+      "birthDayRequired": "Enter your date of birth",
+      "sexRequired": "Choose your sex",
+      "birthDayFuture": "Date of birth can’t be in the future"
+    },
+    "verified": "Verified account",
+    "changePhoto": "Change photo",
+    "photoFailed": "Couldn't upload the photo. Please try again."
   }
 }

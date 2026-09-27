@@ -7,6 +7,7 @@ import { StyleSheet } from 'react-native-unistyles';
 import { Button, TextInput } from '@/ui/components';
 
 import {
+  useFieldErrorText,
   useLoginMutation,
   useRecoverPasswordMutation,
   useSubmitForm,
@@ -19,7 +20,6 @@ import { usePendingActivationStore } from '@/store';
 import { type NewPasswordFormValues, newPasswordSchema } from '@/schemas';
 
 import { AuthFooterLink, AuthLayout, FormError } from '../../components';
-import { useFieldErrorText } from '../../hooks';
 
 /** Step 3 of password recovery: set the new password, then sign in with it. */
 export function NewPasswordScreen() {

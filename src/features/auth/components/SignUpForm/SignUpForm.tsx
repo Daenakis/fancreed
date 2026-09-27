@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, TextInput } from '@/ui/components';
 
-import { useSubmitForm } from '@/hooks';
+import { useFieldErrorText, useSubmitForm } from '@/hooks';
 
 import {
   type SignUpFormInput,
@@ -14,7 +14,6 @@ import {
   signUpSchema,
 } from '@/schemas';
 
-import { useFieldErrorText } from '../../hooks';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignUpFormProps } from './types';

@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Linking, Share } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
@@ -12,7 +12,7 @@ import {
 
 import { useMatchVideosQuery } from '@/hooks';
 
-import { youtubeThumbnail } from '@/utils';
+import { goBack, youtubeThumbnail } from '@/utils';
 
 // TODO: open in an in-app browser once one is approved (expo-web-browser).
 const openVideo = (url: string) => void Linking.openURL(url);
@@ -31,7 +31,7 @@ export function VideosScreen() {
   return (
     <PageLayout
       title={t('videos.title')}
-      onBack={router.back}
+      onBack={goBack}
       onShare={
         first?.videoLink
           ? () => void Share.share({ message: first.videoLink! })

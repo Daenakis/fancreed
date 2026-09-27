@@ -13,6 +13,8 @@ import {
 
 import { useNewsPostBodyQuery, useNewsQuery, useSocialsQuery } from '@/hooks';
 
+import { goBack } from '@/utils';
+
 import { CONFIG } from '@/config';
 
 import { NewsBlock, PartnersBlock } from '@/features/home';
@@ -38,7 +40,7 @@ export function ArticleScreen() {
   return (
     <PageLayout
       title={t('article.title')}
-      onBack={router.back}
+      onBack={goBack}
       onShare={post ? () => void Share.share({ message: url }) : undefined}
       contentStyle={styles.content}
     >

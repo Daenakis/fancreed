@@ -14,6 +14,8 @@ import {
 
 import { usePlayerDetailsQuery, usePlayerQuery } from '@/hooks';
 
+import { goBack } from '@/utils';
+
 import type { InfoRowProps, StatTileProps } from './types';
 
 const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Attacker'];
@@ -40,7 +42,7 @@ export function PlayerScreen() {
   return (
     <PageLayout
       title={name}
-      onBack={router.back}
+      onBack={goBack}
       onShare={
         player?.ruhLink
           ? () => void Share.share({ message: player.ruhLink! })

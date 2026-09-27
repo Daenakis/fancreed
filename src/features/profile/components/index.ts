@@ -5,3 +5,4 @@ export {
   type LoyaltyLevel,
 } from './FanCard';
 export { FanCardModal, type FanCardModalProps } from './FanCardModal';
+export { ProfileCard, type ProfileCardProps } from './ProfileCard';
