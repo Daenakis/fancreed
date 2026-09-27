@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Keyboard, Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { BottomSheet } from '../BottomSheet';
@@ -32,7 +32,10 @@ export function Select<T extends string | number>({
         accessibilityRole="button"
         accessibilityLabel={label}
         accessibilityValue={{ text: picked?.label ?? '' }}
-        onPress={() => setOpen(true)}
+        onPress={() => {
+          Keyboard.dismiss();
+          setOpen(true);
+        }}
         style={({ pressed }) => [
           styles.field,
           pressed && styles.pressed,

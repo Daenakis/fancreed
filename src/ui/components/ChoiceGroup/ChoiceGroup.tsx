@@ -1,6 +1,7 @@
-import { Pressable, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Keyboard, Pressable, ScrollView, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
+import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { ChoiceGroupProps, ChoiceItemProps, SegmentProps } from './types';
 
@@ -9,7 +10,8 @@ import type { ChoiceGroupProps, ChoiceItemProps, SegmentProps } from './types';
  * one filled green, like a selected outline Button); `radio` shows circles
  * with labels, two per row, for polls with more or longer answers; `tabs`
  * shows text tabs with a green underline under the selected one; `list`
- * shows one radio row per option (bottom-sheet pickers).
+ * shows one radio row per option (bottom-sheet pickers); `chips` a scrolling
+ * row of pills with icons.
  *
  * @example
  * <ChoiceGroup options={genders} value={gender} onChange={setGender} caption={`${t('profile.gender')} *`} />
@@ -27,42 +29,65 @@ export function ChoiceGroup<T extends string | number>({
   const radio = variant === 'radio';
   const tabs = variant === 'tabs';
   const list = variant === 'list';
+  const chips = variant === 'chips';
+
+  const group = (
+    <View
+      accessibilityRole={tabs ? 'tablist' : 'radiogroup'}
+      accessibilityLabel={caption}
+      style={
+        radio
+          ? styles.radioList
+          : tabs
+            ? styles.tabRow
+            : list
+              ? styles.list
+              : chips
+                ? styles.chipRow
+                : styles.segmentRow
+      }
+    >
+      {options.map((option, i) => {
+        const common = {
+          label: option.label,
+          icon: option.icon,
+          selected: option.value === value,
+          onPress: () => {
+            // Picking an option ends typing in a nearby field.
+            Keyboard.dismiss();
+            onChange(option.value);
+          },
+        };
+        if (tabs) return <Tab key={String(option.value)} {...common} />;
+        if (list) return <ListItem key={String(option.value)} {...common} />;
+        if (chips) return <Chip key={String(option.value)} {...common} />;
+        return radio ? (
+          <RadioItem key={String(option.value)} {...common} />
+        ) : (
+          <Segment
+            key={String(option.value)}
+            {...common}
+            first={i === 0}
+            last={i === options.length - 1}
+          />
+        );
+      })}
+    </View>
+  );
 
   return (
-    <View style={[styles.container(radio || list), style]}>
-      <View
-        accessibilityRole={tabs ? 'tablist' : 'radiogroup'}
-        accessibilityLabel={caption}
-        style={
-          radio
-            ? styles.radioList
-            : tabs
-              ? styles.tabRow
-              : list
-                ? styles.list
-                : styles.segmentRow
-        }
-      >
-        {options.map((option, i) => {
-          const common = {
-            label: option.label,
-            selected: option.value === value,
-            onPress: () => onChange(option.value),
-          };
-          if (tabs) return <Tab key={String(option.value)} {...common} />;
-          if (list) return <ListItem key={String(option.value)} {...common} />;
-          return radio ? (
-            <RadioItem key={String(option.value)} {...common} />
-          ) : (
-            <Segment
-              key={String(option.value)}
-              {...common}
-              first={i === 0}
-              last={i === options.length - 1}
-            />
-          );
-        })}
-      </View>
+    <View style={[styles.container(radio || list || chips), style]}>
+      {chips ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {group}
+        </ScrollView>
+      ) : (
+        group
+      )}
       {caption ? (
         <Text color="mutedForeground" style={styles.caption}>
           {caption}
@@ -104,6 +129,29 @@ function Tab({ label, selected, onPress }: ChoiceItemProps) {
         variant={selected ? 'bodySSemibold' : 'bodySRegular'}
         color={selected ? 'foreground' : 'mutedForeground'}
       >
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+function Chip({ label, icon, selected, onPress }: ChoiceItemProps) {
+  const { theme } = useUnistyles();
+  const color = selected ? theme.colors.onBrand : theme.colors.foreground;
+
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityLabel={label}
+      accessibilityState={{ checked: selected }}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.chip(selected),
+        pressed && styles.pressed,
+      ]}
+    >
+      {icon ? <Icon name={icon} size={16} color={color} /> : null}
+      <Text variant="bodyMRegular" color={selected ? 'onBrand' : 'foreground'}>
         {label}
       </Text>
     </Pressable>
@@ -186,6 +234,21 @@ const styles = StyleSheet.create((theme) => ({
   list: {
     gap: theme.spacing(2),
   },
+  chipRow: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+  },
+  chip: (selected: boolean) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing(1.5),
+    paddingHorizontal: theme.spacing(3),
+    paddingVertical: theme.spacing(2),
+    borderWidth: 1,
+    borderRadius: theme.radius.md,
+    borderColor: selected ? theme.colors.brand : theme.colors.border,
+    backgroundColor: selected ? theme.colors.brand : theme.colors.background,
+  }),
   listItem: (selected: boolean) => ({
     flexDirection: 'row',
     alignItems: 'center',

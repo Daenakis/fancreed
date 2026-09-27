@@ -1,5 +1,5 @@
 import { fireEvent, render } from '@tests/test-utils';
-import { StyleSheet, type TextStyle } from 'react-native';
+import { Keyboard, StyleSheet, type TextStyle } from 'react-native';
 
 import { PageLayout, Text } from '@/ui/components';
 import { lightTheme } from '@/ui/theme/unistyles';
@@ -52,5 +52,18 @@ describe('PageLayout', () => {
     expect(
       (StyleSheet.flatten(getByRole('header').props.style) as TextStyle).color,
     ).toBe(lightTheme.colors.foreground);
+  });
+
+  it('hides the keyboard when the content is tapped', () => {
+    const dismiss = jest.spyOn(Keyboard, 'dismiss');
+    const { getByText } = render(
+      <PageLayout title="Edit">
+        <Text>Form</Text>
+      </PageLayout>,
+    );
+
+    fireEvent.press(getByText('Form'));
+
+    expect(dismiss).toHaveBeenCalled();
   });
 });

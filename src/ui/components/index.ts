@@ -16,6 +16,7 @@ export {
   type ChoiceOption,
 } from './ChoiceGroup';
 export { DateCalendar, type DateCalendarProps } from './DateCalendar';
+export { DateField, type DateFieldProps } from './DateField';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
 export { GoalsPicker, type GoalsPickerProps } from './GoalsPicker';
@@ -25,6 +26,7 @@ export {
   type ImageCardProps,
   type ImageCardVariant,
 } from './ImageCard';
+export { InfoRow, type InfoRowProps } from './InfoRow';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
 export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
 export { Notice, type NoticeProps } from './Notice';
@@ -55,3 +57,4 @@ export {
   type TileCarouselProps,
   type TileItem,
 } from './TileCarousel';
+export { TimeField, type TimeFieldProps } from './TimeField';

@@ -128,4 +128,23 @@ describe('ChoiceGroup', () => {
     fireEvent.press(getByRole('radio', { name: 'S' }));
     expect(onChange).toHaveBeenCalledWith('S');
   });
+
+  it('shows pills and picks one when variant is chips', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <ChoiceGroup
+        variant="chips"
+        options={[
+          { label: 'Party', value: 'party', icon: 'party' },
+          { label: 'Trip', value: 'trip', icon: 'bus' },
+        ]}
+        value="party"
+        onChange={onChange}
+      />,
+    );
+
+    expect(getByRole('radio', { name: 'Party' })).toBeChecked();
+    fireEvent.press(getByRole('radio', { name: 'Trip' }));
+    expect(onChange).toHaveBeenCalledWith('trip');
+  });
 });

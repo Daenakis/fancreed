@@ -20,6 +20,8 @@ export type PageLayoutProps = {
   /** Wraps the content in a ScrollView. Defaults to `true`. */
   scrollable?: boolean;
   children: ReactNode;
+  /** Pinned under the content, e.g. a Join button. */
+  footer?: ReactNode;
   /** Style of the white content area (inside the scroll view when scrollable). */
   contentStyle?: StyleProp<ViewStyle>;
 };
@@ -29,4 +31,9 @@ export type HeaderButtonProps = {
   label: string;
   onPress?: () => void;
   color: string;
+};
+
+export type DismissKeyboardProps = {
+  style?: StyleProp<ViewStyle>;
+  children: ReactNode;
 };

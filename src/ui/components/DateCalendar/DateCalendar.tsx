@@ -16,6 +16,9 @@ import type {
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i);
 
+const startOfDay = (date: Date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
 /** Translated name list; numbers as a fallback when it's missing. */
 function names(value: unknown, count: number): string[] {
   return Array.isArray(value)
@@ -34,7 +37,8 @@ function names(value: unknown, count: number): string[] {
 export function DateCalendar({
   value,
   onChange,
-  minYear = 1920,
+  minDate,
+  minYear = minDate?.getFullYear() ?? 1920,
   maxDate,
   maxYear = (maxDate ?? new Date()).getFullYear(),
   initialView,
@@ -95,7 +99,10 @@ export function DateCalendar({
               accessibilityLabel={`${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`}
               selected={!!value && inMonth && isSameDay(date, value)}
               muted={!inMonth}
-              disabled={!!maxDate && date > maxDate}
+              disabled={
+                (!!maxDate && date > maxDate) ||
+                (!!minDate && date < startOfDay(minDate))
+              }
               onPress={() => onChange(date)}
             />
           ))}
@@ -109,9 +116,12 @@ export function DateCalendar({
               selected={m === month}
               wide
               disabled={
-                !!maxDate &&
-                year === maxDate.getFullYear() &&
-                m > maxDate.getMonth()
+                (!!maxDate &&
+                  year === maxDate.getFullYear() &&
+                  m > maxDate.getMonth()) ||
+                (!!minDate &&
+                  year === minDate.getFullYear() &&
+                  m < minDate.getMonth())
               }
               onPress={() => {
                 setMonth(m);

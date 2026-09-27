@@ -6,12 +6,14 @@ export type DateCalendarProps = {
   /** Month to open on when there's no value, e.g. 2000 for birthdays. */
   initialView?: Date;
   onChange: (date: Date) => void;
-  /** First year in the year list. Defaults to 1920. */
+  /** First year in the year list. Defaults to 1920 (or `minDate`'s year). */
   minYear?: number;
   /** Last year in the year list. Defaults to the current year (or `maxDate`'s). */
   maxYear?: number;
   /** Latest pickable day; later days and months are disabled (e.g. today for birthdays). */
   maxDate?: Date;
+  /** Earliest pickable day; earlier days and months are disabled (e.g. today for events). */
+  minDate?: Date;
   style?: StyleProp<ViewStyle>;
 };
 

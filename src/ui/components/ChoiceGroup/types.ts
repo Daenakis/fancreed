@@ -1,8 +1,12 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
+import type { IconName } from '@/ui/assets/icons';
+
 export type ChoiceOption<T extends string | number> = {
   label: string;
   value: T;
+  /** `chips` only: icon before the label. */
+  icon?: IconName;
 };
 
 /**
@@ -14,8 +18,15 @@ export type ChoiceOption<T extends string | number> = {
  *   sections, e.g. upcoming matches / results).
  * - `list`: one full-width radio row per option (bottom-sheet pickers, e.g.
  *   clothing size).
+ * - `chips`: a horizontally scrolling row of pills with optional icons
+ *   (event type).
  */
-export type ChoiceGroupVariant = 'segmented' | 'radio' | 'tabs' | 'list';
+export type ChoiceGroupVariant =
+  | 'segmented'
+  | 'radio'
+  | 'tabs'
+  | 'list'
+  | 'chips';
 
 export type ChoiceGroupProps<T extends string | number> = {
   options: ChoiceOption<T>[];
@@ -31,6 +42,7 @@ export type ChoiceGroupProps<T extends string | number> = {
 
 export type ChoiceItemProps = {
   label: string;
+  icon?: IconName;
   selected: boolean;
   onPress: () => void;
 };

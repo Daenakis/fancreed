@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Keyboard, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type {
+  DismissKeyboardProps,
   HeaderButtonProps,
   PageLayoutProps,
   PageLayoutTone,
@@ -27,6 +28,7 @@ export function PageLayout({
   tone = 'brand',
   scrollable = true,
   children,
+  footer,
   contentStyle,
 }: PageLayoutProps) {
   const { t } = useTranslation();
@@ -63,23 +65,42 @@ export function PageLayout({
       <View style={styles.sheet}>
         {scrollable ? (
           <ScrollView
-            // Fills the screen so an EmptyState (flex: 1) centres in the free space.
-            contentContainerStyle={[styles.content, styles.fill, contentStyle]}
+            contentContainerStyle={styles.fill}
             showsVerticalScrollIndicator={false}
+            // Taps on buttons work while typing; scrolling hides the keyboard.
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
           >
-            {children}
+            <DismissKeyboard
+              style={[styles.content, styles.fill, contentStyle]}
+            >
+              {children}
+            </DismissKeyboard>
           </ScrollView>
         ) : (
-          <View style={[styles.content, styles.fill, contentStyle]}>
+          <DismissKeyboard style={[styles.content, styles.fill, contentStyle]}>
             {children}
-          </View>
+          </DismissKeyboard>
         )}
+        {footer ? <View style={styles.footer}>{footer}</View> : null}
       </View>
     </View>
   );
 }
 
 PageLayout.displayName = 'PageLayout';
+
+/**
+ * Content area: a tap on empty space hides the keyboard. It also fills the
+ * screen, so an EmptyState (flex: 1) centres in the free space.
+ */
+function DismissKeyboard({ style, children }: DismissKeyboardProps) {
+  return (
+    <Pressable accessible={false} onPress={Keyboard.dismiss} style={style}>
+      {children}
+    </Pressable>
+  );
+}
 
 function HeaderButton({ icon, label, onPress, color }: HeaderButtonProps) {
   // Keeps the title centred when a button is missing.
@@ -132,6 +153,13 @@ const styles = StyleSheet.create((theme) => ({
   },
   content: {
     paddingVertical: theme.spacing(4),
+  },
+  footer: {
+    paddingHorizontal: theme.spacing(4),
+    paddingVertical: theme.spacing(3),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.background,
   },
   fill: {
     flexGrow: 1,
