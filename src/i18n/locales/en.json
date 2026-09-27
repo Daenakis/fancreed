@@ -65,7 +65,9 @@
     "title": "Home",
     "subtitle": "You are authenticated",
     "tableTitle": "STANDINGS",
-    "allTable": "Full table"
+    "allTable": "Full table",
+    "squadTitle": "LINE-UP",
+    "showMore": "Show more"
   },
   "errors": {
     "network": "No internet connection",

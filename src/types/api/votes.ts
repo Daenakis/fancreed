@@ -1,16 +1,6 @@
 // Backend group "votes" — "player of the match". Needs an activated account.
 
-export type Player = {
-  _id: string;
-  _teamId: number;
-  name: string;
-  number: number;
-  position: string;
-  photo: string;
-  /** Preferred over `name`/`photo` when set (club-maintained values). */
-  actualName?: string | null;
-  actualPhoto?: string | null;
-};
+import type { Player } from './players';
 
 export type Vote = {
   _id: string;

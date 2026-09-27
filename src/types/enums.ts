@@ -11,5 +11,6 @@ export enum QueryKey {
   Leagues = 'leagues',
   News = 'news',
   Predictions = 'predictions',
+  Squads = 'squads',
   Votes = 'votes',
 }
