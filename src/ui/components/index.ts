@@ -24,6 +24,7 @@ export {
   type ImageCardVariant,
 } from './ImageCard';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
+export { SectionTitle, type SectionTitleProps } from './SectionTitle';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export { SlideshowList, type SlideshowListProps } from './SlideshowList';
 export {

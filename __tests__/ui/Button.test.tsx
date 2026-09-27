@@ -183,4 +183,18 @@ describe('Button', () => {
       });
     });
   });
+
+  it('uses a white outline and label when variant is brandOutline', () => {
+    const { getByRole, getByText } = render(
+      <Button variant="brandOutline" size="xs" text="Video" />,
+    );
+    const style = styleOf(getByRole('button'));
+
+    expect(style.backgroundColor).toBe('transparent');
+    expect(style.borderColor).toBe(colors.onBrand);
+    expect(styleOf(getByText('Video'))).toMatchObject({
+      ...lightTheme.typography.bodyMRegular,
+      color: colors.onBrand,
+    });
+  });
 });

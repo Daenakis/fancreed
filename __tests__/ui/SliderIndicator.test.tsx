@@ -19,9 +19,9 @@ describe('SliderIndicator', () => {
 
   it('fills only the active dot with the default colours', () => {
     const utils = render(<SliderIndicator count={3} active={1} />);
-    const { foreground, background } = lightTheme.colors;
+    const { brand, border } = lightTheme.colors;
 
-    expect(dotColors(utils)).toEqual([background, foreground, background]);
+    expect(dotColors(utils)).toEqual([border, brand, border]);
   });
 
   it('applies the given theme colours', () => {

@@ -16,11 +16,17 @@ import type { ColorToken } from '@/ui/theme';
  *   filled choice (e.g. one option in a list).
  * - `brand`: for brand-green screens (auth) — white when active, dark green
  *   when disabled.
+ * - `brandOutline`: white outline and label on brand-green cards.
  * - `ghost`: no background or border, e.g. small icon actions (Share, Remind).
  */
-export type ButtonVariant = 'solid' | 'outline' | 'brand' | 'ghost';
+export type ButtonVariant =
+  | 'solid'
+  | 'outline'
+  | 'brand'
+  | 'brandOutline'
+  | 'ghost';
 
-export type ButtonSize = 'md' | 'sm';
+export type ButtonSize = 'md' | 'sm' | 'xs';
 
 export type ButtonProps = Omit<
   PressableProps,
@@ -30,7 +36,7 @@ export type ButtonProps = Omit<
   text: string;
   /** Defaults to `solid`. */
   variant?: ButtonVariant;
-  /** `md` (default, 48 px high) or compact `sm` with a bolder label. */
+  /** `md` (default, 48 px high), compact `sm` with a bolder label, or small `xs` (in cards). */
   size?: ButtonSize;
   /** Image before the label (24×24), e.g. a club logo. */
   image?: ImageSourcePropType;

@@ -50,16 +50,21 @@ export function ImageCard({
         <>
           {title ? (
             <Text
-              variant="h3Medium"
+              variant="bodyLMedium"
               color={textColor}
-              numberOfLines={3}
+              numberOfLines={2}
               style={styles.articleTitle}
             >
               {title}
             </Text>
           ) : null}
           {description ? (
-            <Text variant="bodyMSemibold" color={textColor} numberOfLines={4}>
+            <Text
+              variant="bodySRegular"
+              color="mutedForeground"
+              numberOfLines={3}
+              style={styles.articleText}
+            >
               {description}
             </Text>
           ) : null}
@@ -127,7 +132,12 @@ ImageCard.displayName = 'ImageCard';
 const styles = StyleSheet.create((theme) => ({
   card: (variant: ImageCardVariant) =>
     variant === 'article'
-      ? { width: theme.spacing(70), padding: theme.spacing(2) }
+      ? {
+          width: '100%',
+          padding: theme.spacing(3),
+          borderRadius: theme.radius.lg,
+          backgroundColor: theme.colors.secondary,
+        }
       : {
           width: variant === 'tile' ? 100 : theme.spacing(28),
           alignItems: 'center',
@@ -148,7 +158,7 @@ const styles = StyleSheet.create((theme) => ({
         }
       : {
           width: '100%',
-          height: variant === 'article' ? 250 : 200,
+          height: variant === 'article' ? 180 : 200,
           borderRadius:
             variant === 'article' ? theme.radius.md : theme.radius.lg,
           overflow: 'hidden',
@@ -165,6 +175,9 @@ const styles = StyleSheet.create((theme) => ({
     marginTop: theme.spacing(2),
   },
   articleTitle: {
+    marginTop: theme.spacing(3),
+  },
+  articleText: {
     marginTop: theme.spacing(2),
   },
   caption: {

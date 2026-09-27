@@ -7,9 +7,9 @@ export type SliderIndicatorProps = {
   count: number;
   /** Index of the current slide. */
   active: number;
-  /** Theme colour of the current dot. Defaults to `foreground`. */
+  /** Theme colour of the current dot. Defaults to `brand`. */
   activeColor?: ColorToken;
-  /** Theme colour of the other dots. Defaults to `background`. */
+  /** Theme colour of the other dots. Defaults to `border`. */
   inactiveColor?: ColorToken;
   style?: StyleProp<ViewStyle>;
 };

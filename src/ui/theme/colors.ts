@@ -29,6 +29,8 @@ export const palette = {
   bronze: '#A36117',
   silver: '#C6C8CA',
   gold: '#D19F11',
+  // Highlight (own team row, women badge)
+  yellow: '#F7D54A',
   // Red
   red300: '#CF0000',
   red200: '#FFA8A8',
@@ -67,6 +69,8 @@ export const lightColors = {
   loyaltyBronze: palette.bronze,
   loyaltySilver: palette.silver,
   loyaltyGold: palette.gold,
+  highlight: palette.yellow,
+  onHighlight: palette.black,
 } as const;
 
 export const darkColors = {
@@ -101,6 +105,8 @@ export const darkColors = {
   loyaltyBronze: palette.bronze,
   loyaltySilver: palette.silver,
   loyaltyGold: palette.gold,
+  highlight: palette.yellow,
+  onHighlight: palette.black,
 } as const;
 
 export type ColorToken = keyof typeof lightColors;

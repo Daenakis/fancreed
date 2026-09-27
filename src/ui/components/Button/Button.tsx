@@ -31,6 +31,8 @@ function getColors(
         : { background: 'background', label: 'foreground', border: 'border' };
     case 'ghost':
       return { background: null, label: custom.label };
+    case 'brandOutline':
+      return { background: null, label: 'onBrand', border: 'onBrand' };
     case 'brand':
       return state.disabled
         ? { background: 'brandStrong', label: 'brandMutedForeground' }
@@ -46,6 +48,7 @@ function getLabelVariant(
   iconOnTop: boolean,
 ): TypographyVariant {
   if (iconOnTop) return 'bodySRegular';
+  if (size === 'xs') return 'bodyMRegular';
   if (size === 'sm') return 'h4Semibold';
   if (variant === 'brand') return 'bodyMMedium';
   if (variant === 'outline') return 'bodyLMedium';
@@ -160,9 +163,17 @@ const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    minHeight: size === 'sm' ? undefined : theme.spacing(12),
-    paddingVertical: size === 'sm' ? theme.spacing(1) : theme.spacing(2.5),
-    paddingHorizontal: size === 'sm' ? theme.spacing(4) : theme.spacing(6),
+    minHeight: size === 'md' ? theme.spacing(12) : undefined,
+    paddingVertical: {
+      md: theme.spacing(2.5),
+      sm: theme.spacing(1),
+      xs: theme.spacing(2),
+    }[size],
+    paddingHorizontal: {
+      md: theme.spacing(6),
+      sm: theme.spacing(4),
+      xs: theme.spacing(2),
+    }[size],
     borderRadius: theme.radius.md,
     borderWidth: border ? 1 : 0,
     borderColor: border ? theme.colors[border] : undefined,
