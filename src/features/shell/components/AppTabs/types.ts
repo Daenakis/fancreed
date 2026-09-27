@@ -12,3 +12,11 @@ export type AppTab = {
 
 /** Layout component — rendered by `src/app/(app)/(tabs)/_layout.tsx`. */
 export type AppTabsProps = Record<string, never>;
+
+export type TabIndicatorProps = {
+  /** Tab under the line (the tab whose stack is on screen). */
+  index: number;
+  /** False on screens outside the tab roots — the line squashes away. */
+  visible: boolean;
+  tabWidth: number;
+};

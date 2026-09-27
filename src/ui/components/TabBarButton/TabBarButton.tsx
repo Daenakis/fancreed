@@ -5,7 +5,8 @@ import { Icon } from '../Icon';
 import type { TabBarButtonProps } from './types';
 
 /**
- * One bottom-tab button: icon only, green with a line above when active.
+ * One bottom-tab button: icon only, green when active. The line above the
+ * active tab is drawn (and animated) by the tab bar; this keeps its space.
  * Use as the child of `<TabTrigger asChild>` — it receives `isFocused`.
  */
 export function TabBarButton({
@@ -32,7 +33,7 @@ export function TabBarButton({
       ]}
       {...props}
     >
-      <View style={styles.indicator(isFocused)} />
+      <View style={styles.indicatorSpace} />
       <Icon
         name={isFocused ? (activeIcon ?? icon) : icon}
         size={24}
@@ -52,11 +53,7 @@ const styles = StyleSheet.create((theme) => ({
     paddingBottom: theme.spacing(2),
     gap: theme.spacing(2.5),
   },
-  indicator: (active: boolean) => ({
-    width: theme.spacing(12),
+  indicatorSpace: {
     height: 3,
-    borderBottomLeftRadius: 2,
-    borderBottomRightRadius: 2,
-    backgroundColor: active ? theme.colors.brand : 'transparent',
-  }),
+  },
 }));
