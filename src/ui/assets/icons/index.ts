@@ -30,6 +30,7 @@ import Info from './Info';
 import Instagram from './Instagram';
 import Language from './Language';
 import Lion from './Lion';
+import LionFace from './LionFace';
 import List from './List';
 import Location from './Location';
 import Logout from './Logout';
@@ -97,6 +98,7 @@ export const ICONS = {
   instagram: Instagram,
   language: Language,
   lion: Lion,
+  lionFace: LionFace,
   list: List,
   location: Location,
   logout: Logout,
