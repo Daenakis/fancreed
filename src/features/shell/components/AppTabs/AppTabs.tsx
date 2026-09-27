@@ -1,3 +1,4 @@
+import { usePathname } from 'expo-router';
 import { TabList, Tabs, TabSlot, TabTrigger } from 'expo-router/ui';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -20,7 +21,7 @@ const TABS: AppTab[] = [
     label: 'nav.gamification',
   },
   {
-    name: 'index',
+    name: '(home)',
     href: '/',
     icon: 'home',
     activeIcon: 'homeFill',
@@ -50,15 +51,20 @@ export function AppTabs() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const logout = useLogoutMutation();
+  const pathname = usePathname();
+  // Detail screens (e.g. /news/…) bring their own header.
+  const onTabRoot = TABS.some((tab) => tab.href === pathname);
 
   return (
     <Tabs style={styles.root}>
       {/* Menu and profile have no screens yet (waiting for Figma). */}
-      <AppHeader
-        logo={CLUB_LOGO}
-        // Dev-only way out while there's no profile screen.
-        onProfileLongPress={__DEV__ ? () => logout.mutate() : undefined}
-      />
+      {onTabRoot ? (
+        <AppHeader
+          logo={CLUB_LOGO}
+          // Dev-only way out while there's no profile screen.
+          onProfileLongPress={__DEV__ ? () => logout.mutate() : undefined}
+        />
+      ) : null}
       <TabSlot />
       <TabList asChild>
         <View style={styles.tabBar(insets.bottom)}>

@@ -9,9 +9,12 @@ const mockRouter = {
 };
 
 jest.mock('expo-router', () => ({
+  router: mockRouter,
   useRouter: () => mockRouter,
   useSegments: () => [],
-  useLocalSearchParams: () => ({}),
+  usePathname: jest.fn(() => '/'),
+  // Tests set route params with jest.mocked(useLocalSearchParams).mockReturnValue(…).
+  useLocalSearchParams: jest.fn(() => ({})),
   Link: 'Link',
   Slot: 'Slot',
   Stack: { Screen: 'Screen' },

@@ -2,7 +2,7 @@ import type { IconName } from '@/ui/assets/icons';
 
 export type AppTab = {
   /** Route name inside (tabs). */
-  name: 'gamification' | 'index' | 'calendar' | 'shop';
+  name: 'gamification' | '(home)' | 'calendar' | 'shop';
   href: '/gamification' | '/' | '/calendar' | '/shop';
   icon: IconName;
   activeIcon?: IconName;
