@@ -1,12 +1,7 @@
 // Shared enums used across the app
-// Example:
-//
-// export enum QueryKey {
-//   User = 'user',
-//   UserProfile = 'user:profile',
-// }
 
 export enum QueryKey {
+  Clubs = 'clubs',
   Fixtures = 'fixtures',
   Leagues = 'leagues',
   News = 'news',

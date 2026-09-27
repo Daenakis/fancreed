@@ -6,7 +6,11 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, TextInput } from '@/ui/components';
 
-import { useLoginMutation, useRecoverPasswordMutation } from '@/hooks';
+import {
+  useLoginMutation,
+  useRecoverPasswordMutation,
+  useSubmitForm,
+} from '@/hooks';
 
 import { getApiErrorCode, getApiErrorMessageKey } from '@/api';
 
@@ -15,7 +19,7 @@ import { usePendingActivationStore } from '@/store';
 import { type NewPasswordFormValues, newPasswordSchema } from '@/schemas';
 
 import { AuthFooterLink, AuthLayout, FormError } from '../../components';
-import { useAuthForm, useFieldErrorText } from '../../hooks';
+import { useFieldErrorText } from '../../hooks';
 
 /** Step 3 of password recovery: set the new password, then sign in with it. */
 export function NewPasswordScreen() {
@@ -36,7 +40,7 @@ export function NewPasswordScreen() {
     submitWith,
     changeHandler,
     formState: { submitCount, errors },
-  } = useAuthForm<NewPasswordFormValues>({
+  } = useSubmitForm<NewPasswordFormValues>({
     resolver: zodResolver(newPasswordSchema),
     defaultValues: { password: '', confirmPassword: '' },
   });

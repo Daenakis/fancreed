@@ -8,25 +8,30 @@ import {
 } from 'react-hook-form';
 
 /**
- * react-hook-form set up the way auth forms behave:
+ * react-hook-form set up the way the app's forms behave:
  * - errors appear only when the button is pressed (no validation while typing);
  * - editing a field removes its error (and the form-level server error)
  *   until the next press;
- * - `filled` — every text field has a value, used to unlock the button.
+ * - `filled` — every text field (or every `requiredFields` entry) has a
+ *   value, used to unlock the button.
  */
-export function useAuthForm<TInput extends FieldValues, TOutput = TInput>(
-  options: Omit<
-    UseFormProps<TInput, unknown, TOutput>,
-    'mode' | 'reValidateMode'
-  >,
-) {
+export function useSubmitForm<TInput extends FieldValues, TOutput = TInput>({
+  requiredFields,
+  ...options
+}: Omit<UseFormProps<TInput, unknown, TOutput>, 'mode' | 'reValidateMode'> & {
+  /** Fields that must have text to unlock the button. Defaults to all. */
+  requiredFields?: Path<TInput>[];
+}) {
   const form = useForm<TInput, unknown, TOutput>({
     ...options,
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
   const values = useWatch({ control: form.control });
-  const filled = Object.values(values ?? {}).every(
+  const checked = requiredFields
+    ? requiredFields.map((name) => (values as Record<string, unknown>)?.[name])
+    : Object.values(values ?? {});
+  const filled = checked.every(
     (v) => typeof v !== 'string' || v.trim().length > 0,
   );
 

@@ -168,5 +168,24 @@
     "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
     "share": "Поділитись",
     "shareMessage": "{{home}} – {{away}}, {{date}}. Стеж за матчем у застосунку Fancreed!"
+  },
+  "club": {
+    "name": "Назва клубу *",
+    "visibility": "Хто може приєднатися",
+    "open": "Усі",
+    "friends": "Друзі та родичі",
+    "address": "Адреса *",
+    "description": "Опис *",
+    "facebook": "Посилання на Facebook",
+    "instagram": "Посилання на Instagram",
+    "telegram": "Посилання на Telegram",
+    "save": "Зберегти",
+    "errors": {
+      "nameLength": "Назва має містити 2–50 символів",
+      "addressLength": "Адреса має містити 10–100 символів",
+      "descriptionLength": "Опис має містити 3–500 символів",
+      "textInvalid": "Містить недопустимі символи",
+      "linkInvalid": "Вставте повне посилання, наприклад https://…"
+    }
   }
 }

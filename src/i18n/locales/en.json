@@ -166,5 +166,24 @@
     "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
     "share": "Share",
     "shareMessage": "{{home}} – {{away}}, {{date}}. Follow the match in the Fancreed app!"
+  },
+  "club": {
+    "name": "Club name *",
+    "visibility": "Who can join",
+    "open": "Anyone",
+    "friends": "Friends & family",
+    "address": "Address *",
+    "description": "Description *",
+    "facebook": "Facebook link",
+    "instagram": "Instagram link",
+    "telegram": "Telegram link",
+    "save": "Save",
+    "errors": {
+      "nameLength": "Name must be 2–50 characters",
+      "addressLength": "Address must be 10–100 characters",
+      "descriptionLength": "Description must be 3–500 characters",
+      "textInvalid": "Contains characters that aren't allowed",
+      "linkInvalid": "Paste the full link, e.g. https://…"
+    }
   }
 }

@@ -6,13 +6,15 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, TextInput } from '@/ui/components';
 
+import { useSubmitForm } from '@/hooks';
+
 import {
   type SignUpFormInput,
   type SignUpFormValues,
   signUpSchema,
 } from '@/schemas';
 
-import { useAuthForm, useFieldErrorText } from '../../hooks';
+import { useFieldErrorText } from '../../hooks';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignUpFormProps } from './types';
@@ -33,7 +35,7 @@ export function SignUpForm({
     submitWith,
     changeHandler,
     formState: { submitCount, errors },
-  } = useAuthForm<SignUpFormInput, SignUpFormValues>({
+  } = useSubmitForm<SignUpFormInput, SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: { name: '', email: '', password: '' },
   });

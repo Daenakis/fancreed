@@ -6,9 +6,11 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, Text, TextInput } from '@/ui/components';
 
+import { useSubmitForm } from '@/hooks';
+
 import { type SignInFormValues, signInSchema } from '@/schemas';
 
-import { useAuthForm, useFieldErrorText } from '../../hooks';
+import { useFieldErrorText } from '../../hooks';
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignInFormProps } from './types';
@@ -30,7 +32,7 @@ export function SignInForm({
     submitWith,
     changeHandler,
     formState: { submitCount, errors },
-  } = useAuthForm<SignInFormValues>({
+  } = useSubmitForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: { login: '', password: '' },
   });

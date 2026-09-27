@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './clubs';
 export * from './common';
 export * from './fixtures';
 export * from './leagues';

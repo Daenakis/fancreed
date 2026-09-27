@@ -7,4 +7,5 @@ export {
   SHAKE_STEPS,
   useShakeAnimation,
 } from './useShakeAnimation';
+export { useSubmitForm } from './useSubmitForm';
 export { useTheme } from './useTheme';

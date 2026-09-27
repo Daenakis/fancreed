@@ -6,6 +6,8 @@ export {
   PASSWORD_MIN_LENGTH,
   RECOVERY_CODE_LENGTH,
 } from './authFields';
+export type { ClubFormValues } from './club';
+export { clubSchema } from './club';
 export type { Env } from './env';
 export { envSchema } from './env';
 export type {

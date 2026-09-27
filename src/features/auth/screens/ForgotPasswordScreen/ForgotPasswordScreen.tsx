@@ -6,14 +6,14 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { Button, TextInput } from '@/ui/components';
 
-import { useForgotPasswordMutation } from '@/hooks';
+import { useForgotPasswordMutation, useSubmitForm } from '@/hooks';
 
 import { toFormError } from '@/api';
 
 import { type ForgotPasswordFormValues, forgotPasswordSchema } from '@/schemas';
 
 import { AuthFooterLink, AuthLayout, FormError } from '../../components';
-import { useAuthForm, useFieldErrorText } from '../../hooks';
+import { useFieldErrorText } from '../../hooks';
 
 /** Step 1 of password recovery: ask where to send the code. */
 export function ForgotPasswordScreen() {
@@ -28,7 +28,7 @@ export function ForgotPasswordScreen() {
     submitWith,
     changeHandler,
     formState: { submitCount, errors },
-  } = useAuthForm<ForgotPasswordFormValues>({
+  } = useSubmitForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: '' },
   });
