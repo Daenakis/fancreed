@@ -9,14 +9,73 @@ import Animated, {
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Button, Icon, Text } from '@/ui/components';
+import type { ColorToken } from '@/ui/theme';
 
-import type { FanCardFrontProps, FanCardProps, LoyaltyLevel } from './types';
+import type {
+  FanCardFrontProps,
+  FanCardProps,
+  LevelLook,
+  LoyaltyLevel,
+} from './types';
 
 const BARCODE = require('../../../../../assets/images/fan-card/barcode.png');
 const NEXT_LEVEL: Record<LoyaltyLevel, LoyaltyLevel | null> = {
   bronze: 'silver',
   silver: 'gold',
-  gold: null,
+  gold: 'emerald',
+  emerald: null,
+};
+
+/** Figma "Cards colors", metallic column: gradient stops, tab, lion and text. */
+const LOOKS: Record<LoyaltyLevel, LevelLook> = {
+  bronze: {
+    gradient: [
+      ['fanBronzeEdge', 0],
+      ['fanBronzeLight', 35],
+      ['fanBronzeWarm', 65],
+      ['fanBronzeShade', 100],
+    ],
+    ink: 'fanBronzeInk',
+    lion: 'fanBronzeInk',
+    face: 'fanBronzeLight',
+    text: 'onFanCard',
+  },
+  silver: {
+    gradient: [
+      ['fanSilverEdge', 0],
+      ['fanSilverLight', 45],
+      ['fanSilverWarm', 65],
+      ['fanSilverShade', 100],
+    ],
+    ink: 'fanSilverInk',
+    lion: 'fanSilverInk',
+    face: 'fanSilverLight',
+    text: 'onFanCard',
+  },
+  gold: {
+    gradient: [
+      ['fanGoldEdge', 0],
+      ['fanGoldLight', 45],
+      ['fanGoldWarm', 65],
+      ['fanGoldShade', 100],
+    ],
+    ink: 'fanGoldInk',
+    lion: 'fanGoldInk',
+    face: 'fanGoldLight',
+    text: 'onFanCard',
+  },
+  emerald: {
+    gradient: [
+      ['fanEmeraldEdge', 0],
+      ['fanEmeraldLight', 50],
+      ['fanEmeraldWarm', 70],
+      ['fanEmeraldShade', 100],
+    ],
+    ink: 'fanEmeraldInk',
+    lion: 'fanEmeraldLion',
+    face: 'onBrand',
+    text: 'onBrand',
+  },
 };
 const FLIP_MS = 500;
 
@@ -60,7 +119,7 @@ export function FanCard({
 
   if (!complete) {
     return (
-      <View style={[styles.card(full), styles.empty, style]}>
+      <View style={[styles.card(full, LOOKS.bronze), styles.empty, style]}>
         <Text variant="bodyLMedium" color="onFanCard" style={styles.centered}>
           {t('fanCard.empty')}
         </Text>
@@ -96,7 +155,7 @@ export function FanCard({
         accessibilityLabel={`${name} ${surname}`}
         disabled={!onPress}
         onPress={onPress}
-        style={[styles.card(false), style]}
+        style={[styles.card(false, LOOKS[loyaltyLevel]), style]}
       >
         {front}
       </Pressable>
@@ -113,11 +172,22 @@ export function FanCard({
       }}
       style={[styles.flipArea, style]}
     >
-      <Animated.View style={[styles.card(true), styles.face, frontStyle]}>
+      <Animated.View
+        style={[
+          styles.card(true, LOOKS[loyaltyLevel]),
+          styles.face,
+          frontStyle,
+        ]}
+      >
         {front}
       </Animated.View>
       <Animated.View
-        style={[styles.card(true), styles.face, styles.back, backStyle]}
+        style={[
+          styles.card(true, LOOKS[loyaltyLevel]),
+          styles.face,
+          styles.back,
+          backStyle,
+        ]}
       >
         {/* TODO: static picture until a barcode generator is approved. */}
         <Image
@@ -148,11 +218,12 @@ function FanCardFront({
   const { t } = useTranslation();
   const { theme } = useUnistyles();
   const next = NEXT_LEVEL[level];
+  const look = LOOKS[level];
   const showProgress = next && points != null && !!nextLevelPoints;
 
   return (
     <>
-      <View style={styles.tab}>
+      <View style={styles.tab(look.ink)}>
         <Text variant={full ? 'bodyLRegular' : 'bodyMRegular'} color="onBrand">
           {t('fanCard.level', { level: t(`fanCard.${level}`) })}
         </Text>
@@ -165,28 +236,41 @@ function FanCardFront({
             style={styles.avatar}
           />
         ) : (
-          <View style={[styles.avatar, styles.avatarEmpty]}>
+          <View style={[styles.avatar, styles.avatarEmpty(look.ink)]}>
             <Icon name="user" size={20} color={theme.colors.onBrand} />
           </View>
         )}
         <View style={styles.fanText}>
-          <Text variant="bodyMMedium" color="onFanCard" numberOfLines={1}>
+          <Text variant="bodyMMedium" color={look.text} numberOfLines={1}>
             {name} {surname}
           </Text>
-          <Text variant="bodySRegular" color="onFanCard">
+          <Text variant="bodySRegular" color={look.text}>
             {t('fanCard.season', { season })}
           </Text>
         </View>
       </View>
-      <Icon
-        name="lion"
-        size={full ? 150 : 100}
-        color={theme.colors.fanCardInk}
-        style={styles.lion(full)}
-      />
+      {/* Two layers: the head, then the face features in a lighter tone. */}
+      <View style={styles.lion(full)}>
+        <Icon
+          name="lion"
+          size={full ? 150 : 100}
+          color={theme.colors[look.lion]}
+        />
+        <Icon
+          name="lionFace"
+          size={full ? 150 : 100}
+          color={theme.colors[look.face]}
+          style={styles.lionFace}
+        />
+      </View>
       {showProgress ? (
         <View style={styles.progress}>
-          <Text variant="bodySRegular" color="onFanCard">
+          <Text
+            variant="bodySRegular"
+            color={look.text}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
             {t('fanCard.toNextLevel', {
               level: t(`fanCard.${next}`),
               points,
@@ -194,7 +278,12 @@ function FanCardFront({
             })}
           </Text>
           <View style={styles.track}>
-            <View style={styles.fill(Math.min(points / nextLevelPoints, 1))} />
+            <View
+              style={styles.fill(
+                Math.min(points / nextLevelPoints, 1),
+                look.text,
+              )}
+            />
           </View>
         </View>
       ) : null}
@@ -203,12 +292,14 @@ function FanCardFront({
 }
 
 const styles = StyleSheet.create((theme) => ({
-  card: (full: boolean) => ({
+  card: (full: boolean, look: LevelLook) => ({
     overflow: 'hidden',
     borderRadius: theme.radius.lg,
     padding: theme.spacing(3),
     ...(full ? { flex: 1 } : { height: 150 }),
-    experimental_backgroundImage: `linear-gradient(90deg, ${theme.colors.fanCardEdge} 0%, ${theme.colors.fanCardLight} 35%, ${theme.colors.fanCardWarm} 65%, ${theme.colors.fanCardShade} 100%)`,
+    experimental_backgroundImage: `linear-gradient(90deg, ${look.gradient
+      .map(([color, stop]) => `${theme.colors[color]} ${stop}%`)
+      .join(', ')})`,
   }),
   empty: {
     alignItems: 'center',
@@ -234,15 +325,15 @@ const styles = StyleSheet.create((theme) => ({
     width: 300,
     height: 80,
   },
-  tab: {
+  tab: (ink: ColorToken) => ({
     position: 'absolute',
     top: 0,
     right: 0,
     paddingHorizontal: theme.spacing(3),
     paddingVertical: theme.spacing(1),
     borderBottomLeftRadius: theme.radius.lg,
-    backgroundColor: theme.colors.fanCardInk,
-  },
+    backgroundColor: theme.colors[ink],
+  }),
   fan: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -254,11 +345,11 @@ const styles = StyleSheet.create((theme) => ({
     height: theme.spacing(10),
     borderRadius: theme.radius.full,
   },
-  avatarEmpty: {
+  avatarEmpty: (ink: ColorToken) => ({
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.fanCardInk,
-  },
+    backgroundColor: theme.colors[ink],
+  }),
   fanText: {
     flexShrink: 1,
     gap: theme.spacing(0.5),
@@ -268,20 +359,25 @@ const styles = StyleSheet.create((theme) => ({
     right: full ? theme.spacing(8) : theme.spacing(4),
     bottom: theme.spacing(3),
   }),
+  lionFace: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   progress: {
     position: 'absolute',
     left: theme.spacing(3),
     bottom: theme.spacing(3),
-    width: '55%',
+    width: '62%',
     gap: theme.spacing(1),
   },
   track: {
     height: 2,
     backgroundColor: theme.colors.translucentSurface,
   },
-  fill: (share: number) => ({
+  fill: (share: number, color: ColorToken) => ({
     width: `${share * 100}%`,
     height: 2,
-    backgroundColor: theme.colors.onFanCard,
+    backgroundColor: theme.colors[color],
   }),
 }));

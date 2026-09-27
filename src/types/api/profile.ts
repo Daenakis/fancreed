@@ -13,7 +13,7 @@ export type Profile = {
   origPhoto?: string | null;
 };
 
-export type LoyaltyLevel = 'bronze' | 'silver' | 'gold';
+export type LoyaltyLevel = 'bronze' | 'silver' | 'gold' | 'emerald';
 
 /**
  * Loyalty status for the fan card.

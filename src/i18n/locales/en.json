@@ -141,7 +141,8 @@
     "flipHint": "Tap to show the barcode",
     "bronze": "Bronze",
     "silver": "Silver",
-    "gold": "Gold"
+    "gold": "Gold",
+    "emerald": "Emerald"
   },
   "goals": {
     "more": "One more goal",

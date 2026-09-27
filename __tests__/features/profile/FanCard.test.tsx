@@ -30,7 +30,7 @@ describe('FanCard', () => {
     const { queryByText } = render(
       <FanCard
         {...fan}
-        loyaltyLevel="gold"
+        loyaltyLevel="emerald"
         points={5000}
         nextLevelPoints={null}
       />,

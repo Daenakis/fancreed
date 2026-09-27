@@ -1,5 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
+import type { ColorToken } from '@/ui/theme';
+
 import type { LoyaltyLevel } from '@/types/api';
 
 export type { LoyaltyLevel };
@@ -40,4 +42,17 @@ export type FanCardFrontProps = Pick<
 > & {
   level: LoyaltyLevel;
   full: boolean;
+};
+
+/** Colours of one loyalty level's card. */
+export type LevelLook = {
+  /** Horizontal gradient: [colour, stop %]. */
+  gradient: [ColorToken, number][];
+  /** Level tab and avatar placeholder. */
+  ink: ColorToken;
+  lion: ColorToken;
+  /** Lion face features. */
+  face: ColorToken;
+  /** Name, season, progress text and bar. */
+  text: ColorToken;
 };
