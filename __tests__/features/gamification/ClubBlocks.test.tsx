@@ -57,8 +57,23 @@ describe('ClubEventsBlock', () => {
       <ClubEventsBlock onOpenEvent={onOpenEvent} />,
     );
 
-    fireEvent.press(await findByRole('button', { name: 'Away trip' }));
+    // Rows are named by the event kind.
+    fireEvent.press(await findByRole('button', { name: 'events.kind.trip' }));
 
     expect(onOpenEvent).toHaveBeenCalledWith(clubEvent);
+  });
+
+  it('shows "+" only when the fan can create events', async () => {
+    jest
+      .spyOn(eventsApi, 'clubList')
+      .mockResolvedValue(apiOk({ events: [clubEvent] }));
+    const onCreateEvent = jest.fn();
+    const { findByRole } = render(
+      <ClubEventsBlock onOpenEvent={jest.fn()} onCreateEvent={onCreateEvent} />,
+    );
+
+    fireEvent.press(await findByRole('button', { name: 'club.createEvent' }));
+
+    expect(onCreateEvent).toHaveBeenCalledTimes(1);
   });
 });

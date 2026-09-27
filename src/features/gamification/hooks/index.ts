@@ -1,0 +1,1 @@
+export { useMatchdayJoins } from './useMatchdayJoins';

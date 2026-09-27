@@ -30,7 +30,11 @@ export function EventRow({
 }: EventRowProps) {
   const { t, i18n } = useTranslation();
   const { theme } = useUnistyles();
-  const members = event.members?.length;
+  // The owner isn't in `totalMembers`; old lists only sent `members`.
+  const members =
+    event.totalMembers !== undefined
+      ? event.totalMembers + 1
+      : event.members?.length;
   const start = event.startDate ?? event.time;
 
   return (

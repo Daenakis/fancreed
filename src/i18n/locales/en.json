@@ -150,10 +150,11 @@
     "less": "One goal less"
   },
   "votes": {
-    "playerOfMatch": "PLAYER OF THE MATCH",
-    "choose": "Choose",
+    "playerOfMatch": "Players of the match",
+    "choose": "Vote",
     "share": "Share",
-    "shareMessage": "Pick the player of the match {{home}} – {{away}} in the Fancreed app!"
+    "shareMessage": "Pick the player of the match {{home}} – {{away}} in the Fancreed app!",
+    "yourVote": "your vote"
   },
   "prediction": {
     "title": "Match prediction",
@@ -209,8 +210,8 @@
       "textInvalid": "Contains characters that aren't allowed",
       "linkInvalid": "Paste the full link, e.g. https://…"
     },
-    "fanClubsTitle": "FAN CLUBS",
-    "eventsTitle": "EVENTS",
+    "fanClubsTitle": "Fan clubs",
+    "eventsTitle": "Fan events",
     "createClub": "Create a fan club",
     "createEvent": "Create event",
     "namePlaceholder": "Club name",
@@ -231,7 +232,7 @@
     "notFound": "This club no longer exists."
   },
   "event": {
-    "matchdayTitle": "MATCHDAY",
+    "matchdayTitle": "Matchday",
     "share": "Share",
     "location": "Location",
     "remind": "Remind",
@@ -258,7 +259,9 @@
       "dateRequired": "Choose a date",
       "datePast": "The date can't be in the past",
       "timeRequired": "Choose a time"
-    }
+    },
+    "showMore": "Show more events",
+    "showLess": "Show fewer events"
   },
   "nav": {
     "menu": "Menu",
@@ -388,5 +391,45 @@
     "league": "Competition",
     "noTable": "This competition has no table.",
     "noMatches": "No matches in this competition yet."
+  },
+  "reminder": {
+    "title": "Set a reminder",
+    "min10": "10 min before the event",
+    "min15": "15 min before the event",
+    "hour1": "1 hour before the event",
+    "hours2": "2 hours before the event",
+    "hours6": "6 hours before the event",
+    "day1": "1 day before the event",
+    "confirmToday": "Remind me today at {{time}}",
+    "confirmOn": "Remind me on {{day}} at {{time}}",
+    "added": "Reminder added to your calendar.",
+    "denied": "Allow calendar access in Settings to get reminders.",
+    "failed": "Couldn't add the reminder. Please try again."
+  },
+  "lineupPrediction": {
+    "title": "Line-up prediction",
+    "pickFormation": "Choose a formation",
+    "formation": "Formation",
+    "pickPlayers": "Choose the players",
+    "pickPlayer": "Choose a player",
+    "search": "Search",
+    "vote": "Vote",
+    "yours": "Your prediction",
+    "shareMessage": "My line-up prediction ({{formation}}): {{players}}. Make yours in the Fancreed app!"
+  },
+  "quiz": {
+    "title": "Quiz",
+    "next": "Next",
+    "showResult": "See the result",
+    "result": "Your result",
+    "place": "#{{place}} in the rating",
+    "pointsLabel_one": "point",
+    "pointsLabel_other": "points",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points",
+    "shareMessage": "I scored {{score}} points in the Fancreed quiz. Can you beat it?"
+  },
+  "challenge": {
+    "title": "Challenge"
   }
 }

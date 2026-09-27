@@ -2,15 +2,23 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 import type { LineupPlayer } from '@/types/api';
 
+/** A place on the pitch ("row:column", row 1 = goalkeeper), filled or empty. */
+export type PitchSlot = {
+  grid: string;
+  player?: LineupPlayer | null;
+};
+
 export type PitchProps = {
-  /** Starting XI with `grid` positions. */
-  players: LineupPlayer[];
-  /** Tap on a player, e.g. open the player page. */
-  onPressPlayer?: (player: LineupPlayer) => void;
+  slots: PitchSlot[];
+  /** Tap on a place, e.g. open a player page or pick a player. */
+  onPressSlot?: (slot: PitchSlot) => void;
+  /** Caption of an empty place, e.g. "Choose a player". */
+  emptyLabel?: string;
   style?: StyleProp<ViewStyle>;
 };
 
-export type PitchPlayerProps = {
-  player: LineupPlayer;
-  onPress?: (player: LineupPlayer) => void;
+export type PitchPlaceProps = {
+  slot: PitchSlot;
+  emptyLabel?: string;
+  onPress?: (slot: PitchSlot) => void;
 };

@@ -53,9 +53,7 @@ describe('VotesBlock', () => {
     const share = jest.spyOn(Share, 'share').mockResolvedValue({
       action: 'sharedAction',
     });
-    const { findByRole, getByText } = render(
-      <VotesBlock homeTeam="Rukh" awayTeam="Vorskla" />,
-    );
+    const { findByRole, getByText } = render(<VotesBlock />);
 
     fireEvent.press(await findByRole('button', { name: 'votes.share' }));
 

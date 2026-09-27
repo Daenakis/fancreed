@@ -1,5 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type VotesBlockProps = {
+export type ChallengeBlockProps = {
   style?: StyleProp<ViewStyle>;
 };

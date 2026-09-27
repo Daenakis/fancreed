@@ -40,8 +40,12 @@ export function LineupScreen() {
         <LoadingMore loading />
       ) : lineup?.startXI.length ? (
         <Pitch
-          players={lineup.startXI}
-          onPressPlayer={(player) =>
+          slots={lineup.startXI.map((player) => ({
+            grid: player.grid ?? '',
+            player,
+          }))}
+          onPressSlot={({ player }) =>
+            player &&
             router.push({
               pathname: '/players/[id]',
               params: { id: player._id },

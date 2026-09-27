@@ -1,2 +1,2 @@
 export { Pitch } from './Pitch';
-export type { PitchProps } from './types';
+export type { PitchProps, PitchSlot } from './types';

@@ -3,4 +3,4 @@ export {
   type MatchCardProps,
   type MatchCardVariant,
 } from './MatchCard';
-export { Pitch, type PitchProps } from './Pitch';
+export { Pitch, type PitchProps, type PitchSlot } from './Pitch';

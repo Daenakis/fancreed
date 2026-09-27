@@ -1,3 +1,3 @@
-import { GamificationScreen } from '@/features/shell';
+import { FanCentreScreen } from '@/features/gamification';
 
-export default GamificationScreen;
+export default FanCentreScreen;

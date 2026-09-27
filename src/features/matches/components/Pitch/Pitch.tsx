@@ -5,14 +5,15 @@ import { Text } from '@/ui/components';
 
 import { pitchRows, shortName } from '@/utils';
 
-import type { PitchPlayerProps, PitchProps } from './types';
+import type { PitchPlaceProps, PitchProps } from './types';
 
 /**
- * Half a football pitch with the starting XI in formation: attack at the
- * top, goalkeeper at the bottom by the penalty area.
+ * Half a football pitch with a line-up in formation: attack at the top,
+ * goalkeeper at the bottom by the penalty area. Empty places show a
+ * placeholder (line-up prediction).
  */
-export function Pitch({ players, onPressPlayer, style }: PitchProps) {
-  const rows = pitchRows(players);
+export function Pitch({ slots, onPressSlot, emptyLabel, style }: PitchProps) {
+  const rows = pitchRows(slots);
 
   return (
     <View style={[styles.pitch, style]}>
@@ -22,11 +23,12 @@ export function Pitch({ players, onPressPlayer, style }: PitchProps) {
       </View>
       {rows.map((row, i) => (
         <View key={i} style={styles.row}>
-          {row.map((player) => (
-            <PitchPlayer
-              key={player._id}
-              player={player}
-              onPress={onPressPlayer}
+          {row.map((slot) => (
+            <PitchPlace
+              key={slot.grid}
+              slot={slot}
+              emptyLabel={emptyLabel}
+              onPress={onPressSlot}
             />
           ))}
         </View>
@@ -37,29 +39,34 @@ export function Pitch({ players, onPressPlayer, style }: PitchProps) {
 
 Pitch.displayName = 'Pitch';
 
-function PitchPlayer({ player, onPress }: PitchPlayerProps) {
-  const name = player.actualName ?? player.name;
+function PitchPlace({ slot, emptyLabel, onPress }: PitchPlaceProps) {
+  const { player } = slot;
+  const name = player ? (player.actualName ?? player.name) : null;
 
   return (
     <Pressable
       accessibilityRole={onPress ? 'button' : 'text'}
-      accessibilityLabel={`${name}, ${player.number}`}
+      accessibilityLabel={name ? `${name}, ${player!.number}` : emptyLabel}
       disabled={!onPress}
-      onPress={() => onPress?.(player)}
+      onPress={() => onPress?.(slot)}
       style={styles.player}
     >
-      <Image
-        source={{ uri: player.actualPhoto ?? player.photo }}
-        resizeMode="cover"
-        style={styles.photo}
-      />
+      {player ? (
+        <Image
+          source={{ uri: player.actualPhoto ?? player.photo }}
+          resizeMode="cover"
+          style={styles.photo}
+        />
+      ) : (
+        <View style={[styles.photo, styles.empty]} />
+      )}
       <Text
         variant="bodyXSMedium"
         color="onBrand"
         numberOfLines={2}
         style={styles.caption}
       >
-        {shortName(name)} ({player.number})
+        {name ? `${shortName(name)} (${player!.number})` : emptyLabel}
       </Text>
     </Pressable>
   );
@@ -122,6 +129,10 @@ const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     borderColor: theme.colors.onBrand,
     backgroundColor: theme.colors.background,
+  },
+  empty: {
+    borderColor: theme.colors.brandBorder,
+    backgroundColor: theme.colors.brandSurface,
   },
   caption: {
     textAlign: 'center',

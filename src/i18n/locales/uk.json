@@ -152,10 +152,11 @@
     "less": "На гол менше"
   },
   "votes": {
-    "playerOfMatch": "ГРАВЕЦЬ МАТЧУ",
-    "choose": "Обрати",
-    "share": "Поділитись",
-    "shareMessage": "Обери гравця матчу {{home}} – {{away}} у застосунку Fancreed!"
+    "playerOfMatch": "Гравці матчу",
+    "choose": "Проголосувати",
+    "share": "Поділитися",
+    "shareMessage": "Обери гравця матчу {{home}} – {{away}} у застосунку Fancreed!",
+    "yourVote": "ваш голос"
   },
   "prediction": {
     "title": "Матч-прогноз",
@@ -217,8 +218,8 @@
       "textInvalid": "Містить недопустимі символи",
       "linkInvalid": "Вставте повне посилання, наприклад https://…"
     },
-    "fanClubsTitle": "ФАН-КЛУБИ",
-    "eventsTitle": "ПОДІЇ",
+    "fanClubsTitle": "Фан-клуби",
+    "eventsTitle": "Фан-івенти",
     "createClub": "Створити фан-клуб",
     "createEvent": "Створити івент",
     "namePlaceholder": "Назва клубу",
@@ -239,7 +240,7 @@
     "notFound": "Цього клубу більше немає."
   },
   "event": {
-    "matchdayTitle": "МАТЧДЕЙ",
+    "matchdayTitle": "Матчдей",
     "share": "Поділитись",
     "location": "Локація",
     "remind": "Нагадати",
@@ -266,7 +267,9 @@
       "dateRequired": "Оберіть дату",
       "datePast": "Дата не може бути в минулому",
       "timeRequired": "Оберіть час"
-    }
+    },
+    "showMore": "Показати більше івентів",
+    "showLess": "Згорнути івенти"
   },
   "nav": {
     "menu": "Меню",
@@ -398,5 +401,49 @@
     "league": "Турнір",
     "noTable": "Для цього турніру немає таблиці.",
     "noMatches": "У цьому турнірі поки немає матчів."
+  },
+  "reminder": {
+    "title": "Встановити нагадування",
+    "min10": "За 10 хв до івенту",
+    "min15": "За 15 хв до івенту",
+    "hour1": "За 1 годину до івенту",
+    "hours2": "За 2 години до івенту",
+    "hours6": "За 6 годин до івенту",
+    "day1": "За 1 день до івенту",
+    "confirmToday": "Нагадати сьогодні о {{time}}",
+    "confirmOn": "Нагадати {{day}} о {{time}}",
+    "added": "Нагадування додано в календар.",
+    "denied": "Дозвольте доступ до календаря в Налаштуваннях, щоб отримувати нагадування.",
+    "failed": "Не вдалося додати нагадування. Спробуйте ще раз."
+  },
+  "lineupPrediction": {
+    "title": "Склад-прогноз",
+    "pickFormation": "Оберіть формацію",
+    "formation": "Формація",
+    "pickPlayers": "Оберіть гравців",
+    "pickPlayer": "Оберіть гравця",
+    "search": "Пошук",
+    "vote": "Голосувати",
+    "yours": "Ваш прогноз",
+    "shareMessage": "Мій прогноз складу ({{formation}}): {{players}}. Зроби свій у застосунку Fancreed!"
+  },
+  "quiz": {
+    "title": "Вікторина",
+    "next": "Далі",
+    "showResult": "Дізнатись результат",
+    "result": "Ваш результат",
+    "place": "{{place}} місце в рейтингу",
+    "pointsLabel_one": "бал",
+    "pointsLabel_few": "бали",
+    "pointsLabel_many": "балів",
+    "pointsLabel_other": "бала",
+    "points_one": "{{count}} бал",
+    "points_few": "{{count}} бали",
+    "points_many": "{{count}} балів",
+    "points_other": "{{count}} бала",
+    "shareMessage": "Я набрав {{score}} балів у вікторині Fancreed. Зможеш краще?"
+  },
+  "challenge": {
+    "title": "Челендж"
   }
 }
