@@ -14,13 +14,18 @@ export type MatchCardProps = {
   variant?: MatchCardVariant;
   /** Opens a match link (tickets, review, video) — e.g. in a browser. */
   onOpenLink: (url: string) => void;
+  /** `full`: "Line-up" opens the line-up screen; disabled without it. */
+  onOpenLineup?: (match: Fixture) => void;
+  /** `full`: "Video" opens the videos screen instead of the link. */
+  onOpenVideos?: (match: Fixture) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 /** One button in the full card's link row. */
 export type MatchLinkItem = {
   label: string;
-  url?: string | null;
+  /** Missing = the button is disabled. */
+  onPress?: () => void;
   /** The filled (white) button, e.g. tickets. */
   primary?: boolean;
 };

@@ -19,7 +19,7 @@ import type {
 /**
  * One match. `full`: green home-screen card — league and round on top, team
  * crests around the kick-off time (or the score), a countdown before
- * kick-off and a row of links (disabled when the match has no URL for them).
+ * kick-off and a row of links (disabled when the match has nothing to open).
  * `compact`: calendar row with team names, score or date/time and icon
  * actions (tickets, share, video).
  */
@@ -33,7 +33,13 @@ export function MatchCard({ variant = 'full', ...props }: MatchCardProps) {
 
 MatchCard.displayName = 'MatchCard';
 
-function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
+function FullMatch({
+  match,
+  onOpenLink,
+  onOpenLineup,
+  onOpenVideos,
+  style,
+}: MatchVariantProps) {
   const { t, i18n } = useTranslation();
   const now = useNow();
   const phase = matchPhase(match.status);
@@ -52,19 +58,29 @@ function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
   }).format(kickOff);
   // TODO(backend): no women's flag on fixtures yet — guessed from the league name.
   const women = /women|жін/i.test(match.league.name);
-  // TODO(backend): no line-up link on fixtures yet, so "Line-up" stays disabled.
+  const link = (url?: string | null) =>
+    url ? () => onOpenLink(url) : undefined;
+  const lineup = onOpenLineup ? () => onOpenLineup(match) : undefined;
+  const video =
+    match.videoLink && onOpenVideos
+      ? () => onOpenVideos(match)
+      : link(match.videoLink);
   const links: MatchLinkItem[] = played
     ? [
-        { label: t('match.review'), url: match.overviewLink },
-        { label: t('match.lineup'), url: null },
-        { label: t('match.photo'), url: match.photoLink },
-        { label: t('match.video'), url: match.videoLink },
+        { label: t('match.review'), onPress: link(match.overviewLink) },
+        { label: t('match.lineup'), onPress: lineup },
+        { label: t('match.photo'), onPress: link(match.photoLink) },
+        { label: t('match.video'), onPress: video },
       ]
     : [
-        { label: t('match.lineup'), url: null },
-        { label: t('match.preview'), url: match.previewLink },
-        { label: t('match.video'), url: match.videoLink },
-        { label: t('match.tickets'), url: match.ticketLink, primary: true },
+        { label: t('match.lineup'), onPress: lineup },
+        { label: t('match.preview'), onPress: link(match.previewLink) },
+        { label: t('match.video'), onPress: video },
+        {
+          label: t('match.tickets'),
+          onPress: link(match.ticketLink),
+          primary: true,
+        },
       ];
 
   return (
@@ -152,14 +168,14 @@ function FullMatch({ match, onOpenLink, style }: MatchVariantProps) {
         </View>
       ) : null}
       <View style={styles.links}>
-        {links.map(({ label, url, primary }) => (
+        {links.map(({ label, onPress, primary }) => (
           <Button
             key={label}
             variant={primary ? 'brand' : 'brandOutline'}
             size="xs"
             text={label}
-            disabled={!url}
-            onPress={() => url && onOpenLink(url)}
+            disabled={!onPress}
+            onPress={onPress}
             style={styles.link}
           />
         ))}

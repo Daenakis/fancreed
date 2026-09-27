@@ -128,4 +128,24 @@ describe('MatchCard full', () => {
 
     expect(getByText('match.women')).toBeTruthy();
   });
+
+  it('opens the line-up and videos screens when their handlers are set', () => {
+    const onOpenLineup = jest.fn();
+    const onOpenVideos = jest.fn();
+    const m = match({ videoLink: 'https://v' });
+    const { getByRole } = render(
+      <MatchCard
+        match={m}
+        onOpenLink={jest.fn()}
+        onOpenLineup={onOpenLineup}
+        onOpenVideos={onOpenVideos}
+      />,
+    );
+
+    fireEvent.press(getByRole('button', { name: 'match.lineup' }));
+    fireEvent.press(getByRole('button', { name: 'match.video' }));
+
+    expect(onOpenLineup).toHaveBeenCalledWith(m);
+    expect(onOpenVideos).toHaveBeenCalledWith(m);
+  });
 });
