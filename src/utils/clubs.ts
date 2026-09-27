@@ -2,7 +2,10 @@ import type { ClubLogoUpload, CreateClubRequest } from '@/types/api';
 
 import type { ClubFormValues } from '@/schemas';
 
-/** Club form values → `POST clubs/create` body. Empty links are left out. */
+/**
+ * Club form values → `POST clubs/create` body. Empty links are left out.
+ * The logo goes separately via `clubs/:id/setphoto` after creating.
+ */
 export function toCreateClubRequest(
   values: ClubFormValues,
   logo?: ClubLogoUpload,

@@ -5,7 +5,8 @@ export {
   isSameDay,
 } from './calendar';
 export { toCreateClubRequest } from './clubs';
-export { eventDate, mapsUrl } from './events';
+export { eventDate, formatEventDate, mapsUrl } from './events';
+export { geocodeAddress } from './geocode';
 export { type HtmlBlock, htmlToBlocks } from './html';
 export { pitchRows, shortName } from './lineup';
 export {

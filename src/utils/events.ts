@@ -15,3 +15,16 @@ export function mapsUrl(event: Pick<AppEvent, 'coords' | 'location'>): string {
     : event.location;
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
+
+/** "17 березня, 16:00" — day, month and time in the app language. */
+export function formatEventDate(date: Date, language: string): string {
+  const day = new Intl.DateTimeFormat(language, {
+    day: 'numeric',
+    month: 'long',
+  }).format(date);
+  const time = new Intl.DateTimeFormat(language, {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+  return `${day}, ${time}`;
+}

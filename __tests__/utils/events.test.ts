@@ -1,4 +1,4 @@
-import { eventDate, mapsUrl } from '@/utils';
+import { eventDate, formatEventDate, mapsUrl } from '@/utils';
 
 describe('eventDate', () => {
   it('reads unix seconds', () => {
@@ -27,6 +27,14 @@ describe('mapsUrl', () => {
   it('falls back to the address', () => {
     expect(mapsUrl({ location: 'Arena Lviv', coords: null })).toBe(
       'https://www.google.com/maps/search/?api=1&query=Arena%20Lviv',
+    );
+  });
+});
+
+describe('formatEventDate', () => {
+  it('joins the day and the time', () => {
+    expect(formatEventDate(new Date(2026, 2, 17, 16, 0), 'en')).toBe(
+      'March 17, 04:00 PM',
     );
   });
 });
