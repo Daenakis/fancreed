@@ -1,9 +1,6 @@
 import { fireEvent, render } from '@tests/test-utils';
-import { StyleSheet, type TextStyle } from 'react-native';
 
-import { lightTheme } from '@/ui/theme/unistyles';
-
-import { FanCard } from '@/features/profile';
+import { FanCard, FanCardModal } from '@/features/profile';
 
 const fan = {
   name: 'Andriy',
@@ -13,33 +10,36 @@ const fan = {
 };
 
 describe('FanCard', () => {
-  it('shows the fan, season and header when the profile is complete', () => {
+  it('shows the fan, season and level when the profile has a name', () => {
     const { getByText } = render(<FanCard {...fan} />);
 
-    expect(getByText('fanCard.title')).toBeTruthy();
-    expect(getByText('Andriy\nMelnyk')).toBeTruthy();
-    expect(getByText('fanCard.season\n2025/2026')).toBeTruthy();
+    expect(getByText('Andriy Melnyk')).toBeTruthy();
+    expect(getByText('fanCard.season')).toBeTruthy();
+    expect(getByText('fanCard.level')).toBeTruthy();
   });
 
-  it('falls back to the bronze level when loyaltyLevel is missing', () => {
-    const { getByText } = render(<FanCard {...fan} />);
-    const level = getByText('fanCard.level');
-
-    expect((StyleSheet.flatten(level.props.style) as TextStyle).color).toBe(
-      lightTheme.colors.loyaltyBronze,
+  it('shows the progress to the next level when points are given', () => {
+    const { getByText } = render(
+      <FanCard {...fan} points={700} nextLevelPoints={2000} />,
     );
+
+    expect(getByText('fanCard.toNextLevel')).toBeTruthy();
   });
 
-  it('uses the colour of the given loyalty level', () => {
-    const { getByText } = render(<FanCard {...fan} loyaltyLevel="gold" />);
+  it('hides the progress at the top level', () => {
+    const { queryByText } = render(
+      <FanCard
+        {...fan}
+        loyaltyLevel="gold"
+        points={5000}
+        nextLevelPoints={null}
+      />,
+    );
 
-    expect(
-      (StyleSheet.flatten(getByText('fanCard.level').props.style) as TextStyle)
-        .color,
-    ).toBe(lightTheme.colors.loyaltyGold);
+    expect(queryByText('fanCard.toNextLevel')).toBeNull();
   });
 
-  it('asks to fill the profile and opens it when data is missing', () => {
+  it('asks to fill the profile and opens it when the name is missing', () => {
     const onOpenProfile = jest.fn();
     const { getByText, getByRole } = render(
       <FanCard
@@ -55,23 +55,36 @@ describe('FanCard', () => {
     expect(onOpenProfile).toHaveBeenCalledTimes(1);
   });
 
-  it('opens the profile when the photo is pressed on the compact card', () => {
-    const onOpenProfile = jest.fn();
-    const { getByRole } = render(
-      <FanCard {...fan} onOpenProfile={onOpenProfile} />,
-    );
+  it('calls onPress when the compact card is pressed', () => {
+    const onPress = jest.fn();
+    const { getByRole } = render(<FanCard {...fan} onPress={onPress} />);
 
     fireEvent.press(getByRole('button', { name: 'Andriy Melnyk' }));
 
-    expect(onOpenProfile).toHaveBeenCalledTimes(1);
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('can be flipped when it is the full card', () => {
-    const { getByRole } = render(<FanCard {...fan} variant="full" />);
+  it('shows the card id on the back of the full card', () => {
+    const { getByRole, getByLabelText } = render(
+      <FanCard {...fan} variant="full" cardId="123" />,
+    );
 
-    const card = getByRole('button');
-    fireEvent.press(card);
+    expect(getByRole('button').props.accessibilityHint).toBe(
+      'fanCard.flipHint',
+    );
+    expect(getByLabelText('fanCard.cardId')).toBeTruthy();
+  });
+});
 
-    expect(card.props.accessibilityHint).toBe('fanCard.flipHint');
+describe('FanCardModal', () => {
+  it('closes from the close button', () => {
+    const onClose = jest.fn();
+    const { getByRole } = render(
+      <FanCardModal {...fan} visible onClose={onClose} />,
+    );
+
+    fireEvent.press(getByRole('button', { name: 'common.close' }));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

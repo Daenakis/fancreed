@@ -25,10 +25,12 @@ export const palette = {
   whiteAlpha13: 'rgba(255, 255, 255, 0.13)',
   // Shadows
   blackAlpha25: 'rgba(0, 0, 0, 0.25)',
-  // Loyalty levels (fan card)
-  bronze: '#A36117',
-  silver: '#C6C8CA',
-  gold: '#D19F11',
+  // Fan card metallic gradient + ink
+  metal100: '#EBD8C3',
+  metal200: '#E4D5C7',
+  metal300: '#C9AE95',
+  metal400: '#B0927D',
+  metalInk: '#3A2613',
   // Highlight (own team row, women badge)
   yellow: '#F7D54A',
   // Red
@@ -66,10 +68,14 @@ export const lightColors = {
   // Dark card surfaces that stay dark in both themes (fan card)
   inverseSurface: palette.black,
   onInverseSurface: palette.white,
-  loyaltyBronze: palette.bronze,
-  loyaltySilver: palette.silver,
-  loyaltyGold: palette.gold,
   highlight: palette.yellow,
+  // Fan card (same in both themes)
+  fanCardEdge: palette.metal400,
+  fanCardLight: palette.metal200,
+  fanCardWarm: palette.metal100,
+  fanCardShade: palette.metal300,
+  fanCardInk: palette.metalInk,
+  onFanCard: palette.black,
   onHighlight: palette.black,
 } as const;
 
@@ -102,10 +108,14 @@ export const darkColors = {
   // Dark card surfaces that stay dark in both themes (fan card)
   inverseSurface: palette.black,
   onInverseSurface: palette.white,
-  loyaltyBronze: palette.bronze,
-  loyaltySilver: palette.silver,
-  loyaltyGold: palette.gold,
   highlight: palette.yellow,
+  // Fan card (same in both themes)
+  fanCardEdge: palette.metal400,
+  fanCardLight: palette.metal200,
+  fanCardWarm: palette.metal100,
+  fanCardShade: palette.metal300,
+  fanCardInk: palette.metalInk,
+  onFanCard: palette.black,
   onHighlight: palette.black,
 } as const;
 

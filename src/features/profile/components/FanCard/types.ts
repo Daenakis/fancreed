@@ -1,35 +1,42 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type LoyaltyLevel = 'bronze' | 'silver' | 'gold';
+import type { LoyaltyLevel } from '@/types/api';
+
+export type { LoyaltyLevel };
 
 /**
- * - `compact` (default): banner on the home screen.
- * - `full`: large bordered card (landscape view); tapping flips it to the
- *   barcode side.
+ * - `compact` (default): card on the home screen; tap opens the full card.
+ * - `full`: large landscape card; tapping flips it to the barcode side.
  */
 export type FanCardVariant = 'compact' | 'full';
 
 export type FanCardProps = {
   name?: string | null;
   surname?: string | null;
-  /** Photo URL. Without name, surname and photo the "fill your profile" state shows. */
+  /** Photo URL; a placeholder avatar shows without it. */
   photo?: string | null;
   /** Current season, e.g. "2025/2026". */
   season: string;
-  /** Not in the backend yet — falls back to bronze, as in the old app. */
+  /** Falls back to bronze, as in the old app. */
   loyaltyLevel?: LoyaltyLevel;
+  /** Current loyalty points. The progress line shows with `nextLevelPoints`. */
+  points?: number;
+  /** Points needed for the next level; omit at the top level. */
+  nextLevelPoints?: number | null;
+  /** Printed under the barcode on the back of the full card. */
+  cardId?: string;
   /** Defaults to `compact`. */
   variant?: FanCardVariant;
-  /** Header text. Defaults to "FAN CARD". */
-  title?: string;
-  /** Opens the profile (photo tap and the empty-state button). */
+  /** Compact card tap, e.g. open the full card. */
+  onPress?: () => void;
+  /** Without name and surname the card asks to fill the profile; this opens it. */
   onOpenProfile?: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export type FanCardFrontProps = Pick<
   FanCardProps,
-  'name' | 'surname' | 'photo' | 'season' | 'onOpenProfile'
+  'name' | 'surname' | 'photo' | 'season' | 'points' | 'nextLevelPoints'
 > & {
   level: LoyaltyLevel;
   full: boolean;
