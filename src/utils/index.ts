@@ -18,3 +18,4 @@ export {
   zustandStorage,
 } from './storage';
 export { validateEnv } from './validateEnv';
+export { youtubeId, youtubeThumbnail } from './videos';
