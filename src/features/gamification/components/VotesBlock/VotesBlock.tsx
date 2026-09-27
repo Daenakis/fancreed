@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, Share, View } from 'react-native';
+import { Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
@@ -8,6 +8,7 @@ import {
   Carousel,
   ImageCard,
   LoadingMore,
+  RemoteImage,
   Text,
 } from '@/ui/components';
 
@@ -65,7 +66,7 @@ export function VotesBlock({ style }: VotesBlockProps) {
           {t('votes.playerOfMatch')}
         </Text>
         {sponsor ? (
-          <Image
+          <RemoteImage
             source={{ uri: sponsor.image }}
             resizeMode="contain"
             accessibilityLabel={sponsor.name}
@@ -74,12 +75,12 @@ export function VotesBlock({ style }: VotesBlockProps) {
         ) : null}
         {match ? (
           <>
-            <Image
+            <RemoteImage
               source={{ uri: match.homeTeam.logo }}
               accessibilityLabel={match.homeTeam.name}
               style={styles.crest}
             />
-            <Image
+            <RemoteImage
               source={{ uri: match.awayTeam.logo }}
               accessibilityLabel={match.awayTeam.name}
               style={styles.crest}

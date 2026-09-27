@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
+import { RemoteImage } from '../RemoteImage';
 import { Text } from '../Text';
 import type { StandingsRowProps, StandingsTableProps } from './types';
 
@@ -114,7 +115,7 @@ function StandingsRow({ row, highlighted, full }: StandingsRowProps) {
           {row.rank}
         </Text>
         {row.teamLogo ? (
-          <Image
+          <RemoteImage
             source={{ uri: row.teamLogo }}
             resizeMode="contain"
             style={styles.logo}

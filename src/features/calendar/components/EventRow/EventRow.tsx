@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Image, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import type { IconName } from '@/ui/assets/icons';
-import { Icon, Text } from '@/ui/components';
+import { Icon, RemoteImage, Text } from '@/ui/components';
 
 import { eventDate, formatEventDate } from '@/utils';
 
@@ -73,7 +73,7 @@ export function EventRow({
             <Text variant="bodySRegular" style={styles.flex}>
               {t('events.associatedMatch')}
             </Text>
-            <Image
+            <RemoteImage
               source={{ uri: match.homeTeam.logo }}
               accessibilityLabel={match.homeTeam.name}
               style={styles.crest}
@@ -81,7 +81,7 @@ export function EventRow({
             <Text variant="bodySRegular" color="mutedForeground">
               —
             </Text>
-            <Image
+            <RemoteImage
               source={{ uri: match.awayTeam.logo }}
               accessibilityLabel={match.awayTeam.name}
               style={styles.crest}

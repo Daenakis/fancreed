@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Image, Pressable, Share, View } from 'react-native';
+import { FlatList, Pressable, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
   BottomSheet,
   Button,
+  RemoteImage,
   SectionTitle,
   Select,
   Text,
@@ -176,7 +177,7 @@ function PlayerPicker({
               pressed && styles.pressed,
             ]}
           >
-            <Image
+            <RemoteImage
               source={{ uri: item.actualPhoto ?? item.photo }}
               style={styles.avatar}
             />

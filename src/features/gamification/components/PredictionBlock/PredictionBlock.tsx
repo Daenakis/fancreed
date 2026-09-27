@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, Share, View } from 'react-native';
+import { Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
   Button,
   GoalsPicker,
   LoadingMore,
+  RemoteImage,
   SectionTitle,
   Text,
 } from '@/ui/components';
@@ -68,7 +69,7 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
       <SectionTitle title={t('prediction.title')} />
       <View style={styles.card}>
         {sponsor ? (
-          <Image
+          <RemoteImage
             source={{ uri: sponsor.image }}
             resizeMode="contain"
             accessibilityLabel={sponsor.name}
@@ -142,7 +143,7 @@ PredictionBlock.displayName = 'PredictionBlock';
 
 function TeamLogo({ uri, name }: TeamLogoProps) {
   return (
-    <Image
+    <RemoteImage
       source={{ uri }}
       resizeMode="contain"
       accessibilityLabel={name}

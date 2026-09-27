@@ -1,7 +1,7 @@
-import { Image, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text } from '@/ui/components';
+import { RemoteImage, Text } from '@/ui/components';
 
 import { pitchRows, shortName } from '@/utils';
 
@@ -52,7 +52,7 @@ function PitchPlace({ slot, emptyLabel, onPress }: PitchPlaceProps) {
       style={styles.player}
     >
       {player ? (
-        <Image
+        <RemoteImage
           source={{ uri: player.actualPhoto ?? player.photo }}
           resizeMode="cover"
           style={styles.photo}

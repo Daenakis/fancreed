@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Image, Share, View } from 'react-native';
+import { Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
@@ -9,6 +9,7 @@ import {
   InfoRow,
   LoadingMore,
   PageLayout,
+  RemoteImage,
   SectionTitle,
   Text,
 } from '@/ui/components';
@@ -62,7 +63,7 @@ export function PlayerScreen() {
       ) : (
         <>
           <View style={styles.photoCard}>
-            <Image
+            <RemoteImage
               source={{ uri: player.actualPhoto ?? player.photo }}
               resizeMode="contain"
               accessibilityLabel={name}

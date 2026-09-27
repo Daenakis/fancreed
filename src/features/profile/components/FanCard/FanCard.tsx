@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { Button, Icon, Text } from '@/ui/components';
+import { Button, Icon, RemoteImage, Text } from '@/ui/components';
 import type { ColorToken } from '@/ui/theme';
 
 import type {
@@ -230,7 +230,7 @@ function FanCardFront({
       </View>
       <View style={styles.fan}>
         {photo ? (
-          <Image
+          <RemoteImage
             source={{ uri: photo }}
             resizeMode="cover"
             style={styles.avatar}

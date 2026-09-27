@@ -31,6 +31,11 @@ export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
 export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
 export { Notice, type NoticeProps } from './Notice';
 export { PageLayout, type PageLayoutProps } from './PageLayout';
+export {
+  RemoteImage,
+  type RemoteImagePosition,
+  type RemoteImageProps,
+} from './RemoteImage';
 export { SectionTitle, type SectionTitleProps } from './SectionTitle';
 export { Select, type SelectProps } from './Select';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';

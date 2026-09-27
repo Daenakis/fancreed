@@ -1,12 +1,13 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Image, Linking, Share, View } from 'react-native';
+import { Linking, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
   EmptyState,
   LoadingMore,
   PageLayout,
+  RemoteImage,
   SocialLinks,
   Text,
 } from '@/ui/components';
@@ -55,9 +56,10 @@ export function ArticleScreen() {
       ) : (
         <>
           <View style={styles.head}>
-            <Image
+            <RemoteImage
               source={{ uri: post.image }}
               resizeMode="cover"
+              position="top"
               style={styles.cover}
             />
             <Text variant="h4Medium" accessibilityRole="header">

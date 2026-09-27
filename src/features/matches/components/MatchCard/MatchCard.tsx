@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Image, Pressable, Share, View } from 'react-native';
+import { Pressable, Share, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { Button, Icon, Text } from '@/ui/components';
+import { Button, Icon, RemoteImage, Text } from '@/ui/components';
 
 import { useNow } from '@/hooks';
 
@@ -92,7 +92,7 @@ function FullMatch({
         </View>
       ) : null}
       <View style={styles.top}>
-        <Image
+        <RemoteImage
           source={{ uri: match.league.logo }}
           resizeMode="contain"
           style={styles.leagueLogo}
@@ -108,7 +108,7 @@ function FullMatch({
         </Text>
       </View>
       <View style={styles.middle}>
-        <Image
+        <RemoteImage
           source={{ uri: match.homeTeam.logo }}
           resizeMode="contain"
           accessibilityLabel={match.homeTeam.name}
@@ -144,7 +144,7 @@ function FullMatch({
             </Text>
           ) : null}
         </View>
-        <Image
+        <RemoteImage
           source={{ uri: match.awayTeam.logo }}
           resizeMode="contain"
           accessibilityLabel={match.awayTeam.name}
@@ -253,7 +253,7 @@ function CompactMatch({
         ) : null}
       </View>
       <View style={styles.rowTeams}>
-        <Image
+        <RemoteImage
           source={{ uri: match.homeTeam.logo }}
           resizeMode="contain"
           accessibilityLabel={match.homeTeam.name}
@@ -284,7 +284,7 @@ function CompactMatch({
             <Text variant="h2Medium">{time}</Text>
           </View>
         )}
-        <Image
+        <RemoteImage
           source={{ uri: match.awayTeam.logo }}
           resizeMode="contain"
           accessibilityLabel={match.awayTeam.name}

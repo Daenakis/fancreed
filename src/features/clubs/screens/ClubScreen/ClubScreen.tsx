@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Image, Linking, Pressable, Share, View } from 'react-native';
+import { Linking, Pressable, Share, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import {
@@ -10,6 +10,7 @@ import {
   InfoRow,
   LoadingMore,
   PageLayout,
+  RemoteImage,
   SectionTitle,
   Text,
 } from '@/ui/components';
@@ -127,7 +128,10 @@ export function ClubScreen() {
           <View style={styles.card}>
             <View style={styles.head}>
               {club.origPhoto ? (
-                <Image source={{ uri: club.origPhoto }} style={styles.logo} />
+                <RemoteImage
+                  source={{ uri: club.origPhoto }}
+                  style={styles.logo}
+                />
               ) : (
                 <View style={[styles.logo, styles.logoEmpty]}>
                   <Icon name="cup" size={24} color={theme.colors.onBrand} />

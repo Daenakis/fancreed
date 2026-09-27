@@ -1,8 +1,9 @@
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import type { ColorToken } from '@/ui/theme';
 
+import { RemoteImage } from '../RemoteImage';
 import { Text } from '../Text';
 import type { BlockHeaderProps } from './types';
 
@@ -38,14 +39,14 @@ export function BlockHeader({
       ]}
     >
       {teamLogos?.map((logo, i) => (
-        <Image
+        <RemoteImage
           key={i}
           source={logo}
           resizeMode="contain"
           style={styles.teamLogo}
         />
       ))}
-      {image ? <Image source={image} style={styles.image} /> : null}
+      {image ? <RemoteImage source={image} style={styles.image} /> : null}
       <Text variant="h3Medium" color={textColor} style={styles.title}>
         {title}
       </Text>

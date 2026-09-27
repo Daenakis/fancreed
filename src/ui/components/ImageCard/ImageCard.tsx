@@ -1,9 +1,10 @@
-import { Image, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import type { ColorToken } from '@/ui/theme';
 
 import { Icon } from '../Icon';
+import { RemoteImage } from '../RemoteImage';
 import { Text } from '../Text';
 import type { ImageCardProps, ImageCardVariant } from './types';
 
@@ -48,9 +49,11 @@ export function ImageCard({
         ]}
       >
         {source ? (
-          <Image
+          <RemoteImage
             source={source}
             resizeMode={article ? 'cover' : 'contain'}
+            // News photos: crop from the bottom so heads stay in view.
+            position={article ? 'top' : 'center'}
             style={styles.image(variant)}
           />
         ) : placeholderIcon ? (

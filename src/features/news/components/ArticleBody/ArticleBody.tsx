@@ -1,7 +1,7 @@
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text } from '@/ui/components';
+import { RemoteImage, Text } from '@/ui/components';
 
 import { htmlToBlocks } from '@/utils';
 
@@ -13,10 +13,11 @@ export function ArticleBody({ html, style }: ArticleBodyProps) {
     <View style={[styles.body, style]}>
       {htmlToBlocks(html).map((block, i) =>
         block.type === 'image' ? (
-          <Image
+          <RemoteImage
             key={i}
             source={{ uri: block.uri }}
             resizeMode="cover"
+            position="top"
             style={styles.image}
           />
         ) : (

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Image, Pressable, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { Icon, Text } from '@/ui/components';
+import { Icon, RemoteImage, Text } from '@/ui/components';
 
 import type { LoyaltyLevel } from '@/types/api';
 
@@ -43,7 +43,7 @@ export function ProfileCard({
           onPress={onChangePhoto}
         >
           {photo ? (
-            <Image source={{ uri: photo }} style={styles.avatar} />
+            <RemoteImage source={{ uri: photo }} style={styles.avatar} />
           ) : (
             <View style={[styles.avatar, styles.avatarEmpty]}>
               <Icon name="user" size={18} color={theme.colors.onBrand} />

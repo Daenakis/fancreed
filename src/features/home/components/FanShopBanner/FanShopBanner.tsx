@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Image, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Text } from '@/ui/components';
+import { RemoteImage, Text } from '@/ui/components';
 
 import type { FanShopBannerProps } from './types';
 
@@ -19,7 +19,7 @@ export function FanShopBanner({ image, onPress, style }: FanShopBannerProps) {
       style={({ pressed }) => [styles.banner, pressed && styles.pressed, style]}
     >
       {source ? (
-        <Image source={source} resizeMode="cover" style={styles.image} />
+        <RemoteImage source={source} resizeMode="cover" style={styles.image} />
       ) : (
         <Text variant="h3Medium" color="onBrand">
           {t('home.fanShop')}
