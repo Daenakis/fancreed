@@ -1,5 +1,7 @@
 export { toCreateClubRequest } from './clubs';
 export { eventDate, mapsUrl } from './events';
+export { type HtmlBlock, htmlToBlocks } from './html';
+export { pitchRows, shortName } from './lineup';
 export {
   type Countdown,
   countdownTo,
