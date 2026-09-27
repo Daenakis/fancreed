@@ -2,14 +2,15 @@ import { Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import type { IconName } from '@/ui/assets/icons';
+import type { ColorToken } from '@/ui/theme';
 
-import { BlockHeader } from '../BlockHeader';
 import { Icon } from '../Icon';
+import { SectionTitle } from '../SectionTitle';
 import type { SocialLinksProps } from './types';
 
 /** Backend network name → icon and screen-reader name. Others are hidden. */
 const NETWORKS: Record<string, { icon: IconName; label: string }> = {
-  facebook: { icon: 'facebook', label: 'Facebook' },
+  facebook: { icon: 'facebookMono', label: 'Facebook' },
   instagram: { icon: 'instagram', label: 'Instagram' },
   telegram: { icon: 'telegram', label: 'Telegram' },
   web: { icon: 'website', label: 'Website' },
@@ -20,8 +21,8 @@ const NETWORKS: Record<string, { icon: IconName; label: string }> = {
 };
 
 /**
- * The club's social networks as a row of icon buttons, optionally under a
- * BlockHeader. Unknown networks and empty links are skipped.
+ * The club's social networks on a green block: an optional title, then a
+ * row of outlined icon squares. Unknown networks and empty links are skipped.
  *
  * @example
  * <SocialLinks title={t('home.socials')} links={socials} onOpen={(l) => Linking.openURL(l.url)} />
@@ -30,7 +31,7 @@ export function SocialLinks({
   links,
   onOpen,
   title,
-  iconColor = 'foreground',
+  iconColor = 'onBrand',
   style,
 }: SocialLinksProps) {
   const { theme } = useUnistyles();
@@ -40,7 +41,9 @@ export function SocialLinks({
 
   return (
     <View style={[styles.container, style]}>
-      {title ? <BlockHeader title={title} /> : null}
+      {title ? (
+        <SectionTitle title={title} color={iconColor} style={styles.title} />
+      ) : null}
       <View style={styles.row}>
         {shown.map((link) => {
           const network = NETWORKS[link.name]!;
@@ -51,11 +54,14 @@ export function SocialLinks({
               accessibilityLabel={network.label}
               hitSlop={8}
               onPress={() => onOpen(link)}
-              style={({ pressed }) => pressed && styles.pressed}
+              style={({ pressed }) => [
+                styles.square(iconColor),
+                pressed && styles.pressed,
+              ]}
             >
               <Icon
                 name={network.icon}
-                size={32}
+                size={20}
                 color={theme.colors[iconColor]}
               />
             </Pressable>
@@ -70,14 +76,27 @@ SocialLinks.displayName = 'SocialLinks';
 
 const styles = StyleSheet.create((theme) => ({
   container: {
-    alignItems: 'center',
+    paddingVertical: theme.spacing(5),
+    backgroundColor: theme.colors.brand,
+  },
+  title: {
+    marginBottom: theme.spacing(4),
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: theme.spacing(6),
-    paddingVertical: theme.spacing(6),
+    gap: theme.spacing(3),
+    paddingHorizontal: theme.spacing(5),
   },
+  square: (color: ColorToken) => ({
+    flex: 1,
+    maxWidth: theme.spacing(12),
+    aspectRatio: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: theme.radius.sm,
+    borderColor: theme.colors[color],
+  }),
   pressed: {
     opacity: 0.7,
   },
