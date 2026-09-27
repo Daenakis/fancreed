@@ -3,11 +3,12 @@
 export type AppEvent = {
   _id: string;
   type: string;
-  /** Start time: ISO string or unix time (seconds). */
+  /** Start time: ISO string, unix time (seconds) or a bare "HH:mm" (old matchday events). */
   time: string | number;
   title: string;
   location: string;
-  coords?: { latitude: number; longitude: number } | null;
+  /** Old records may carry only one of the two. */
+  coords?: { latitude?: number; longitude?: number } | null;
 };
 
 export type EventsListResponse = {

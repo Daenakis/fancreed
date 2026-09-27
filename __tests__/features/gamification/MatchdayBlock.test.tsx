@@ -33,6 +33,26 @@ describe('MatchdayBlock', () => {
     );
   });
 
+  it('shows a clock-only event (live data shape) without the reminder', async () => {
+    mockEvents([
+      {
+        ...event('Old matchday', '17:00'),
+        coords: { latitude: 49.77 },
+      },
+    ]);
+    const onOpenLink = jest.fn();
+    const { findByText, queryByRole, getByRole } = render(
+      <MatchdayBlock onOpenLink={onOpenLink} />,
+    );
+
+    expect(await findByText('05:00 PM')).toBeTruthy();
+    expect(queryByRole('button', { name: 'event.remind' })).toBeNull();
+    fireEvent.press(getByRole('button', { name: 'event.location' }));
+    expect(onOpenLink).toHaveBeenCalledWith(
+      'https://www.google.com/maps/search/?api=1&query=Arena%20Lviv',
+    );
+  });
+
   it('shows two events and the rest after "show more"', async () => {
     mockEvents([event('A'), event('B'), event('C')]);
     const { findByText, queryByText, getByRole } = render(

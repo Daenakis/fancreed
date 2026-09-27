@@ -7,7 +7,7 @@ import { Icon, LoadingMore, Text } from '@/ui/components';
 
 import { useCalendarReminder, useMatchdayEventsQuery } from '@/hooks';
 
-import { eventDate, mapsUrl } from '@/utils';
+import { eventDate, hasEventDay, mapsUrl } from '@/utils';
 
 import type { AppEvent } from '@/types/api';
 
@@ -108,10 +108,12 @@ function MatchdayEvent({
 }: MatchdayEventProps) {
   const { t, i18n } = useTranslation();
   const start = eventDate(event.time);
-  const time = new Intl.DateTimeFormat(i18n.language, {
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(start);
+  const time = Number.isNaN(start.getTime())
+    ? ''
+    : new Intl.DateTimeFormat(i18n.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(start);
 
   const share = () =>
     void Share.share({
@@ -145,7 +147,14 @@ function MatchdayEvent({
       </View>
       <View style={styles.actions}>
         <ActionTile icon="telegram" label={t('event.share')} onPress={share} />
-        <ActionTile icon="bell" label={t('event.remind')} onPress={onRemind} />
+        {/* Clock-only events have no day to put in the calendar. */}
+        {hasEventDay(event.time) ? (
+          <ActionTile
+            icon="bell"
+            label={t('event.remind')}
+            onPress={onRemind}
+          />
+        ) : null}
         {event.location || event.coords ? (
           <ActionTile
             icon="location"
