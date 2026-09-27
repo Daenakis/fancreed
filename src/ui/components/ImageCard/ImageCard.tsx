@@ -16,6 +16,7 @@ import type { ImageCardProps, ImageCardVariant } from './types';
  * <ImageCard image={player.photo} title={player.name} subtitle="45%" />
  * <ImageCard image={club.photo} title={club.name} subtitle={club.city} subtitleIcon="location" onPress={open} />
  * <ImageCard variant="article" image={news.image} title={news.title} description={news.description} onPress={open} />
+ * <ImageCard variant="article" image={thumb} title={video.title} overlayIcon="play" onPress={open} />
  * <ImageCard variant="tile" image={event.image} title={event.name} textColor="background" onPress={open} />
  */
 export function ImageCard({
@@ -25,6 +26,7 @@ export function ImageCard({
   subtitleIcon,
   description,
   variant = 'photo',
+  overlayIcon,
   onPress,
   textColor = 'foreground',
   tileSurface = 'translucentSurface',
@@ -44,6 +46,17 @@ export function ImageCard({
             resizeMode={article ? 'cover' : 'contain'}
             style={styles.image(variant)}
           />
+        ) : null}
+        {overlayIcon ? (
+          <View style={styles.overlay}>
+            <View style={styles.overlayCircle}>
+              <Icon
+                name={overlayIcon}
+                size={24}
+                color={theme.colors.foreground}
+              />
+            </View>
+          </View>
         ) : null}
       </View>
       {article ? (
@@ -184,6 +197,19 @@ const styles = StyleSheet.create((theme) => ({
     maxWidth: '90%',
     marginTop: theme.spacing(1),
     textAlign: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  overlayCircle: {
+    width: theme.spacing(12),
+    height: theme.spacing(12),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: theme.radius.full,
+    backgroundColor: theme.colors.background,
   },
   pressed: {
     opacity: 0.7,

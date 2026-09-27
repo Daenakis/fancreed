@@ -20,10 +20,12 @@ export type ImageCardProps = {
   subtitle?: string;
   /** Icon before the subtitle, e.g. `location` for a club's city. */
   subtitleIcon?: IconName;
-  /** `article` only: body text under the title, cut to 4 lines. */
+  /** `article` only: body text under the title, cut to 3 lines. */
   description?: string;
   /** Defaults to `photo`. */
   variant?: ImageCardVariant;
+  /** Icon in a white circle over the image, e.g. `play` for videos. */
+  overlayIcon?: IconName;
   /** Makes the card pressable. */
   onPress?: () => void;
   /** `tile` only: frame background. Defaults to `translucentSurface` (for coloured backgrounds). */

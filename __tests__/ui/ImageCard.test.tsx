@@ -6,7 +6,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { ImageCard } from '@/ui/components';
+import { Icon, ImageCard } from '@/ui/components';
 import { lightTheme } from '@/ui/theme/unistyles';
 
 const url = 'https://example.com/p.png';
@@ -114,5 +114,20 @@ describe('ImageCard', () => {
     expect(getByText('Knights')).toBeTruthy();
     expect(getByText('Ivano-Frankivsk')).toBeTruthy();
     expect(getByLabelText('Knights, Ivano-Frankivsk')).toBeTruthy();
+  });
+
+  it('shows the overlay icon over the image when overlayIcon is set', () => {
+    const { UNSAFE_getAllByType } = render(
+      <ImageCard
+        variant="article"
+        image={url}
+        title="Review"
+        overlayIcon="play"
+      />,
+    );
+
+    expect(UNSAFE_getAllByType(Icon).map((icon) => icon.props.name)).toContain(
+      'play',
+    );
   });
 });
