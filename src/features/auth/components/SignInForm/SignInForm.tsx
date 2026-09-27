@@ -10,6 +10,8 @@ import { useFieldErrorText, useSubmitForm } from '@/hooks';
 
 import { type SignInFormValues, signInSchema } from '@/schemas';
 
+import { CONFIG } from '@/config';
+
 import { AuthFooterLink } from '../AuthFooterLink';
 import { FormError } from '../FormError';
 import type { SignInFormProps } from './types';
@@ -33,7 +35,8 @@ export function SignInForm({
     formState: { submitCount, errors },
   } = useSubmitForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
-    defaultValues: { login: '', password: '' },
+    // Empty unless a dev build has a test account in .env.local.
+    defaultValues: { ...CONFIG.DEV_SIGN_IN },
   });
 
   const submit = submitWith((values) => onSubmit(values, setError));

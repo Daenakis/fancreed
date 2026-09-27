@@ -12,6 +12,10 @@ export const envSchema = z.object({
   EXPO_PUBLIC_PACKAGE: z.string(),
 
   EXPO_PUBLIC_VERSION: z.string(),
+
+  /** Dev builds only: prefills the sign-in form (set in .env.local, never committed). */
+  EXPO_PUBLIC_DEV_LOGIN: z.string().default(''),
+  EXPO_PUBLIC_DEV_PASSWORD: z.string().default(''),
 });
 
 export type Env = z.infer<typeof envSchema>;

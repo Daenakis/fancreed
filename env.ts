@@ -56,6 +56,16 @@ const _env: EnvType = {
   EXPO_PUBLIC_BUGSNAG_API_KEY: process.env.EXPO_PUBLIC_BUGSNAG_API_KEY ?? '',
 
   EXPO_PUBLIC_VERSION: packageJSON.version,
+
+  // Test account for the sign-in form — dev builds only (see .env.example).
+  EXPO_PUBLIC_DEV_LOGIN:
+    EXPO_PUBLIC_RUN_MODE === 'dev'
+      ? (process.env.EXPO_PUBLIC_DEV_LOGIN ?? '')
+      : '',
+  EXPO_PUBLIC_DEV_PASSWORD:
+    EXPO_PUBLIC_RUN_MODE === 'dev'
+      ? (process.env.EXPO_PUBLIC_DEV_PASSWORD ?? '')
+      : '',
 };
 
 // Strict (EAS builds): invalid env fails the build.
