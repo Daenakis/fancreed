@@ -21,3 +21,11 @@ jest.mock('expo-router', () => ({
   Tabs: { Screen: 'Screen' },
   Redirect: 'Redirect',
 }));
+
+// Headless tabs (the tab shell) — only rendered by the router, never in tests.
+jest.mock('expo-router/ui', () => ({
+  Tabs: 'Tabs',
+  TabList: 'TabList',
+  TabSlot: 'TabSlot',
+  TabTrigger: 'TabTrigger',
+}));

@@ -61,6 +61,16 @@ const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
     'expo-secure-store',
     'expo-status-bar',
     [
+      'expo-image-picker',
+      {
+        // Profile photo only; no camera or microphone use.
+        photosPermission:
+          'Fancreed uses your photos so you can choose a profile picture.',
+        cameraPermission: false,
+        microphonePermission: false,
+      },
+    ],
+    [
       'expo-localization',
       {
         supportedLocales: ['en', 'uk'],

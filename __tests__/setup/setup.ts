@@ -13,6 +13,11 @@ jest.mock('expo-splash-screen', () => ({
   setOptions: jest.fn(),
 }));
 
+// Same lazy-`fetch` problem; tests set results via jest.mocked(…).
+jest.mock('expo-image-picker', () => ({
+  launchImageLibraryAsync: jest.fn(),
+}));
+
 jest.mock(
   'react-native-safe-area-context',
   // eslint-disable-next-line @typescript-eslint/no-require-imports
