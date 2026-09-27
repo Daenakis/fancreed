@@ -1,2 +1,7 @@
-export { AppTabs, ShellHeader, type ShellHeaderProps } from './components';
+export {
+  AppTabs,
+  ShellHeader,
+  type ShellHeaderProps,
+  WelcomeBack,
+} from './components';
 export { ShopScreen } from './screens';

@@ -1,5 +1,5 @@
 export { AddPhoto, type AddPhotoProps } from './AddPhoto';
-export { AppHeader, type AppHeaderProps } from './AppHeader';
+export { APP_HEADER_LOGO, AppHeader, type AppHeaderProps } from './AppHeader';
 export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
 export { BottomSheet, type BottomSheetProps } from './BottomSheet';
 export {

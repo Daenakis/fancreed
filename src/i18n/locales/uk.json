@@ -18,6 +18,8 @@
     "welcomeTitle": "Ласкаво просимо",
     "welcomeSubtitle": "Увійдіть, щоб продовжити",
     "splashWelcome": "Ласкаво просимо!",
+    "welcomeBack": "З поверненням, {{name}}!",
+    "welcomeBackNoName": "З поверненням!",
     "signInTitle": "Увійдіть у свій акаунт",
     "forgotPassword": "Забули пароль?",
     "notRegistered": "Ще не зареєстровані?",

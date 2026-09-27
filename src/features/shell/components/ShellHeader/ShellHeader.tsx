@@ -7,6 +7,7 @@ import { CLUB_LOGO } from '@/constants';
 
 import { SideMenu } from '@/features/menu';
 
+import { useHeaderLogoReveal } from '../../hooks';
 import type { ShellHeaderProps } from './types';
 
 /**
@@ -16,11 +17,13 @@ import type { ShellHeaderProps } from './types';
  */
 export function ShellHeader({ style }: ShellHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const logoStyle = useHeaderLogoReveal();
 
   return (
     <>
       <AppHeader
         logo={CLUB_LOGO}
+        logoStyle={logoStyle}
         onMenuPress={() => setMenuOpen(true)}
         onProfilePress={() => router.push('/profile')}
         style={style}

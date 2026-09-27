@@ -18,6 +18,8 @@
     "welcomeTitle": "Welcome",
     "welcomeSubtitle": "Sign in to continue",
     "splashWelcome": "Welcome!",
+    "welcomeBack": "Welcome back, {{name}}!",
+    "welcomeBackNoName": "Welcome back!",
     "signInTitle": "Sign in to your account",
     "forgotPassword": "Forgot password?",
     "notRegistered": "Not registered yet?",
