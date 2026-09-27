@@ -1,4 +1,6 @@
 export {
+  MatchdayBlock,
+  type MatchdayBlockProps,
   PredictionBlock,
   type PredictionBlockProps,
   VotesBlock,

@@ -1,4 +1,5 @@
 export { toCreateClubRequest } from './clubs';
+export { eventDate, mapsUrl } from './events';
 export {
   type Countdown,
   countdownTo,

@@ -185,5 +185,12 @@
       "textInvalid": "Contains characters that aren't allowed",
       "linkInvalid": "Paste the full link, e.g. https://…"
     }
+  },
+  "event": {
+    "matchdayTitle": "MATCHDAY",
+    "share": "Share",
+    "location": "Location",
+    "remind": "Remind",
+    "shareMessage": "{{title}} — {{date}}, {{location}}. Join via the Fancreed app!"
   }
 }

@@ -187,5 +187,12 @@
       "textInvalid": "Містить недопустимі символи",
       "linkInvalid": "Вставте повне посилання, наприклад https://…"
     }
+  },
+  "event": {
+    "matchdayTitle": "МАТЧДЕЙ",
+    "share": "Поділитись",
+    "location": "Локація",
+    "remind": "Нагадати",
+    "shareMessage": "{{title}} — {{date}}, {{location}}. Долучайся через застосунок Fancreed!"
   }
 }

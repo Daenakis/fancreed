@@ -1,5 +1,6 @@
 export { authApi } from './auth';
 export { clubsApi } from './clubs';
+export { eventsApi } from './events';
 export { fixturesApi } from './fixtures';
 export { leaguesApi } from './leagues';
 export { newsApi } from './news';

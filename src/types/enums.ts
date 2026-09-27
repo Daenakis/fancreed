@@ -2,6 +2,7 @@
 
 export enum QueryKey {
   Clubs = 'clubs',
+  Events = 'events',
   Fixtures = 'fixtures',
   Leagues = 'leagues',
   News = 'news',

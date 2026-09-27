@@ -2,6 +2,7 @@ export { axiosInstance } from './client';
 export {
   authApi,
   clubsApi,
+  eventsApi,
   fixturesApi,
   leaguesApi,
   newsApi,
