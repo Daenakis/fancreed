@@ -28,6 +28,7 @@ export function ImageCard({
   variant = 'photo',
   overlayIcon,
   placeholderIcon,
+  hideCaption = false,
   onPress,
   textColor = 'foreground',
   tileSurface = 'translucentSurface',
@@ -71,7 +72,7 @@ export function ImageCard({
           </View>
         ) : null}
       </View>
-      {article ? (
+      {hideCaption ? null : article ? (
         <>
           {title ? (
             <Text

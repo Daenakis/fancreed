@@ -53,4 +53,12 @@ describe('TileCarousel', () => {
 
     expect(toJSON()).toBeNull();
   });
+
+  it('hides the captions when hideCaptions is set', () => {
+    const { queryByText } = render(
+      <TileCarousel items={items} onPressItem={jest.fn()} hideCaptions />,
+    );
+
+    expect(queryByText(items[0]!.title)).toBeNull();
+  });
 });

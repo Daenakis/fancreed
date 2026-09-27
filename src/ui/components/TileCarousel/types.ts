@@ -20,6 +20,8 @@ export type TileCarouselProps<T extends TileItem> = {
   pageSize?: number;
   /** Tile frame background. Defaults to `translucentSurface`. */
   tileSurface?: ColorToken;
+  /** Logos only: captions become screen-reader labels. Defaults to `false`. */
+  hideCaptions?: boolean;
   /** Theme colour of the captions. Defaults to `foreground`. */
   textColor?: ColorToken;
   style?: StyleProp<ViewStyle>;

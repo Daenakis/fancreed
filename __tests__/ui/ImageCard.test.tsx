@@ -140,4 +140,13 @@ describe('ImageCard', () => {
       'lion',
     );
   });
+
+  it('hides the caption but keeps it as the label when hideCaption is set', () => {
+    const { getByLabelText, queryByText } = render(
+      <ImageCard variant="tile" image={url} title="Onur" hideCaption />,
+    );
+
+    expect(queryByText('Onur')).toBeNull();
+    expect(getByLabelText('Onur')).toBeTruthy();
+  });
 });

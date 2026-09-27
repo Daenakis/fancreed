@@ -28,6 +28,8 @@ export type ImageCardProps = {
   placeholderIcon?: IconName;
   /** Icon in a white circle over the image, e.g. `play` for videos. */
   overlayIcon?: IconName;
+  /** Hides the captions (they stay as the screen-reader label), e.g. logos. */
+  hideCaption?: boolean;
   /** Makes the card pressable. */
   onPress?: () => void;
   /** `tile` only: frame background. Defaults to `translucentSurface` (for coloured backgrounds). */
