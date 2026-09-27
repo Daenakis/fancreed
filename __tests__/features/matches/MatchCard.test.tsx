@@ -20,9 +20,9 @@ const match = (overrides: Partial<Fixture>): Fixture => ({
 });
 
 describe('MatchCard compact', () => {
-  it('shows team names and the date before kick-off, with tickets and share', () => {
+  it('shows the crests and date before kick-off and opens tickets', () => {
     const onOpenLink = jest.fn();
-    const { getByText, getByRole, queryByLabelText } = render(
+    const { getByLabelText, getByRole, queryByLabelText } = render(
       <MatchCard
         variant="compact"
         match={match({ ticketLink: 'https://club/t' })}
@@ -30,8 +30,8 @@ describe('MatchCard compact', () => {
       />,
     );
 
-    expect(getByText('Rukh')).toBeTruthy();
-    expect(getByText('Vorskla')).toBeTruthy();
+    expect(getByLabelText('Rukh')).toBeTruthy();
+    expect(getByLabelText('Vorskla')).toBeTruthy();
     expect(queryByLabelText('match.score')).toBeNull();
     fireEvent.press(getByRole('button', { name: 'match.tickets' }));
     expect(onOpenLink).toHaveBeenCalledWith('https://club/t');
@@ -57,6 +57,25 @@ describe('MatchCard compact', () => {
     expect(queryByRole('button', { name: 'match.tickets' })).toBeNull();
     fireEvent.press(getByRole('button', { name: 'match.video' }));
     expect(onOpenLink).toHaveBeenCalledWith('https://yt/v');
+  });
+
+  it('opens the events of the match and disables them without a handler', () => {
+    const onOpenEvents = jest.fn();
+    const m = match({});
+    const { getByRole, rerender } = render(
+      <MatchCard
+        variant="compact"
+        match={m}
+        onOpenLink={jest.fn()}
+        onOpenEvents={onOpenEvents}
+      />,
+    );
+
+    fireEvent.press(getByRole('button', { name: 'match.events' }));
+    expect(onOpenEvents).toHaveBeenCalledWith(m);
+
+    rerender(<MatchCard variant="compact" match={m} onOpenLink={jest.fn()} />);
+    expect(getByRole('button', { name: 'match.events' })).toBeDisabled();
   });
 
   it('shares the match', () => {

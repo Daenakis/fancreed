@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Image, Share, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Image, Pressable, Share, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { Button, Text } from '@/ui/components';
+import { Button, Icon, Text } from '@/ui/components';
 
 import { useNow } from '@/hooks';
 
@@ -13,15 +13,14 @@ import type {
   MatchCardProps,
   MatchLinkItem,
   MatchVariantProps,
-  TeamProps,
 } from './types';
 
 /**
  * One match. `full`: green home-screen card — league and round on top, team
  * crests around the kick-off time (or the score), a countdown before
  * kick-off and a row of links (disabled when the match has nothing to open).
- * `compact`: calendar row with team names, score or date/time and icon
- * actions (tickets, share, video).
+ * `compact`: light-green calendar card — league and share on top, crests
+ * around the date/time (or score), then Events, Video and Tickets buttons.
  */
 export function MatchCard({ variant = 'full', ...props }: MatchCardProps) {
   return variant === 'compact' ? (
@@ -194,8 +193,15 @@ function Chip({ text }: ChipProps) {
   );
 }
 
-function CompactMatch({ match, onOpenLink, style }: MatchVariantProps) {
+function CompactMatch({
+  match,
+  onOpenLink,
+  onOpenEvents,
+  onOpenVideos,
+  style,
+}: MatchVariantProps) {
   const { t, i18n } = useTranslation();
+  const { theme } = useUnistyles();
   const phase = matchPhase(match.status);
   const played = phase === 'live' || phase === 'finished';
   const kickOff = new Date(match.event_date);
@@ -207,6 +213,12 @@ function CompactMatch({ match, onOpenLink, style }: MatchVariantProps) {
     hour: '2-digit',
     minute: '2-digit',
   }).format(kickOff);
+  const video =
+    match.videoLink && onOpenVideos
+      ? () => onOpenVideos(match)
+      : match.videoLink
+        ? () => onOpenLink(match.videoLink!)
+        : undefined;
 
   const share = () =>
     void Share.share({
@@ -219,11 +231,26 @@ function CompactMatch({ match, onOpenLink, style }: MatchVariantProps) {
 
   return (
     <View style={[styles.row, style]}>
-      <Text variant="bodySSemibold" color="mutedForeground">
-        {match.league.name}
-      </Text>
+      <View style={styles.rowHead}>
+        <Text variant="bodyMRegular" numberOfLines={1} style={styles.rowLeague}>
+          {match.league.name}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('match.share')}
+          hitSlop={8}
+          onPress={share}
+        >
+          <Icon name="telegram" size={18} color={theme.colors.foreground} />
+        </Pressable>
+      </View>
       <View style={styles.rowTeams}>
-        <Team name={match.homeTeam.name} logo={match.homeTeam.logo} />
+        <Image
+          source={{ uri: match.homeTeam.logo }}
+          resizeMode="contain"
+          accessibilityLabel={match.homeTeam.name}
+          style={styles.rowLogo}
+        />
         {played ? (
           <Text
             variant="h1Semibold"
@@ -234,58 +261,50 @@ function CompactMatch({ match, onOpenLink, style }: MatchVariantProps) {
               awayGoals: match.goalsAwayTeam ?? 0,
             })}
           >
-            {match.goalsHomeTeam ?? 0} : {match.goalsAwayTeam ?? 0}
+            {match.goalsHomeTeam ?? 0} - {match.goalsAwayTeam ?? 0}
           </Text>
         ) : (
           <View style={styles.center}>
-            <Text variant="bodyLMedium">{day}</Text>
-            <Text variant="bodyLMedium">{time}</Text>
+            <Text variant="bodyMRegular">{day}</Text>
+            <Text variant="h2Medium">{time}</Text>
           </View>
         )}
-        <Team name={match.awayTeam.name} logo={match.awayTeam.logo} />
-      </View>
-      <View style={styles.actions}>
-        {!played && match.ticketLink ? (
-          <Button
-            variant="ghost"
-            icon="shop"
-            iconPosition="top"
-            text={t('match.tickets')}
-            onPress={() => onOpenLink(match.ticketLink!)}
-          />
-        ) : null}
-        <Button
-          variant="ghost"
-          icon="telegram"
-          iconPosition="top"
-          text={t('match.share')}
-          onPress={share}
+        <Image
+          source={{ uri: match.awayTeam.logo }}
+          resizeMode="contain"
+          accessibilityLabel={match.awayTeam.name}
+          style={styles.rowLogo}
         />
-        {played && match.videoLink ? (
-          <Button
-            variant="ghost"
-            icon="video"
-            iconPosition="top"
-            text={t('match.video')}
-            onPress={() => onOpenLink(match.videoLink!)}
-          />
-        ) : null}
       </View>
-    </View>
-  );
-}
-
-function Team({ name, logo }: TeamProps) {
-  return (
-    <View style={styles.team}>
-      <Image
-        source={{ uri: logo }}
-        resizeMode="contain"
-        style={styles.rowLogo}
-      />
-      <Text variant="bodySSemibold" numberOfLines={2} style={styles.centered}>
-        {name}
-      </Text>
+      <View style={styles.rowActions}>
+        <Button
+          variant="brandLine"
+          size="xs"
+          text={t('match.events')}
+          disabled={!onOpenEvents}
+          onPress={() => onOpenEvents?.(match)}
+          style={styles.link}
+        />
+        <Button
+          variant="brandLine"
+          size="xs"
+          text={t('match.video')}
+          disabled={!video}
+          onPress={video}
+          style={styles.link}
+        />
+        {played ? null : (
+          <Button
+            size="xs"
+            backgroundColor="brand"
+            textColor="onBrand"
+            text={t('match.tickets')}
+            disabled={!match.ticketLink}
+            onPress={() => onOpenLink(match.ticketLink!)}
+            style={styles.link}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -358,31 +377,30 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
   },
   row: {
+    gap: theme.spacing(3),
+    padding: theme.spacing(3),
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.mintSurface,
+  },
+  rowHead: {
+    flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing(2),
-    paddingVertical: theme.spacing(4),
-    paddingHorizontal: theme.spacing(4),
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border,
+  },
+  rowLeague: {
+    flex: 1,
   },
   rowTeams: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch',
     justifyContent: 'space-between',
   },
-  team: {
-    width: theme.spacing(24),
-    alignItems: 'center',
-    gap: theme.spacing(1),
-  },
   rowLogo: {
-    width: theme.spacing(12),
-    height: theme.spacing(12),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
-  actions: {
+  rowActions: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: theme.spacing(6),
+    gap: theme.spacing(1.5),
   },
 }));

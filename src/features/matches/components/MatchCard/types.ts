@@ -4,7 +4,7 @@ import type { Fixture } from '@/types/api';
 
 /**
  * - `full` (default): home-screen card with countdown and links.
- * - `compact`: calendar row — team names, score or date/time, icon actions.
+ * - `compact`: light-green calendar card — events, video, tickets buttons.
  */
 export type MatchCardVariant = 'full' | 'compact';
 
@@ -16,8 +16,10 @@ export type MatchCardProps = {
   onOpenLink: (url: string) => void;
   /** `full`: "Line-up" opens the line-up screen; disabled without it. */
   onOpenLineup?: (match: Fixture) => void;
-  /** `full`: "Video" opens the videos screen instead of the link. */
+  /** "Video" opens the videos screen instead of the link. */
   onOpenVideos?: (match: Fixture) => void;
+  /** `compact`: "Events" opens the match's fan events; disabled without it. */
+  onOpenEvents?: (match: Fixture) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -35,8 +37,3 @@ export type ChipProps = {
 };
 
 export type MatchVariantProps = Omit<MatchCardProps, 'variant'>;
-
-export type TeamProps = {
-  name: string;
-  logo: string;
-};
