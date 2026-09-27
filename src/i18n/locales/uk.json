@@ -165,6 +165,8 @@
     "tickets": "Квитки",
     "review": "Огляд",
     "video": "Відео",
-    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}"
+    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
+    "share": "Поділитись",
+    "shareMessage": "{{home}} – {{away}}, {{date}}. Стеж за матчем у застосунку Fancreed!"
   }
 }

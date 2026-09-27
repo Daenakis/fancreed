@@ -1,1 +1,5 @@
-export { MatchCard, type MatchCardProps } from './MatchCard';
+export {
+  MatchCard,
+  type MatchCardProps,
+  type MatchCardVariant,
+} from './MatchCard';

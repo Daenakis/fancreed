@@ -1,2 +1,2 @@
 export { MatchCard } from './MatchCard';
-export type { MatchCardProps } from './types';
+export type { MatchCardProps, MatchCardVariant } from './types';

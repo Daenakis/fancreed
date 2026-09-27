@@ -1,1 +1,5 @@
-export { MatchCard, type MatchCardProps } from './components';
+export {
+  MatchCard,
+  type MatchCardProps,
+  type MatchCardVariant,
+} from './components';

@@ -163,6 +163,8 @@
     "tickets": "Tickets",
     "review": "Review",
     "video": "Video",
-    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}"
+    "score": "{{home}} {{homeGoals}} : {{awayGoals}} {{away}}",
+    "share": "Share",
+    "shareMessage": "{{home}} – {{away}}, {{date}}. Follow the match in the Fancreed app!"
   }
 }
