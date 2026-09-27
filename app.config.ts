@@ -61,6 +61,15 @@ const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
     'expo-secure-store',
     'expo-status-bar',
     [
+      'expo-calendar',
+      {
+        // Matchday reminders are saved as calendar events with an alert.
+        calendarPermission:
+          'Fancreed adds matchday events to your calendar so you get a reminder.',
+        remindersPermission: false,
+      },
+    ],
+    [
       'expo-location',
       {
         // Only to turn a typed event address into map coordinates.

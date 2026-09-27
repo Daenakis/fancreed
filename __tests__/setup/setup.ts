@@ -18,6 +18,14 @@ jest.mock('expo-image-picker', () => ({
   launchImageLibraryAsync: jest.fn(),
 }));
 
+jest.mock('expo-calendar/legacy', () => ({
+  EntityTypes: { EVENT: 'event' },
+  requestCalendarPermissionsAsync: jest.fn(),
+  getDefaultCalendarAsync: jest.fn(),
+  getCalendarsAsync: jest.fn(),
+  createEventAsync: jest.fn(),
+}));
+
 jest.mock('expo-location', () => ({
   geocodeAsync: jest.fn(),
 }));

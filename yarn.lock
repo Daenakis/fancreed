@@ -5369,6 +5369,11 @@ expo-asset@~57.0.18:
     "@expo/image-utils" "^0.11.5"
     expo-constants "~57.0.19"
 
+expo-calendar@~57.0.5:
+  version "57.0.5"
+  resolved "https://registry.yarnpkg.com/expo-calendar/-/expo-calendar-57.0.5.tgz#ccf2fa86d814c18149b77059a129571da765eb51"
+  integrity sha512-0qGJq8kIU7JmtMouKZhA89UOoAcCmOqKmPzTl+PxeKo1a9CIVbXu1w9H+XIhmmRzoSfnGXx/l5UpIiOE5eyJjA==
+
 expo-constants@~57.0.19:
   version "57.0.19"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-57.0.19.tgz#9df45e23672342f44f12f290399d95097af738c6"
