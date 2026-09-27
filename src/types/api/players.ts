@@ -25,3 +25,29 @@ export type Squad = {
 export type ActualSquadResponse = {
   squad: Squad;
 };
+
+export type PlayerResponse = {
+  player: Player;
+};
+
+/** A stat: career total plus the current season's share. */
+export type PlayerStat = { total: number; season: number };
+
+/**
+ * Bio and statistics for the player page.
+ * TODO(backend): no endpoint yet — mocked in `playersApi.details`.
+ */
+export type PlayerDetails = {
+  /** ISO date. */
+  birthday: string;
+  nationality: string;
+  /** cm. */
+  height: number;
+  /** kg. */
+  weight: number;
+  /** e.g. "2024/2025". */
+  season: string;
+  matches: PlayerStat;
+  goals: PlayerStat;
+  assists: PlayerStat;
+};

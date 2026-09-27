@@ -22,3 +22,12 @@ export type NewsListResponse = {
   data: NewsPost[];
   meta: { current_page: number; last_page: number; total: number };
 };
+
+/**
+ * Full article text as HTML.
+ * TODO(backend): no endpoint yet — mocked in `newsApi.body`.
+ */
+export type NewsPostBody = {
+  slug: string;
+  body: string;
+};

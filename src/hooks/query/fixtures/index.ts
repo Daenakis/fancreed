@@ -5,3 +5,9 @@ export {
   useLatestVideosQuery,
   useNextMatchQuery,
 } from './useActualFixturesQuery';
+export { fixtureQueryOptions, useFixtureQuery } from './useFixtureQuery';
+export {
+  fixturesTableQueryOptions,
+  useFixturesTableQuery,
+  useMatchVideosQuery,
+} from './useFixturesTableQuery';

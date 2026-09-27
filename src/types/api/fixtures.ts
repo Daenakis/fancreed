@@ -1,5 +1,7 @@
 // Backend group "fixtures" (api-football shaped matches).
 
+import type { Player } from './players';
+
 export type FixtureTeam = { id: number; name: string; logo: string };
 
 export type Fixture = {
@@ -24,9 +26,33 @@ export type Fixture = {
   overviewLink?: string | null;
   photoLink?: string | null;
   videoLink?: string | null;
+  /** Starting line-ups of both teams, once announced. */
+  lineups?: Lineup[];
+};
+
+/** A player in a line-up; `grid` is "row:column" on the pitch (row 1 = goalkeeper). */
+export type LineupPlayer = Player & { grid?: string | null };
+
+export type Lineup = {
+  team: FixtureTeam;
+  /** e.g. "4-3-3". */
+  formation?: string | null;
+  startXI: LineupPlayer[];
+  substitutes?: LineupPlayer[];
 };
 
 export type ActualFixturesResponse = {
   /** Last played match, then the upcoming ones. */
   fixtures: Fixture[];
+};
+
+export type FixtureResponse = {
+  fixture: Fixture;
+};
+
+export type FixturesTableResponse = {
+  /** Played matches, newest first. */
+  past: Fixture[];
+  /** Upcoming matches, soonest first. */
+  future: Fixture[];
 };
