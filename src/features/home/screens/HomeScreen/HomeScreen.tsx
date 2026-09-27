@@ -36,19 +36,33 @@ export function HomeScreen() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <MatchesBlock onOpenLink={openLink} />
+      <MatchesBlock
+        onOpenLink={openLink}
+        onOpenLineup={(match) =>
+          router.push({
+            pathname: '/matches/[id]/lineup',
+            params: { id: match._id },
+          })
+        }
+        onOpenVideos={(match) =>
+          router.push({ pathname: '/videos', params: { match: match._id } })
+        }
+      />
       <NewsBlock
-        onOpenPost={(post) => openLink(`${CONFIG.LINKS.NEWS_POST}${post.slug}`)}
+        onOpenPost={(post) =>
+          router.push({ pathname: '/news/[slug]', params: { slug: post.slug } })
+        }
         onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
       />
       <FanShopBanner onPress={() => router.navigate('/shop')} />
       <FanCardBlock />
       <PredictionBlock />
-      {/* TODO: open the full table screen once it exists. */}
-      <TableBlock onShowAll={() => {}} />
+      <TableBlock onShowAll={() => router.push('/standings')} />
       <VideosBlock onOpenVideo={openLink} />
       <SquadBlock
-        onOpenPlayer={(player) => player.ruhLink && openLink(player.ruhLink)}
+        onOpenPlayer={(player) =>
+          router.push({ pathname: '/players/[id]', params: { id: player._id } })
+        }
       />
       <SocialLinks
         title={t('home.linksTitle')}

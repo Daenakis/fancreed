@@ -21,18 +21,21 @@ import type { NewsBlockProps } from './types';
 export function NewsBlock({
   onOpenPost,
   onShowAll,
+  title,
+  excludeSlug,
   count = 10,
   style,
 }: NewsBlockProps) {
   const { t } = useTranslation();
-  const { data: posts, isPending } = useNewsQuery(count);
+  const { data, isPending } = useNewsQuery(count);
+  const posts = data?.filter((post) => post.slug !== excludeSlug);
 
   if (isPending) return <LoadingMore loading />;
   if (!posts?.length) return null;
 
   return (
     <View style={style}>
-      <SectionTitle title={t('home.newsTitle')} />
+      <SectionTitle title={title ?? t('home.newsTitle')} />
       <Carousel
         data={posts}
         itemWidthRatio={0.9}

@@ -8,7 +8,8 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "slideOf": "Slide {{current}} of {{total}}",
-    "close": "Close"
+    "close": "Close",
+    "share": "Share"
   },
   "auth": {
     "signIn": "Sign In",
@@ -125,7 +126,8 @@
     "drawn": "D",
     "lost": "L",
     "points": "Pts",
-    "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points"
+    "rowLabel": "{{rank}}. {{team}}: played {{played}}, won {{won}}, drawn {{drawn}}, lost {{lost}}, {{points}} points",
+    "emptyText": "The table will appear once the season starts."
   },
   "fanCard": {
     "title": "FAN CARD",
@@ -226,5 +228,41 @@
     "shop": "Shop",
     "comingSoon": "Coming soon",
     "comingSoonText": "This section is on its way."
+  },
+  "lineup": {
+    "title": "Line-up",
+    "emptyTitle": "Nothing here yet",
+    "emptyText": "We're waiting for the official line-up announcement. It will appear here soon.",
+    "shareMessage": "Line-up for {{home}} – {{away}} in the Fancreed app!"
+  },
+  "videos": {
+    "title": "Video",
+    "emptyText": "Match videos will appear here after the games."
+  },
+  "article": {
+    "title": "Article",
+    "similar": "Similar news",
+    "notFound": "This article is no longer available."
+  },
+  "player": {
+    "notFound": "This player is no longer in the squad.",
+    "position": {
+      "Goalkeeper": "Goalkeeper",
+      "Defender": "Defender",
+      "Midfielder": "Midfielder",
+      "Attacker": "Forward"
+    },
+    "birthday": "Date of birth",
+    "nationality": "Nationality",
+    "height": "Height",
+    "weight": "Weight",
+    "cm": "{{value}} cm",
+    "kg": "{{value}} kg",
+    "stats": "Statistics",
+    "matches": "Matches",
+    "goals": "Goals",
+    "assists": "Assists",
+    "seasonStat": "{{season}}\nseason {{value}}",
+    "buyShirt": "Buy the shirt"
   }
 }

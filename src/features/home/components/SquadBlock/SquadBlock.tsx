@@ -56,7 +56,7 @@ export function SquadBlock({ onOpenPlayer, style }: SquadBlockProps) {
         textColor="onBrand"
         text={t('home.showMore')}
         style={styles.inset}
-        disabled={!current?.ruhLink}
+        disabled={!current}
         onPress={() => current && onOpenPlayer(current)}
       />
     </View>

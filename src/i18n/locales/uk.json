@@ -8,7 +8,8 @@
     "showPassword": "Показати пароль",
     "hidePassword": "Сховати пароль",
     "slideOf": "Слайд {{current}} з {{total}}",
-    "close": "Закрити"
+    "close": "Закрити",
+    "share": "Поділитися"
   },
   "auth": {
     "signIn": "Увійти",
@@ -127,7 +128,8 @@
     "drawn": "Н",
     "lost": "П",
     "points": "О",
-    "rowLabel": "{{rank}}. {{team}}: ігор {{played}}, перемог {{won}}, нічиїх {{drawn}}, поразок {{lost}}, очок {{points}}"
+    "rowLabel": "{{rank}}. {{team}}: ігор {{played}}, перемог {{won}}, нічиїх {{drawn}}, поразок {{lost}}, очок {{points}}",
+    "emptyText": "Таблиця зʼявиться, коли стартує сезон."
   },
   "fanCard": {
     "title": "FAN CARD",
@@ -234,5 +236,41 @@
     "shop": "Магазин",
     "comingSoon": "Незабаром",
     "comingSoonText": "Цей розділ уже в роботі."
+  },
+  "lineup": {
+    "title": "Склад",
+    "emptyTitle": "Наразі тут порожньо",
+    "emptyText": "Очікуємо на офіційне оголошення складу. Інформація з'явиться незабаром.",
+    "shareMessage": "Склад на матч {{home}} – {{away}} у застосунку Fancreed!"
+  },
+  "videos": {
+    "title": "Відео",
+    "emptyText": "Відео з матчів з'являться тут після ігор."
+  },
+  "article": {
+    "title": "Стаття",
+    "similar": "Схожі новини",
+    "notFound": "Ця стаття більше недоступна."
+  },
+  "player": {
+    "notFound": "Цього гравця більше немає в складі.",
+    "position": {
+      "Goalkeeper": "Воротар",
+      "Defender": "Захисник",
+      "Midfielder": "Півзахисник",
+      "Attacker": "Нападник"
+    },
+    "birthday": "Дата народження",
+    "nationality": "Національність",
+    "height": "Зріст",
+    "weight": "Вага",
+    "cm": "{{value}} см",
+    "kg": "{{value}} кг",
+    "stats": "Статистика",
+    "matches": "Матчі",
+    "goals": "Голи",
+    "assists": "Асисти",
+    "seasonStat": "{{season}}\nсезон {{value}}",
+    "buyShirt": "Придбати футболку"
   }
 }

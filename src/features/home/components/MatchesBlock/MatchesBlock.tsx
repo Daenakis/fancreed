@@ -12,7 +12,12 @@ import type { MatchesBlockProps } from './types';
  * Home-screen matches: last played and upcoming matches as swipeable cards,
  * opening on the next match once the last one is over a day old.
  */
-export function MatchesBlock({ onOpenLink, style }: MatchesBlockProps) {
+export function MatchesBlock({
+  onOpenLink,
+  onOpenLineup,
+  onOpenVideos,
+  style,
+}: MatchesBlockProps) {
   const { data: fixtures, isPending } = useActualFixturesQuery();
 
   if (isPending) return <LoadingMore loading />;
@@ -25,7 +30,12 @@ export function MatchesBlock({ onOpenLink, style }: MatchesBlockProps) {
       itemWidthRatio={0.9}
       keyExtractor={(match) => String(match._id)}
       renderItem={(match) => (
-        <MatchCard match={match} onOpenLink={onOpenLink} />
+        <MatchCard
+          match={match}
+          onOpenLink={onOpenLink}
+          onOpenLineup={onOpenLineup}
+          onOpenVideos={onOpenVideos}
+        />
       )}
       style={style}
     />

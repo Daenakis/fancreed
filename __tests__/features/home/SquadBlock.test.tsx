@@ -36,13 +36,14 @@ describe('SquadBlock', () => {
     expect(onOpenPlayer).toHaveBeenCalledWith(first);
   });
 
-  it('disables Show more when the player has no page', async () => {
+  it('opens a player even without a club site page', async () => {
     mockSquad([player('a', null)]);
-    const { findByRole } = render(<SquadBlock onOpenPlayer={jest.fn()} />);
+    const onOpenPlayer = jest.fn();
+    const { findByRole } = render(<SquadBlock onOpenPlayer={onOpenPlayer} />);
 
-    expect(
-      await findByRole('button', { name: 'home.showMore' }),
-    ).toBeDisabled();
+    fireEvent.press(await findByRole('button', { name: 'home.showMore' }));
+
+    expect(onOpenPlayer).toHaveBeenCalledTimes(1);
   });
 
   it('renders nothing for an empty squad', async () => {

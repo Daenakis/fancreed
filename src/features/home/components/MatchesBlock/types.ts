@@ -1,7 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type MatchesBlockProps = {
-  /** Opens a match link (tickets, review, video). */
-  onOpenLink: (url: string) => void;
+import type { MatchCardProps } from '@/features/matches';
+
+export type MatchesBlockProps = Pick<
+  MatchCardProps,
+  'onOpenLink' | 'onOpenLineup' | 'onOpenVideos'
+> & {
   style?: StyleProp<ViewStyle>;
 };
