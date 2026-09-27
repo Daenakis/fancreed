@@ -7,6 +7,8 @@ import { storage } from '@/utils/storage';
 
 import { STORAGE_KEYS } from '@/constants';
 
+import { useSplashStore } from './useSplashStore';
+
 interface AuthState {
   accessToken: string | null;
   signIn: (accessToken: string) => Promise<void>;
@@ -28,6 +30,8 @@ export const useAuthStore = create<AuthState>()((set) => ({
    * next user never sees the previous user's data.
    */
   signOut: async () => {
+    // The sign-in screen that appears next opens with its logo intro.
+    useSplashStore.getState().replaySignInIntro();
     set({ accessToken: null });
     queryClient.clear();
     await clearToken();

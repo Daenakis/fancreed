@@ -1,4 +1,6 @@
-import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { usePathname } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, useWindowDimensions, View } from 'react-native';
 import Animated, {
@@ -16,17 +18,26 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { APP_HEADER_LOGO, Text } from '@/ui/components';
 
-import { useProfileQuery } from '@/hooks';
+import { profileQueryOptions } from '@/hooks';
 
 import { useAuthStore } from '@/store';
 
-import { CLUB_LOGO, CLUB_LOGO_HEIGHT, CLUB_LOGO_WIDTH } from '@/constants';
+import {
+  AUTH_LOGO_SCALE,
+  AUTH_LOGO_TOP_OFFSET,
+  AUTH_SIDE_PADDING,
+  CLUB_LOGO,
+  CLUB_LOGO_HEIGHT,
+  CLUB_LOGO_WIDTH,
+} from '@/constants';
 
 import { headerLogoOpacity } from '../../hooks';
 import type { WelcomeBackProps } from './types';
 
 /** The greeting slides out from under the logo and fades in. */
 const TEXT_MS = 500;
+/** After sign-in: the logo comes down from the auth screens' top-left spot. */
+const ENTER_MS = 600;
 const HOLD_MS = 500;
 /** The logo flies into the header logo; the green fades at the very end. */
 const EXIT_MS = 600;
@@ -38,28 +49,48 @@ const EXIT_MS = 600;
 const SWAP_MS = 150;
 /** Plain fade, when there's no header to fly to (signed out, reduced motion). */
 const FADE_MS = 250;
+/** Slow fade when the app opens on another screen than Home (no logo flight). */
+const SLOW_FADE_MS = 600;
 /** Give up on the greeting when the profile is this slow. */
 const MAX_WAIT_MS = 1500;
 /** How far above its place the greeting starts (tucked under the logo). */
 const TEXT_START_OFFSET = -40;
 
 /**
- * Launch overlay for a stored, still-valid session: the club logo centred
- * (as on the sign-in intro), then "Welcome back, {name}!" slides down from
- * the logo; then the logo flies straight up into the Home header's logo
+ * Welcome splash over the app, on a launch with a stored, still-valid session
+ * (`from="center"`: the logo starts centred, as on the sign-in intro) or
+ * right after signing in (`from="auth"`: the logo first moves from the auth
+ * screens' top-left spot to the centre — the sign-in intro in reverse).
+ * Then "Welcome back, {name}!" (or "Welcome, {name}!" for a new account)
+ * slides down from the logo; then the logo flies straight up into the Home header's logo
  * (both are centred on the screen) while the green fades away, and the
  * header's own logo fades in over it.
  * Leaves quietly without a greeting when the profile doesn't load (e.g. the
  * token has expired — the app signs out) or takes too long.
  */
-export function WelcomeBack({ onDone }: WelcomeBackProps) {
+export function WelcomeBack({ greeting, from, onDone }: WelcomeBackProps) {
   const { t } = useTranslation();
   const { theme } = useUnistyles();
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const reduceMotion = useReducedMotion();
   const signedIn = useAuthStore((s) => !!s.accessToken);
-  const { data: profile, isError } = useProfileQuery();
+  // The logo flies into Home's header; any other first screen (e.g. a deep
+  // link) has no header logo to land on — then the splash just fades.
+  const onHome = usePathname() === '/';
+  // After sign-in we mount a moment before the token is stored: load the
+  // profile only once signed in, and treat "signed out" as a reason to
+  // leave only after having been signed in.
+  const [wasSignedIn, setWasSignedIn] = useState(signedIn);
+  if (signedIn && !wasSignedIn) setWasSignedIn(true);
+  const signedOut = wasSignedIn && !signedIn;
+  const { data: profile, isError } = useQuery({
+    ...profileQueryOptions(),
+    enabled: signedIn,
+  });
+  const entering = from === 'auth' && !reduceMotion;
+  const [mountedAt] = useState(() => Date.now());
+  const enter = useSharedValue(entering ? 0 : 1);
   const text = useSharedValue(0);
   const exit = useSharedValue(0);
   const fade = useSharedValue(1);
@@ -73,27 +104,41 @@ export function WelcomeBack({ onDone }: WelcomeBackProps) {
   const startTop = height / 2 - CLUB_LOGO_HEIGHT / 2;
   const dy = insets.top + theme.spacing(2) - startTop;
   const scale = APP_HEADER_LOGO.width / CLUB_LOGO_WIDTH;
+  // The auth screens' logo: top-left, scaled down (as in SignInScreen).
+  const authDx =
+    AUTH_SIDE_PADDING + (CLUB_LOGO_WIDTH * AUTH_LOGO_SCALE) / 2 - width / 2;
+  const authDy = insets.top + AUTH_LOGO_TOP_OFFSET - startTop;
 
   // Hide the header logo under us until ours lands; never leave it hidden.
   useEffect(() => {
+    if (entering) {
+      enter.value = withTiming(1, {
+        duration: ENTER_MS,
+        easing: Easing.inOut(Easing.cubic),
+      });
+    }
     headerLogoOpacity.value = 0;
     return () => {
       headerLogoOpacity.value = 1;
     };
+    // Mount-only: the entrance plays once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    // The greeting waits for the logo to reach the centre.
+    const enterLeft = entering
+      ? Math.max(0, ENTER_MS - (Date.now() - mountedAt))
+      : 0;
     const finish = (finished?: boolean) => {
       'worklet';
       if (finished) scheduleOnRN(onDone);
     };
-    const fadeOut = (delay: number) => {
+    const fadeOut = (delay: number, duration = FADE_MS) => {
       headerLogoOpacity.value = 1;
-      fade.value = withDelay(
-        delay,
-        withTiming(0, { duration: FADE_MS }, finish),
-      );
+      fade.value = withDelay(delay, withTiming(0, { duration }, finish));
     };
+    const fadeSlowly = (delay: number) => fadeOut(delay, SLOW_FADE_MS);
     const flyToHeader = (delay: number) => {
       exit.value = withDelay(
         delay,
@@ -112,29 +157,40 @@ export function WelcomeBack({ onDone }: WelcomeBackProps) {
         withTiming(1, { duration: SWAP_MS }, finish),
       );
     };
-    const leave = reduceMotion ? fadeOut : flyToHeader;
+    const leave = reduceMotion ? fadeOut : onHome ? flyToHeader : fadeSlowly;
 
-    if (!signedIn || isError) {
+    if (signedOut || isError) {
       fadeOut(0);
       return;
     }
     if (greeted) {
       text.value = reduceMotion
         ? 1
-        : withTiming(1, {
-            duration: TEXT_MS,
-            easing: Easing.out(Easing.cubic),
-          });
-      leave((reduceMotion ? 0 : TEXT_MS) + HOLD_MS);
+        : withDelay(
+            enterLeft,
+            withTiming(1, {
+              duration: TEXT_MS,
+              easing: Easing.out(Easing.cubic),
+            }),
+          );
+      leave(enterLeft + (reduceMotion ? 0 : TEXT_MS) + HOLD_MS);
       return;
     }
-    const timer = setTimeout(() => leave(0), MAX_WAIT_MS);
+    // No session yet (sign-in didn't finish): just fade, no header to fly to.
+    const timer = setTimeout(
+      () => (signedIn ? leave(0) : fadeOut(0)),
+      enterLeft + MAX_WAIT_MS,
+    );
     return () => clearTimeout(timer);
   }, [
     signedIn,
+    signedOut,
     isError,
     greeted,
     reduceMotion,
+    onHome,
+    entering,
+    mountedAt,
     onDone,
     exit,
     fade,
@@ -150,8 +206,17 @@ export function WelcomeBack({ onDone }: WelcomeBackProps) {
   const logoStyle = useAnimatedStyle(() => ({
     opacity: 1 - swap.value,
     transform: [
-      { translateY: interpolate(exit.value, [0, 1], [0, dy]) },
-      { scale: interpolate(exit.value, [0, 1], [1, scale]) },
+      { translateX: interpolate(enter.value, [0, 1], [authDx, 0]) },
+      {
+        translateY:
+          interpolate(enter.value, [0, 1], [authDy, 0]) +
+          interpolate(exit.value, [0, 1], [0, dy]),
+      },
+      {
+        scale:
+          interpolate(enter.value, [0, 1], [AUTH_LOGO_SCALE, 1]) *
+          interpolate(exit.value, [0, 1], [1, scale]),
+      },
     ],
   }));
   const textStyle = useAnimatedStyle(() => ({
@@ -164,10 +229,8 @@ export function WelcomeBack({ onDone }: WelcomeBackProps) {
   }));
 
   return (
-    <Animated.View
-      pointerEvents="none"
-      style={[StyleSheet.absoluteFill, rootStyle]}
-    >
+    // Blocks touches to the app underneath until it's gone.
+    <Animated.View style={[StyleSheet.absoluteFill, rootStyle]}>
       <Animated.View style={[styles.background, backgroundStyle]} />
       <View style={styles.content(startTop)}>
         <Animated.View style={textStyle}>
@@ -177,9 +240,13 @@ export function WelcomeBack({ onDone }: WelcomeBackProps) {
             style={styles.greeting}
             accessibilityRole="header"
           >
-            {name
-              ? t('auth.welcomeBack', { name })
-              : t('auth.welcomeBackNoName')}
+            {greeting === 'new'
+              ? name
+                ? t('auth.welcomeNew', { name })
+                : t('auth.splashWelcome')
+              : name
+                ? t('auth.welcomeBack', { name })
+                : t('auth.welcomeBackNoName')}
           </Text>
         </Animated.View>
         {/* Drawn after the greeting so the text slides out from under it. */}

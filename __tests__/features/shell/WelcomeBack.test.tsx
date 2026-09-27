@@ -22,7 +22,9 @@ beforeEach(() => {
 describe('WelcomeBack', () => {
   it('greets the fan by name once the profile loads', async () => {
     jest.spyOn(profileApi, 'get').mockResolvedValue(apiOk(profile('Ivan')));
-    const { findByRole } = render(<WelcomeBack onDone={jest.fn()} />);
+    const { findByRole } = render(
+      <WelcomeBack greeting="back" from="center" onDone={jest.fn()} />,
+    );
 
     expect(
       await findByRole('header', { name: 'auth.welcomeBack' }),
@@ -31,10 +33,23 @@ describe('WelcomeBack', () => {
 
   it('greets without a name when the profile has none', async () => {
     jest.spyOn(profileApi, 'get').mockResolvedValue(apiOk(profile(null)));
-    const { findByRole } = render(<WelcomeBack onDone={jest.fn()} />);
+    const { findByRole } = render(
+      <WelcomeBack greeting="back" from="center" onDone={jest.fn()} />,
+    );
 
     expect(
       await findByRole('header', { name: 'auth.welcomeBackNoName' }),
+    ).toBeTruthy();
+  });
+
+  it('greets a new account with "Welcome" after sign-in', async () => {
+    jest.spyOn(profileApi, 'get').mockResolvedValue(apiOk(profile('Ivan')));
+    const { findByRole } = render(
+      <WelcomeBack greeting="new" from="auth" onDone={jest.fn()} />,
+    );
+
+    expect(
+      await findByRole('header', { name: 'auth.welcomeNew' }),
     ).toBeTruthy();
   });
 
@@ -43,7 +58,7 @@ describe('WelcomeBack', () => {
       .spyOn(profileApi, 'get')
       .mockRejectedValue(new AxiosError('Request failed'));
     const onDone = jest.fn();
-    render(<WelcomeBack onDone={onDone} />);
+    render(<WelcomeBack greeting="back" from="center" onDone={onDone} />);
 
     await waitFor(() => expect(onDone).toHaveBeenCalled());
   });

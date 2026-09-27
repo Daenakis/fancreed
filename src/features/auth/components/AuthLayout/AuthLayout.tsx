@@ -42,7 +42,11 @@ export function AuthLayout({
     >
       <StatusBar style="light" />
       {hideLogo ? null : (
-        <Image source={AUTH_LOGO} style={styles.logo(insets.top)} />
+        <Image
+          source={AUTH_LOGO}
+          resizeMode="contain"
+          style={styles.logo(insets.top)}
+        />
       )}
       <Animated.View style={[styles.content(insets.top), contentStyle]}>
         <Text

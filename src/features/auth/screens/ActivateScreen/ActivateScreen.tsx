@@ -12,7 +12,7 @@ import {
 
 import { getApiErrorCode, getApiErrorMessageKey } from '@/api';
 
-import { usePendingActivationStore } from '@/store';
+import { usePendingActivationStore, useSplashStore } from '@/store';
 
 import { ACTIVATION_CODE_LENGTH } from '@/schemas';
 
@@ -77,7 +77,10 @@ export function ActivateScreen() {
     activate.mutate(
       { email, code: next },
       {
-        onSuccess: signInAfterActivation,
+        onSuccess: () => {
+          useSplashStore.getState().markNewAccount();
+          signInAfterActivation();
+        },
         onError: (error) => {
           if (getApiErrorCode(error) === 'ALREADY_ACTIVATED') {
             return signInAfterActivation();

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWindowDimensions } from 'react-native';
 import Animated, {
@@ -20,7 +20,7 @@ import { useLoginMutation } from '@/hooks';
 
 import { toFormError } from '@/api';
 
-import { usePendingActivationStore } from '@/store';
+import { usePendingActivationStore, useSplashStore } from '@/store';
 
 import type { SignInFormValues } from '@/schemas';
 
@@ -37,9 +37,6 @@ import {
 const INTRO_DELAY = 600;
 const INTRO_DURATION = 800;
 
-// The intro plays once per app launch, not after every sign-out.
-let introPlayed = false;
-
 export function SignInScreen() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -48,11 +45,16 @@ export function SignInScreen() {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
-  const progress = useSharedValue(introPlayed || reduceMotion ? 1 : 0);
+  // Due on app start and after signing out; not when coming back from the
+  // other auth screens.
+  const [playIntro] = useState(
+    () => useSplashStore.getState().signInIntro && !reduceMotion,
+  );
+  const progress = useSharedValue(playIntro ? 0 : 1);
 
   useEffect(() => {
-    if (introPlayed || reduceMotion) return;
-    introPlayed = true;
+    if (!playIntro) return;
+    useSplashStore.getState().consumeSignInIntro();
     progress.value = 0;
     progress.value = withDelay(
       INTRO_DELAY,
@@ -61,7 +63,7 @@ export function SignInScreen() {
         easing: Easing.inOut(Easing.cubic),
       }),
     );
-  }, [progress, reduceMotion]);
+  }, [progress, playIntro]);
 
   // Logo starts centred on screen and ends top-left, scaled down.
   // transformOrigin is the logo's top centre, so only its top edge and
@@ -117,7 +119,11 @@ export function SignInScreen() {
           pointerEvents="none"
           style={[styles.intro(startTop), introStyle]}
         >
-          <Animated.Image source={AUTH_LOGO} style={styles.logo} />
+          <Animated.Image
+            source={AUTH_LOGO}
+            resizeMode="contain"
+            style={styles.logo}
+          />
           <Animated.View style={welcomeStyle}>
             <Text variant="h3Medium" color="onBrand" style={styles.welcome}>
               {t('auth.splashWelcome')}

@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 
 import { queryClient } from '@/providers/queryClient';
 
-import { loadAuthFromStorage, useAuthStore } from '@/store';
+import { loadAuthFromStorage, useAuthStore, useSplashStore } from '@/store';
 
 import { CLUB_LOGO } from '@/constants';
 
@@ -67,6 +67,8 @@ export function useAppReady() {
 
         const { accessToken } = useAuthStore.getState();
         if (accessToken) {
+          // A stored session opens with the "welcome back" splash.
+          useSplashStore.getState().show('back', 'center');
           // Load the profile under the splash so the welcome-back greeting
           // can start at once; a slow network doesn't hold the splash long.
           await Promise.race([

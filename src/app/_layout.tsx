@@ -5,7 +5,7 @@ import BugsnagPerformance from '@bugsnag/expo-performance';
 import { type ErrorBoundaryProps, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useUnistyles } from 'react-native-unistyles';
 
@@ -15,7 +15,7 @@ import { useAppReady } from '@/hooks';
 
 import { QueryProvider } from '@/providers';
 
-import { useAuthStore } from '@/store';
+import { useAuthStore, useSplashStore } from '@/store';
 
 import { WelcomeBack } from '@/features/shell';
 
@@ -33,11 +33,9 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 function RootLayout() {
   const isReady = useAppReady();
   const { rt } = useUnistyles();
-  // Greet only a launch that restored a stored session (not a fresh sign-in).
-  const [welcome, setWelcome] = useState<boolean | null>(null);
-  if (isReady && welcome === null) {
-    setWelcome(!!useAuthStore.getState().accessToken);
-  }
+  // Welcome splash: after a launch with a stored session or a sign-in.
+  const splash = useSplashStore((s) => s.splash);
+  const hideSplash = useSplashStore((s) => s.hide);
 
   if (!isReady) return null;
 
@@ -45,7 +43,13 @@ function RootLayout() {
     <SafeAreaProvider>
       <QueryProvider>
         <RootNavigator />
-        {welcome ? <WelcomeBack onDone={() => setWelcome(false)} /> : null}
+        {splash ? (
+          <WelcomeBack
+            greeting={splash.greeting}
+            from={splash.from}
+            onDone={hideSplash}
+          />
+        ) : null}
         {/* Follow the app theme, not the device — they differ when the user picks a fixed theme */}
         <StatusBar style={rt.themeName === 'dark' ? 'light' : 'dark'} />
       </QueryProvider>

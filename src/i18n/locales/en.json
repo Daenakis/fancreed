@@ -20,6 +20,7 @@
     "splashWelcome": "Welcome!",
     "welcomeBack": "Welcome back, {{name}}!",
     "welcomeBackNoName": "Welcome back!",
+    "welcomeNew": "Welcome, {{name}}!",
     "signInTitle": "Sign in to your account",
     "forgotPassword": "Forgot password?",
     "notRegistered": "Not registered yet?",
@@ -438,5 +439,35 @@
   },
   "challenge": {
     "title": "Challenge"
+  },
+  "onboarding": {
+    "back": "Back",
+    "next": "Next",
+    "menu": {
+      "title": "Main menu",
+      "text": "Go to news, the team, the academy, settings or support."
+    },
+    "profile": {
+      "title": "Profile",
+      "text": "Pick your favourite player, set up your profile, clothing size and more."
+    },
+    "gamification": {
+      "title": "Fan centre",
+      "text": "Events, fan clubs, votes, challenges and other activities for fans."
+    },
+    "home": {
+      "title": "Home",
+      "text": "Everything about FC Rukh in one place."
+    },
+    "calendar": {
+      "title": "Calendar",
+      "text": "Follow the match schedule and never miss an important game."
+    },
+    "shop": {
+      "title": "Shop",
+      "text": "The club's official fan shop — clothing, merchandise and souvenirs."
+    },
+    "skip": "Skip",
+    "finish": "Finish"
   }
 }
