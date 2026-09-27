@@ -1,5 +1,5 @@
 import { render } from '@tests/test-utils';
-import { StyleSheet, type TextStyle } from 'react-native';
+import { StyleSheet, type ViewStyle } from 'react-native';
 
 import { type StandingsRowData, StandingsTable } from '@/ui/components';
 import { lightTheme } from '@/ui/theme/unistyles';
@@ -41,15 +41,18 @@ describe('StandingsTable', () => {
     expect(getByText('Rukh')).toBeTruthy();
   });
 
-  it('colours only the highlighted team with the primary colour', () => {
-    const { getByText } = render(
+  it('highlights only our team row in yellow', () => {
+    const { getAllByLabelText } = render(
       <StandingsTable rows={rows} highlightTeamId={3632} />,
     );
-    const colorOf = (text: string) =>
-      (StyleSheet.flatten(getByText(text).props.style) as TextStyle).color;
+    const backgrounds = getAllByLabelText('standings.rowLabel').map(
+      (row) =>
+        (StyleSheet.flatten(row.props.style) as ViewStyle).backgroundColor,
+    );
 
-    expect(colorOf('Rukh')).toBe(lightTheme.colors.primary);
-    expect(colorOf('Dynamo')).toBe(lightTheme.colors.foreground);
+    expect(
+      backgrounds.filter((color) => color === lightTheme.colors.highlight),
+    ).toHaveLength(1);
   });
 
   it('renders no logo image when the logo is missing', () => {

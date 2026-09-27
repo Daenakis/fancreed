@@ -14,8 +14,8 @@ const STAT_KEYS = [
 ] as const;
 
 /**
- * League table: a header row, then one row per team. Our club's row is
- * highlighted in the primary colour.
+ * League table: a green header row, then one compact row per team. Our
+ * club's row is highlighted in yellow.
  *
  * @example
  * <StandingsTable rows={rows} highlightTeamId={OUR_TEAM_ID} />
@@ -31,16 +31,12 @@ export function StandingsTable({
     <View style={style}>
       <View style={styles.header}>
         <View style={styles.teamPart}>
-          <Text
-            variant="bodyMSemibold"
-            color="primaryForeground"
-            style={styles.rank}
-          >
+          <Text variant="bodySRegular" color="onBrand" style={styles.rank}>
             {t('standings.place')}
           </Text>
           <Text
-            variant="bodyMSemibold"
-            color="primaryForeground"
+            variant="bodySRegular"
+            color="onBrand"
             style={styles.headerClub}
           >
             {t('standings.club')}
@@ -50,8 +46,8 @@ export function StandingsTable({
           {STAT_KEYS.map((key) => (
             <Text
               key={key}
-              variant="bodyMSemibold"
-              color="primaryForeground"
+              variant="bodySRegular"
+              color="onBrand"
               style={styles.stat}
             >
               {t(key)}
@@ -74,7 +70,7 @@ StandingsTable.displayName = 'StandingsTable';
 
 function StandingsRow({ row, highlighted }: StandingsRowProps) {
   const { t } = useTranslation();
-  const color = highlighted ? 'primary' : 'foreground';
+  const color = highlighted ? 'onHighlight' : 'foreground';
   const stats = [row.played, row.won, row.drawn, row.lost, row.points];
 
   return (
@@ -92,7 +88,7 @@ function StandingsRow({ row, highlighted }: StandingsRowProps) {
       style={[styles.row, highlighted && styles.highlighted]}
     >
       <View style={styles.teamPart}>
-        <Text variant="h2Medium" color={color} style={styles.rank}>
+        <Text variant="bodySRegular" color={color} style={styles.rank}>
           {row.rank}
         </Text>
         {row.teamLogo ? (
@@ -105,7 +101,7 @@ function StandingsRow({ row, highlighted }: StandingsRowProps) {
           <View style={styles.logo} />
         )}
         <Text
-          variant="bodyLRegular"
+          variant="bodySRegular"
           color={color}
           numberOfLines={1}
           style={styles.teamName}
@@ -117,7 +113,7 @@ function StandingsRow({ row, highlighted }: StandingsRowProps) {
         {stats.map((value, i) => (
           <Text
             key={STAT_KEYS[i]}
-            variant="h2Medium"
+            variant="bodySRegular"
             color={color}
             style={styles.stat}
           >
@@ -133,18 +129,21 @@ const styles = StyleSheet.create((theme) => ({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: theme.spacing(7.5),
-    backgroundColor: theme.colors.primary,
+    height: theme.spacing(8),
+    borderTopLeftRadius: theme.radius.sm,
+    borderTopRightRadius: theme.radius.sm,
+    backgroundColor: theme.colors.brand,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: theme.spacing(11.25),
+    height: theme.spacing(10),
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.secondary,
   },
   highlighted: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.highlight,
   },
   teamPart: {
     flex: 0.4,
@@ -165,8 +164,8 @@ const styles = StyleSheet.create((theme) => ({
     textAlign: 'center',
   },
   logo: {
-    width: 35,
-    height: 35,
+    width: theme.spacing(5),
+    height: theme.spacing(5),
   },
   teamName: {
     flex: 1,
