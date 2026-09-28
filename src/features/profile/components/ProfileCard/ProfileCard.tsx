@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon, RemoteImage, Text } from '@/ui/components';
@@ -16,16 +16,14 @@ const NEXT_LEVEL: Record<LoyaltyLevel, LoyaltyLevel | null> = {
 };
 
 /**
- * The fan at the top of the profile: photo (tap to change), name, edit and
- * loyalty progress.
+ * The fan at the top of the profile: photo, name, edit and loyalty progress.
+ * The photo is changed on the edit screen.
  */
 export function ProfileCard({
   name,
   photo,
   level,
   onEdit,
-  onChangePhoto,
-  photoUploading = false,
   style,
 }: ProfileCardProps) {
   const { t } = useTranslation();
@@ -35,30 +33,13 @@ export function ProfileCard({
   return (
     <View style={[styles.card, style]}>
       <View style={styles.row}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('profile.changePhoto')}
-          accessibilityState={{ busy: photoUploading }}
-          disabled={!onChangePhoto || photoUploading}
-          onPress={onChangePhoto}
-        >
-          {photo ? (
-            <RemoteImage source={{ uri: photo }} style={styles.avatar} />
-          ) : (
-            <View style={[styles.avatar, styles.avatarEmpty]}>
-              <Icon name="user" size={18} color={theme.colors.onBrand} />
-            </View>
-          )}
-          {photoUploading ? (
-            <View style={[styles.avatar, styles.avatarBusy]}>
-              <ActivityIndicator color={theme.colors.onBrand} />
-            </View>
-          ) : onChangePhoto ? (
-            <View style={styles.badge}>
-              <Icon name="changeImage" size={10} color={theme.colors.onBrand} />
-            </View>
-          ) : null}
-        </Pressable>
+        {photo ? (
+          <RemoteImage source={{ uri: photo }} style={styles.avatar} />
+        ) : (
+          <View style={[styles.avatar, styles.avatarEmpty]}>
+            <Icon name="user" size={18} color={theme.colors.onBrand} />
+          </View>
+        )}
         <Text variant="bodyMMedium" numberOfLines={1} style={styles.name}>
           {name}
         </Text>
@@ -128,25 +109,6 @@ const styles = StyleSheet.create((theme) => ({
     width: theme.spacing(10),
     height: theme.spacing(10),
     borderRadius: theme.radius.full,
-  },
-  avatarBusy: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.shadow,
-  },
-  badge: {
-    position: 'absolute',
-    right: -2,
-    bottom: -2,
-    width: theme.spacing(4.5),
-    height: theme.spacing(4.5),
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1.5,
-    borderRadius: theme.radius.full,
-    borderColor: theme.colors.mintSurface,
-    backgroundColor: theme.colors.brand,
   },
   avatarEmpty: {
     alignItems: 'center',

@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
@@ -20,7 +21,9 @@ import {
 import {
   useEditProfileMutation,
   useFieldErrorText,
+  usePickImage,
   useProfileQuery,
+  useSetPhotoMutation,
   useSubmitForm,
 } from '@/hooks';
 
@@ -34,12 +37,16 @@ import {
   profileSchema,
 } from '@/schemas';
 
+import { ProfilePhoto } from '../../components';
 import type { ProfileFormProps } from './types';
 
 // Most fans are adults — open the birthday calendar around 2000, not today.
 const BIRTHDAY_VIEW = new Date(2000, 0, 1);
 
-/** Edit profile: name, patronymic, birthday and sex; email is read-only. */
+/**
+ * Edit profile: photo (tap to change), name, patronymic, birthday and sex;
+ * email is read-only.
+ */
 export function EditProfileScreen() {
   const { t } = useTranslation();
   const { data: profile, isPending } = useProfileQuery();
@@ -69,6 +76,10 @@ function ProfileForm({ profile }: ProfileFormProps) {
   const { t } = useTranslation();
   const errorText = useFieldErrorText();
   const editProfile = useEditProfileMutation();
+  const setPhoto = useSetPhotoMutation();
+  const pickImage = usePickImage();
+  // The picked photo shows at once, while it uploads.
+  const [preview, setPreview] = useState<string | null>(null);
   const {
     control,
     setError,
@@ -108,6 +119,22 @@ function ProfileForm({ profile }: ProfileFormProps) {
     ),
   );
 
+  // The photo saves on its own, right after picking (not with "Save").
+  const changePhoto = async () => {
+    const image = await pickImage();
+    if (!image) return;
+    setPreview(image.uri);
+    setPhoto.mutate(
+      { mimeType: 'image/jpeg', data: image.base64 },
+      {
+        onError: () => {
+          setPreview(null);
+          Alert.alert(t('profile.photoFailed'));
+        },
+      },
+    );
+  };
+
   const text = (
     name: 'name' | 'surname' | 'patronymic',
     label: string,
@@ -134,6 +161,11 @@ function ProfileForm({ profile }: ProfileFormProps) {
 
   return (
     <View style={styles.form}>
+      <ProfilePhoto
+        photo={preview ?? profile.origPhoto ?? profile.smallPhoto}
+        uploading={setPhoto.isPending}
+        onPress={() => void changePhoto()}
+      />
       <Notice text={t('profile.requiredNotice')} />
       {text('name', `${t('profile.name')} *`, 'given-name')}
       {text('surname', `${t('profile.surname')} *`, 'family-name')}

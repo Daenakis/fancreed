@@ -1,7 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
@@ -19,9 +18,7 @@ import {
   useEditProfileMutation,
   useFanLevelQuery,
   useLogoutMutation,
-  usePickImage,
   useProfileQuery,
-  useSetPhotoMutation,
 } from '@/hooks';
 
 import { goBack } from '@/utils';
@@ -47,20 +44,9 @@ export function ProfileScreen() {
   const { data: profile, isPending, error } = useProfileQuery();
   const { data: level } = useFanLevelQuery();
   const editProfile = useEditProfileMutation();
-  const setPhoto = useSetPhotoMutation();
-  const pickImage = usePickImage();
   const logout = useLogoutMutation();
   const [size, setSize] = useClothingSize();
   const [sizeOpen, setSizeOpen] = useState(false);
-
-  const changePhoto = async () => {
-    const image = await pickImage();
-    if (!image) return;
-    setPhoto.mutate(
-      { mimeType: 'image/jpeg', data: image.base64 },
-      { onError: () => Alert.alert(t('profile.photoFailed')) },
-    );
-  };
 
   const complete = !!(
     profile?.name &&
@@ -92,8 +78,6 @@ export function ProfileScreen() {
             photo={profile.smallPhoto}
             level={complete ? level : null}
             onEdit={() => router.push('/profile/edit')}
-            onChangePhoto={() => void changePhoto()}
-            photoUploading={setPhoto.isPending}
           />
           <SquadBlock
             boxed
