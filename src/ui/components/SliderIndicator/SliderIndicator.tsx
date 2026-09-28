@@ -17,8 +17,9 @@ const MORPH_MS = 250;
 
 /**
  * Page indicator under a carousel: a green pill for the current slide,
- * short grey dashes for the others. On a page change the old pill squishes
- * into a dash while the new one stretches into the pill.
+ * short grey dashes for the others. The old pill squishes into a dash while
+ * the new one stretches into the pill — following the finger when given the
+ * scroll `progress`, otherwise animated once the page changes.
  *
  * @example
  * <SliderIndicator count={items.length} active={index} activeColor="primary" />
@@ -28,6 +29,7 @@ export function SliderIndicator({
   active,
   activeColor = 'brand',
   inactiveColor = 'border',
+  progress,
   style,
 }: SliderIndicatorProps) {
   const { t } = useTranslation();
@@ -45,7 +47,9 @@ export function SliderIndicator({
       {Array.from({ length: count }, (_, i) => (
         <Dot
           key={i}
+          index={i}
           active={i === active}
+          progress={progress}
           activeColor={theme.colors[activeColor]}
           inactiveColor={theme.colors[inactiveColor]}
           activeWidth={theme.spacing(4)}
@@ -59,7 +63,9 @@ export function SliderIndicator({
 SliderIndicator.displayName = 'SliderIndicator';
 
 function Dot({
+  index,
   active,
+  progress: scroll,
   activeColor,
   inactiveColor,
   activeWidth,
@@ -74,14 +80,25 @@ function Dot({
     });
   }, [active, reduceMotion, progress]);
 
-  const animated = useAnimatedStyle(() => ({
-    width: interpolate(progress.value, [0, 1], [inactiveWidth, activeWidth]),
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1],
-      [inactiveColor, activeColor],
-    ),
-  }));
+  const animated = useAnimatedStyle(() => {
+    // 1 when the scroll sits on this page, 0 a page (or more) away.
+    const t = scroll
+      ? interpolate(
+          scroll.value,
+          [index - 1, index, index + 1],
+          [0, 1, 0],
+          'clamp',
+        )
+      : progress.value;
+    return {
+      width: interpolate(t, [0, 1], [inactiveWidth, activeWidth]),
+      backgroundColor: interpolateColor(
+        t,
+        [0, 1],
+        [inactiveColor, activeColor],
+      ),
+    };
+  });
 
   return <Animated.View style={[styles.dot, animated]} />;
 }

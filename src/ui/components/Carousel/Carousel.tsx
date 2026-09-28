@@ -7,6 +7,10 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { StyleSheet } from 'react-native-unistyles';
 
 import { SliderIndicator } from '../SliderIndicator';
@@ -43,9 +47,15 @@ export function Carousel<T>({
   const listRef = useRef<FlatList<T>>(null);
   const [dragging, setDragging] = useState(false);
   const [screenReader, setScreenReader] = useState(false);
+  // Scroll position in pages, for dots that follow the finger.
+  const progress = useSharedValue(initialIndex);
   const itemWidth = Math.round(width * itemWidthRatio);
   const step = itemWidth + gap;
   const sidePadding = (width - itemWidth) / 2;
+
+  const onScroll = useAnimatedScrollHandler((e) => {
+    progress.value = e.contentOffset.x / step;
+  });
 
   useEffect(() => {
     if (!autoPlayMs) return;
@@ -88,7 +98,7 @@ export function Carousel<T>({
 
   return (
     <View style={style}>
-      <FlatList
+      <Animated.FlatList
         ref={listRef}
         data={data}
         horizontal
@@ -100,6 +110,8 @@ export function Carousel<T>({
         renderItem={({ item, index: i }) => (
           <View style={{ width: itemWidth }}>{renderItem(item, i)}</View>
         )}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         onScrollBeginDrag={() => setDragging(true)}
         onScrollEndDrag={() => setDragging(false)}
         onMomentumScrollEnd={onScrollEnd}
@@ -111,6 +123,7 @@ export function Carousel<T>({
         <SliderIndicator
           count={data.length}
           active={index}
+          progress={progress}
           activeColor={indicatorColor}
           style={styles.indicator}
         />
