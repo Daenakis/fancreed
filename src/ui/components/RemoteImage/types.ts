@@ -16,6 +16,11 @@ export type RemoteImageProps = Omit<ImageProps, 'source' | 'style'> & {
    * cropping evenly. Defaults to `center`.
    */
   position?: RemoteImagePosition;
+  /**
+   * Show the loading skeleton for a local image too, until it has drawn
+   * (large bundled pictures). URLs always get it.
+   */
+  skeleton?: boolean;
   /** The image box: size, radius, margins. */
   style?: StyleProp<ViewStyle>;
 };

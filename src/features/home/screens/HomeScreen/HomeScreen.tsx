@@ -7,6 +7,8 @@ import { SocialLinks } from '@/ui/components';
 
 import { useSocialsQuery } from '@/hooks';
 
+import { FAN_SHOP_BANNER } from '@/constants';
+
 import { CONFIG } from '@/config';
 
 import { PredictionBlock } from '@/features/gamification';
@@ -52,6 +54,7 @@ export function HomeScreen() {
           }
         />
         <NewsBlock
+          autoPlay
           onOpenPost={(post) =>
             router.push({
               pathname: '/news/[slug]',
@@ -60,7 +63,10 @@ export function HomeScreen() {
           }
           onShowAll={() => openLink(CONFIG.LINKS.NEWS_POST)}
         />
-        <FanShopBanner onPress={() => router.navigate('/shop')} />
+        <FanShopBanner
+          image={FAN_SHOP_BANNER}
+          onPress={() => router.navigate('/shop')}
+        />
         <FanCardBlock />
         <PredictionBlock />
         <TableBlock onShowAll={() => router.push('/tournament')} />

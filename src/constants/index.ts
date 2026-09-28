@@ -5,5 +5,7 @@ export {
   CLUB_LOGO,
   CLUB_LOGO_HEIGHT,
   CLUB_LOGO_WIDTH,
+  FAN_SHOP_BANNER,
+  FAN_SHOP_BANNER_RATIO,
 } from './brand';
 export { STORAGE_KEYS } from './storageKeys';

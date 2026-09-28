@@ -4,9 +4,14 @@ import { StyleSheet } from 'react-native-unistyles';
 
 import { RemoteImage, Text } from '@/ui/components';
 
+import { FAN_SHOP_BANNER_RATIO } from '@/constants';
+
 import type { FanShopBannerProps } from './types';
 
-/** Full-width fan-shop promo; without a picture a green titled block. */
+/**
+ * Full-width fan-shop promo at the picture's own proportions (with a loading
+ * skeleton); without a picture a green titled block.
+ */
 export function FanShopBanner({ image, onPress, style }: FanShopBannerProps) {
   const { t } = useTranslation();
   const source = typeof image === 'string' ? { uri: image } : image;
@@ -16,10 +21,20 @@ export function FanShopBanner({ image, onPress, style }: FanShopBannerProps) {
       accessibilityRole="button"
       accessibilityLabel={t('home.fanShop')}
       onPress={onPress}
-      style={({ pressed }) => [styles.banner, pressed && styles.pressed, style]}
+      style={({ pressed }) => [
+        styles.banner,
+        source ? styles.picture : null,
+        pressed && styles.pressed,
+        style,
+      ]}
     >
       {source ? (
-        <RemoteImage source={source} resizeMode="cover" style={styles.image} />
+        <RemoteImage
+          source={source}
+          resizeMode="cover"
+          skeleton
+          style={styles.image}
+        />
       ) : (
         <Text variant="h3Medium" color="onBrand">
           {t('home.fanShop')}
@@ -37,6 +52,10 @@ const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.colors.brand,
+  },
+  picture: {
+    height: undefined,
+    aspectRatio: FAN_SHOP_BANNER_RATIO,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

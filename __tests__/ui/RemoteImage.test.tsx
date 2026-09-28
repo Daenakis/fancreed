@@ -48,6 +48,16 @@ describe('RemoteImage', () => {
     expect(onError).toHaveBeenCalled();
   });
 
+  it('shows the skeleton for a local image when asked, until it loads', () => {
+    const { getByRole, UNSAFE_getByType } = render(
+      <RemoteImage source={1} skeleton accessibilityLabel="Banner" />,
+    );
+
+    expect(getByRole('image', { name: 'Banner' })).toBeBusy();
+    fireEvent(UNSAFE_getByType(Image), 'load', load());
+    expect(getByRole('image', { name: 'Banner' })).not.toBeBusy();
+  });
+
   it('has no skeleton for a local image', () => {
     const { getByRole } = render(
       <RemoteImage source={1} accessibilityLabel="Logo" />,

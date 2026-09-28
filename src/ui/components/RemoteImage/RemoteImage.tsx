@@ -37,7 +37,8 @@ const coverTop = (picture: Size, box: Size) => {
 };
 
 /**
- * Image from the internet: a pulsing skeleton fills its box until it loads
+ * Image from the internet (or, with `skeleton`, a large local one): a
+ * pulsing skeleton fills its box until it loads
  * (and stays, still, if it fails). Size the box with `style`. `position="top"`
  * crops a `cover` picture from the bottom only, so heads stay in view.
  *
@@ -48,6 +49,7 @@ export function RemoteImage({
   source,
   resizeMode = 'cover',
   position = 'center',
+  skeleton = false,
   style,
   onLoad,
   onError,
@@ -55,8 +57,9 @@ export function RemoteImage({
   ...props
 }: RemoteImageProps) {
   const uri = remoteUri(source);
+  const waits = !!uri || skeleton;
   const [state, setState] = useState<'loading' | 'loaded' | 'failed'>(
-    uri ? 'loading' : 'loaded',
+    waits ? 'loading' : 'loaded',
   );
   const [picture, setPicture] = useState<Size | null>(null);
   const [box, setBox] = useState<LayoutRectangle | null>(null);
@@ -65,7 +68,7 @@ export function RemoteImage({
   const [shownUri, setShownUri] = useState(uri);
   if (uri !== shownUri) {
     setShownUri(uri);
-    setState(uri ? 'loading' : 'loaded');
+    setState(waits ? 'loading' : 'loaded');
     setPicture(null);
   }
 
@@ -85,7 +88,7 @@ export function RemoteImage({
         {...props}
         source={source}
         resizeMode={topFit ? 'stretch' : resizeMode}
-        style={topFit ?? StyleSheet.absoluteFill}
+        style={topFit ?? styles.fill}
         onLoad={(event) => {
           const { width, height } = event.nativeEvent.source ?? {};
           if (anchorTop && width && height) setPicture({ width, height });
@@ -109,6 +112,13 @@ RemoteImage.displayName = 'RemoteImage';
 const styles = StyleSheet.create({
   box: {
     overflow: 'hidden',
+  },
+  // Explicit size: absolute insets alone leave an image at its natural size
+  // (a bundled 1206 px picture then drew 1206 pt wide).
+  fill: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
   },
   // Fills the box, which clips it to the image's own corners.
   skeleton: {

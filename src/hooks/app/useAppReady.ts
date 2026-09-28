@@ -7,27 +7,31 @@ import { queryClient } from '@/providers/queryClient';
 
 import { loadAuthFromStorage, useAuthStore, useSplashStore } from '@/store';
 
-import { CLUB_LOGO } from '@/constants';
+import { CLUB_LOGO, FAN_SHOP_BANNER } from '@/constants';
 
 import { profileQueryOptions } from '../query/profile';
 
 /** Longest the splash waits for the profile (the welcome-back greeting). */
 const PROFILE_PREFETCH_MS = 1500;
-/** Longest the splash waits for the logo. */
-const LOGO_PRELOAD_MS = 1000;
-
+/** Longest the splash waits for the preloaded images. */
+const IMAGES_PRELOAD_MS = 1000;
 /**
- * Decode the club logo before the first screen, so the welcome/sign-in
- * intros don't start on an empty spot (in dev it's even fetched from Metro).
+ * Bundled pictures decoded before the first screen: the club logo (so the
+ * welcome/sign-in intros don't start on an empty spot) and the Home fan-shop
+ * banner (so it's cached when Home opens). In dev they come from Metro.
  */
-const preloadLogo = () => {
-  const uri = Image.resolveAssetSource(CLUB_LOGO)?.uri;
-  if (!uri) return Promise.resolve(false);
-  return Promise.race([
-    Image.prefetch(uri).catch(() => false),
-    new Promise((resolve) => setTimeout(resolve, LOGO_PRELOAD_MS)),
+const PRELOADED_IMAGES = [CLUB_LOGO, FAN_SHOP_BANNER];
+
+const preloadImages = () =>
+  Promise.race([
+    Promise.all(
+      PRELOADED_IMAGES.map((image) => {
+        const uri = Image.resolveAssetSource(image)?.uri;
+        return uri ? Image.prefetch(uri).catch(() => false) : false;
+      }),
+    ),
+    new Promise((resolve) => setTimeout(resolve, IMAGES_PRELOAD_MS)),
   ]);
-};
 
 /**
  * Prepares the app while the native splash screen is visible.
@@ -62,7 +66,7 @@ export function useAppReady() {
 
     async function prepare() {
       try {
-        const logo = preloadLogo();
+        const images = preloadImages();
         await loadAuthFromStorage();
 
         const { accessToken } = useAuthStore.getState();
@@ -76,7 +80,7 @@ export function useAppReady() {
             new Promise((resolve) => setTimeout(resolve, PROFILE_PREFETCH_MS)),
           ]);
         }
-        await logo;
+        await images;
       } catch (error) {
         console.warn('App preparation failed:', error);
       } finally {

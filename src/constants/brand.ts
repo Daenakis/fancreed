@@ -13,3 +13,7 @@ export const CLUB_LOGO_HEIGHT = 180;
 export const AUTH_LOGO_SCALE = 40 / CLUB_LOGO_WIDTH;
 export const AUTH_LOGO_TOP_OFFSET = 12;
 export const AUTH_SIDE_PADDING = 18;
+/** Home fan-shop promo (optimised from assets/brand/fan-shop-banner-source.png). */
+export const FAN_SHOP_BANNER = require('../../assets/images/home/fan-shop-banner.jpg');
+/** Its width / height, so the banner shows the whole picture. */
+export const FAN_SHOP_BANNER_RATIO = 1206 / 631;
