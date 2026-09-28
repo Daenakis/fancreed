@@ -34,20 +34,20 @@ export type PlayerResponse = {
 export type PlayerStat = { total: number; season: number };
 
 /**
- * Bio and statistics for the player page.
- * TODO(backend): no endpoint yet — mocked in `playersApi.details`.
+ * Bio and statistics for the player page. The club site (current source)
+ * has only the birth date and nationality; the rest shows when present.
  */
 export type PlayerDetails = {
-  /** ISO date. */
+  /** ISO date; empty when unknown. */
   birthday: string;
   nationality: string;
   /** cm. */
-  height: number;
+  height?: number;
   /** kg. */
-  weight: number;
+  weight?: number;
   /** e.g. "2024/2025". */
-  season: string;
-  matches: PlayerStat;
-  goals: PlayerStat;
-  assists: PlayerStat;
+  season?: string;
+  matches?: PlayerStat;
+  goals?: PlayerStat;
+  assists?: PlayerStat;
 };

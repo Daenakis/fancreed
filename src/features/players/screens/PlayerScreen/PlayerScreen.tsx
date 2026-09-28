@@ -7,8 +7,8 @@ import {
   Button,
   EmptyState,
   InfoRow,
-  LoadingMore,
   PageLayout,
+  PageLoader,
   RemoteImage,
   SectionTitle,
   Text,
@@ -33,12 +33,15 @@ export function PlayerScreen() {
   const { data: details } = usePlayerDetailsQuery(id);
   const name = player ? (player.actualName ?? player.name) : '';
 
+  // Statistics that exist (the club site has none).
   const stats = details
-    ? ([
-        ['matches', details.matches],
-        ['goals', details.goals],
-        ['assists', details.assists],
-      ] as const)
+    ? (
+        [
+          ['matches', details.matches],
+          ['goals', details.goals],
+          ['assists', details.assists],
+        ] as const
+      ).flatMap(([key, stat]) => (stat ? [[key, stat] as const] : []))
     : [];
 
   return (
@@ -53,7 +56,7 @@ export function PlayerScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : !player ? (
         <EmptyState
           icon="user"
@@ -92,39 +95,54 @@ export function PlayerScreen() {
           {details ? (
             <>
               <View style={styles.rows}>
-                <InfoRow
-                  label={t('player.birthday')}
-                  value={new Intl.DateTimeFormat(i18n.language).format(
-                    new Date(details.birthday),
-                  )}
-                />
-                <InfoRow
-                  label={t('player.nationality')}
-                  value={details.nationality}
-                />
-                <InfoRow
-                  label={t('player.height')}
-                  value={t('player.cm', { value: details.height })}
-                />
-                <InfoRow
-                  label={t('player.weight')}
-                  value={t('player.kg', { value: details.weight })}
-                />
-              </View>
-              <SectionTitle title={t('player.stats')} style={styles.flush} />
-              <View style={styles.tiles}>
-                {stats.map(([key, stat]) => (
-                  <StatTile
-                    key={key}
-                    value={stat.total}
-                    label={t(`player.${key}`)}
-                    caption={t('player.seasonStat', {
-                      season: details.season,
-                      value: stat.season,
-                    })}
+                {details.birthday ? (
+                  <InfoRow
+                    label={t('player.birthday')}
+                    value={new Intl.DateTimeFormat(i18n.language).format(
+                      new Date(details.birthday),
+                    )}
                   />
-                ))}
+                ) : null}
+                {details.nationality ? (
+                  <InfoRow
+                    label={t('player.nationality')}
+                    value={details.nationality}
+                  />
+                ) : null}
+                {details.height ? (
+                  <InfoRow
+                    label={t('player.height')}
+                    value={t('player.cm', { value: details.height })}
+                  />
+                ) : null}
+                {details.weight ? (
+                  <InfoRow
+                    label={t('player.weight')}
+                    value={t('player.kg', { value: details.weight })}
+                  />
+                ) : null}
               </View>
+              {stats.length ? (
+                <>
+                  <SectionTitle
+                    title={t('player.stats')}
+                    style={styles.flush}
+                  />
+                  <View style={styles.tiles}>
+                    {stats.map(([key, stat]) => (
+                      <StatTile
+                        key={key}
+                        value={stat.total}
+                        label={t(`player.${key}`)}
+                        caption={t('player.seasonStat', {
+                          season: details.season,
+                          value: stat.season,
+                        })}
+                      />
+                    ))}
+                  </View>
+                </>
+              ) : null}
             </>
           ) : null}
           <Button

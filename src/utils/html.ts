@@ -34,7 +34,7 @@ function decodeEntities(text: string): string {
 }
 
 /** Tags stripped, entities decoded, whitespace collapsed. */
-function toText(html: string): string {
+export function htmlToText(html: string): string {
   return decodeEntities(html.replace(/<[^>]+>/g, ''))
     .replace(/\s+/g, ' ')
     .trim();
@@ -53,7 +53,7 @@ export function htmlToBlocks(html: string): HtmlBlock[] {
   const source = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, '');
   const blocks: HtmlBlock[] = [];
   const pushParagraph = (chunk: string) => {
-    const text = toText(chunk);
+    const text = htmlToText(chunk);
     if (text) blocks.push({ type: 'paragraph', text });
   };
 
@@ -63,7 +63,7 @@ export function htmlToBlocks(html: string): HtmlBlock[] {
     const [, uri, heading] = match;
     if (uri) blocks.push({ type: 'image', uri: decodeEntities(uri) });
     if (heading !== undefined) {
-      const text = toText(heading);
+      const text = htmlToText(heading);
       if (text) blocks.push({ type: 'heading', text });
     }
     last = match.index + match[0].length;

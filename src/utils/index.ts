@@ -5,9 +5,15 @@ export {
   isSameDay,
 } from './calendar';
 export { toCreateClubRequest } from './clubs';
+export {
+  clubSiteSeasons,
+  parseClubPlayer,
+  parseClubSquad,
+  seasonStartYear,
+} from './clubSite';
 export { eventDate, formatEventDate, hasEventDay, mapsUrl } from './events';
 export { geocodeAddress } from './geocode';
-export { type HtmlBlock, htmlToBlocks } from './html';
+export { type HtmlBlock, htmlToBlocks, htmlToText } from './html';
 export { formationGrid, FORMATIONS, pitchRows, shortName } from './lineup';
 export {
   type Countdown,
@@ -27,5 +33,10 @@ export {
   storage,
   zustandStorage,
 } from './storage';
+export {
+  findTransfermarktPlayer,
+  parseTransfermarktSquad,
+  type TransfermarktPlayer,
+} from './transfermarkt';
 export { validateEnv } from './validateEnv';
 export { youtubeId, youtubeThumbnail } from './videos';

@@ -1,9 +1,38 @@
+import { type AxiosResponse, isAxiosError } from 'axios';
+
+import { clubSiteSeasons, parseClubSquad } from '@/utils';
+
 import type * as T from '@/types/api';
 
-import { axiosInstance } from '../client';
+import { CONFIG } from '@/config';
 
-/** Backend group "squads". Needs an activated account. */
+import { siteClient } from '../client';
+
+/** Squad page of the current season, or the previous one until it's up. */
+async function fetchSquadPage(): Promise<AxiosResponse<string>> {
+  const [current, previous] = clubSiteSeasons(new Date());
+  const page = (season?: string) =>
+    siteClient.get<string>(`club/${season}/effectif-professionnel`);
+  try {
+    return await page(current);
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 404) {
+      return page(previous);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Backend group "squads" (`squads/actual`), read from the club site for now:
+ * the backend still holds the old club's players.
+ * TODO(backend): back to `squads/actual` once it serves the ASSE squad.
+ */
 export const squadsApi = {
   /** The club's current squad. */
-  actual: () => axiosInstance.get<T.ActualSquadResponse>('squads/actual'),
+  actual: async (): Promise<AxiosResponse<T.ActualSquadResponse>> => {
+    const response = await fetchSquadPage();
+    const squad = parseClubSquad(response.data, CONFIG.LINKS.CLUB_SITE);
+    return { ...response, data: { squad } };
+  },
 } as const;
