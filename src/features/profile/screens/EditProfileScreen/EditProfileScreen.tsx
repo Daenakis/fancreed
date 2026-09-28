@@ -145,6 +145,7 @@ function ProfileForm({ profile }: ProfileFormProps) {
       name={name}
       render={({ field: { value, onChange, onBlur }, fieldState }) => (
         <TextInput
+          large
           label={label}
           placeholder={label.replace(' *', '')}
           value={value}
@@ -166,7 +167,7 @@ function ProfileForm({ profile }: ProfileFormProps) {
         uploading={setPhoto.isPending}
         onPress={() => void changePhoto()}
       />
-      <Notice text={t('profile.requiredNotice')} />
+      <Notice large text={t('profile.requiredNotice')} />
       {text('name', `${t('profile.name')} *`, 'given-name')}
       {text('surname', `${t('profile.surname')} *`, 'family-name')}
       {text('patronymic', t('profile.patronymic'), 'additional-name')}
@@ -175,6 +176,7 @@ function ProfileForm({ profile }: ProfileFormProps) {
         name="birthDay"
         render={({ field: { value, onChange }, fieldState }) => (
           <DateField
+            large
             label={`${t('profile.birthDay')} *`}
             value={value}
             error={errorText(fieldState.error)}
@@ -190,8 +192,9 @@ function ProfileForm({ profile }: ProfileFormProps) {
         name="sex"
         render={({ field: { value, onChange }, fieldState }) => (
           <View style={styles.field}>
-            <Text variant="bodyMRegular">{`${t('profile.sex')} *`}</Text>
+            <Text variant="bodyLRegular">{`${t('profile.sex')} *`}</Text>
             <ChoiceGroup
+              large
               options={[
                 { label: t('profile.male'), value: 'm' as const },
                 { label: t('profile.female'), value: 'f' as const },
@@ -200,16 +203,21 @@ function ProfileForm({ profile }: ProfileFormProps) {
               onChange={changeHandler<'m' | 'f'>('sex', onChange)}
             />
             {fieldState.error ? (
-              <Text variant="bodySRegular" color="destructive">
+              <Text variant="bodyMRegular" color="destructive">
                 {errorText(fieldState.error)}
               </Text>
             ) : null}
           </View>
         )}
       />
-      <TextInput label={t('profile.email')} value={profile.email} disabled />
+      <TextInput
+        large
+        label={t('profile.email')}
+        value={profile.email}
+        disabled
+      />
       <Button
-        size="xs"
+        size="md"
         fullWidth
         backgroundColor="brand"
         textColor="onBrand"
@@ -219,7 +227,7 @@ function ProfileForm({ profile }: ProfileFormProps) {
         onPress={save}
       />
       {errors.root?.server ? (
-        <Text variant="bodySRegular" color="destructive">
+        <Text variant="bodyMRegular" color="destructive">
           {errorText(errors.root.server)}
         </Text>
       ) : null}

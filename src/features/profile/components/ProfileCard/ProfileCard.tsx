@@ -37,16 +37,16 @@ export function ProfileCard({
           <RemoteImage source={{ uri: photo }} style={styles.avatar} />
         ) : (
           <View style={[styles.avatar, styles.avatarEmpty]}>
-            <Icon name="user" size={18} color={theme.colors.onBrand} />
+            <Icon name="user" size={22} color={theme.colors.onBrand} />
           </View>
         )}
-        <Text variant="bodyMMedium" numberOfLines={1} style={styles.name}>
+        <Text variant="bodyLMedium" numberOfLines={1} style={styles.name}>
           {name}
         </Text>
         {/* The check icon is already a ticked circle. */}
         <Icon
           name="check"
-          size={16}
+          size={18}
           color={theme.colors.brand}
           accessibilityLabel={t('profile.verified')}
         />
@@ -57,17 +57,17 @@ export function ProfileCard({
           hitSlop={8}
           onPress={onEdit}
         >
-          <Icon name="edit" size={18} color={theme.colors.foreground} />
+          <Icon name="edit" size={20} color={theme.colors.foreground} />
         </Pressable>
       </View>
       {level ? (
         <View style={styles.level}>
           <View style={styles.row}>
-            <Text variant="bodyXSMedium" style={styles.flex}>
+            <Text variant="bodySMedium" style={styles.flex}>
               {t('fanCard.level', { level: t(`fanCard.${level.level}`) })}
             </Text>
             {next && level.nextLevelPoints ? (
-              <Text variant="bodyXSMedium" color="mutedForeground">
+              <Text variant="bodySMedium" color="mutedForeground">
                 {t('fanCard.toNextLevel', {
                   level: t(`fanCard.${next}`),
                   points: level.points,
@@ -106,8 +106,8 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing(2),
   },
   avatar: {
-    width: theme.spacing(10),
-    height: theme.spacing(10),
+    width: theme.spacing(12),
+    height: theme.spacing(12),
     borderRadius: theme.radius.full,
   },
   avatarEmpty: {

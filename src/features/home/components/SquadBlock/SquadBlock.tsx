@@ -46,7 +46,7 @@ export function SquadBlock({
     <View style={[boxed && styles.box, style]}>
       <SectionTitle
         title={title ?? t('home.squadTitle')}
-        variant={boxed ? 'bodyLMedium' : undefined}
+        variant={boxed ? 'h4Medium' : undefined}
         style={boxed ? styles.boxTitle : undefined}
       />
       <Carousel

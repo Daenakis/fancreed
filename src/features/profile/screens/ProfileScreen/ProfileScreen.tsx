@@ -72,7 +72,7 @@ export function ProfileScreen() {
         />
       ) : (
         <>
-          {complete ? null : <Notice text={t('profile.fillNotice')} />}
+          {complete ? null : <Notice large text={t('profile.fillNotice')} />}
           <ProfileCard
             name={name || profile.email}
             photo={profile.smallPhoto}
@@ -87,7 +87,7 @@ export function ProfileScreen() {
               profile.favoritePlayer === playerId(player) ? (
                 // The current favourite: a label, not an action.
                 <Button
-                  size="xs"
+                  size="md"
                   fullWidth
                   backgroundColor="brand"
                   textColor="onBrand"
@@ -97,7 +97,7 @@ export function ProfileScreen() {
                 />
               ) : (
                 <Button
-                  size="xs"
+                  size="md"
                   fullWidth
                   backgroundColor="brand"
                   textColor="onBrand"
@@ -111,12 +111,14 @@ export function ProfileScreen() {
             }
           />
           <MenuRow
+            large
             icon="tShirt"
             label={t('profile.size')}
             value={size ?? undefined}
             onPress={() => setSizeOpen(true)}
           />
           <MenuRow
+            large
             icon="logout"
             tone="destructive"
             label={t('profile.logout')}
