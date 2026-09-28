@@ -1,14 +1,24 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import Animated, {
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import type { ColorToken } from '@/ui/theme';
+import type { DotProps, SliderIndicatorProps } from './types';
 
-import type { SliderIndicatorProps } from './types';
+const MORPH_MS = 250;
 
 /**
  * Page indicator under a carousel: a green pill for the current slide,
- * short grey dashes for the others.
+ * short grey dashes for the others. On a page change the old pill squishes
+ * into a dash while the new one stretches into the pill.
  *
  * @example
  * <SliderIndicator count={items.length} active={index} activeColor="primary" />
@@ -21,6 +31,7 @@ export function SliderIndicator({
   style,
 }: SliderIndicatorProps) {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
 
   return (
     <View
@@ -32,12 +43,13 @@ export function SliderIndicator({
       style={[styles.row, style]}
     >
       {Array.from({ length: count }, (_, i) => (
-        <View
+        <Dot
           key={i}
-          style={styles.dot(
-            i === active ? activeColor : inactiveColor,
-            i === active,
-          )}
+          active={i === active}
+          activeColor={theme.colors[activeColor]}
+          inactiveColor={theme.colors[inactiveColor]}
+          activeWidth={theme.spacing(4)}
+          inactiveWidth={theme.spacing(1.5)}
         />
       ))}
     </View>
@@ -46,6 +58,34 @@ export function SliderIndicator({
 
 SliderIndicator.displayName = 'SliderIndicator';
 
+function Dot({
+  active,
+  activeColor,
+  inactiveColor,
+  activeWidth,
+  inactiveWidth,
+}: DotProps) {
+  const reduceMotion = useReducedMotion();
+  const progress = useSharedValue(active ? 1 : 0);
+
+  useEffect(() => {
+    progress.value = withTiming(active ? 1 : 0, {
+      duration: reduceMotion ? 0 : MORPH_MS,
+    });
+  }, [active, reduceMotion, progress]);
+
+  const animated = useAnimatedStyle(() => ({
+    width: interpolate(progress.value, [0, 1], [inactiveWidth, activeWidth]),
+    backgroundColor: interpolateColor(
+      progress.value,
+      [0, 1],
+      [inactiveColor, activeColor],
+    ),
+  }));
+
+  return <Animated.View style={[styles.dot, animated]} />;
+}
+
 const styles = StyleSheet.create((theme) => ({
   row: {
     flexDirection: 'row',
@@ -53,10 +93,8 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing(1),
   },
   // Figma: the current page is a longer pill, the others short dashes.
-  dot: (color: ColorToken, active: boolean) => ({
-    width: active ? theme.spacing(4) : theme.spacing(1.5),
+  dot: {
     height: theme.spacing(1),
     borderRadius: theme.radius.full,
-    backgroundColor: theme.colors[color],
-  }),
+  },
 }));

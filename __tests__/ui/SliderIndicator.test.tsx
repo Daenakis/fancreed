@@ -4,11 +4,16 @@ import { StyleSheet, type ViewStyle } from 'react-native';
 import { SliderIndicator } from '@/ui/components';
 import { lightTheme } from '@/ui/theme/unistyles';
 
+// The drawn dot views (each animated Dot renders one native view).
+const dotStyles = (utils: ReturnType<typeof render>) => {
+  const row = utils.getByLabelText('common.slideOf');
+  return row
+    .findAll((node) => typeof node.type === 'string' && node !== row)
+    .map((dot) => StyleSheet.flatten(dot.props.style) as ViewStyle);
+};
+
 const dotColors = (utils: ReturnType<typeof render>) =>
-  utils.getByLabelText('common.slideOf').children.map((dot) => {
-    if (typeof dot === 'string') return undefined;
-    return (StyleSheet.flatten(dot.props.style) as ViewStyle).backgroundColor;
-  });
+  dotStyles(utils).map((style) => style.backgroundColor);
 
 describe('SliderIndicator', () => {
   it('renders one dot per slide', () => {
@@ -22,6 +27,16 @@ describe('SliderIndicator', () => {
     const { brand, border } = lightTheme.colors;
 
     expect(dotColors(utils)).toEqual([border, brand, border]);
+  });
+
+  it('draws the active dot as a long pill and the others as short dashes', () => {
+    const utils = render(<SliderIndicator count={3} active={2} />);
+
+    expect(dotStyles(utils).map((style) => style.width)).toEqual([
+      lightTheme.spacing(1.5),
+      lightTheme.spacing(1.5),
+      lightTheme.spacing(4),
+    ]);
   });
 
   it('applies the given theme colours', () => {

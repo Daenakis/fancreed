@@ -63,6 +63,25 @@ jest.mock('react-native-reanimated', () => ({
   ...require('react-native-reanimated/mock'),
   // Missing from the official mock.
   useReducedMotion: () => false,
+  // A no-op in the official mock: return the colour at the nearest end, so
+  // styles show the settled state (animations don't run in tests).
+  interpolateColor: (value: number, input: number[], output: string[]) =>
+    value >= input[input.length - 1]! ? output[output.length - 1] : output[0],
+  // Also a no-op in the official mock: plain linear interpolation (clamped
+  // to the first/last segment) so animated styles have real values.
+  interpolate: (value: number, input: number[], output: number[]) => {
+    const last = input.length - 1;
+    let i = 0;
+    while (i < last - 1 && value > input[i + 1]!) i++;
+    const [x0, x1, y0, y1] = [
+      input[i]!,
+      input[i + 1]!,
+      output[i]!,
+      output[i + 1]!,
+    ];
+    if (x1 === x0) return y0;
+    return y0 + ((y1 - y0) * (value - x0)) / (x1 - x0);
+  },
 }));
 
 beforeEach(() => {

@@ -13,3 +13,12 @@ export type SliderIndicatorProps = {
   inactiveColor?: ColorToken;
   style?: StyleProp<ViewStyle>;
 };
+
+/** One dot; animates between the dash and the pill. */
+export type DotProps = {
+  active: boolean;
+  activeColor: string;
+  inactiveColor: string;
+  activeWidth: number;
+  inactiveWidth: number;
+};
