@@ -4,12 +4,11 @@ import { fetcher, newsApi } from '@/api';
 
 import { QueryKey } from '@/types';
 
-/** An article's full text as HTML (mocked until the backend has it). */
+/** One article: text as HTML (or a video link), title, lead and image. */
 export const newsPostBodyQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: [QueryKey.News, 'body', slug],
     queryFn: () => fetcher(newsApi.body(slug)),
-    select: (response) => response.body,
   });
 
 export function useNewsPostBodyQuery(slug: string) {

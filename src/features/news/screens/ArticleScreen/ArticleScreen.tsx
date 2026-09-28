@@ -4,9 +4,11 @@ import { Linking, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 import {
+  Button,
   EmptyState,
   LoadingMore,
   PageLayout,
+  PageLoader,
   RemoteImage,
   SocialLinks,
   Text,
@@ -26,28 +28,32 @@ import { ArticleBody } from '../../components';
 const openLink = (url: string) => void Linking.openURL(url);
 
 /**
- * One news article: cover, title, date and the text, then similar news,
- * partners and the club's links. The post comes from the news list cache.
+ * One news article: cover, title, date and the text (or a "Watch video"
+ * button for video posts), then similar news, partners and the club's links.
+ * The head comes from the news list cache when the post is there, otherwise
+ * from the article itself (older posts, shared links).
  */
 export function ArticleScreen() {
   const { t, i18n } = useTranslation();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { data: posts, isPending } = useNewsQuery();
-  const { data: body } = useNewsPostBodyQuery(slug);
+  const { data: article, isPending: articlePending } =
+    useNewsPostBodyQuery(slug);
   const { data: socials } = useSocialsQuery();
-  const post = posts?.find((p) => p.slug === slug);
+  const listed = posts?.find((p) => p.slug === slug);
+  const head = listed ?? article;
   const url = `${CONFIG.LINKS.NEWS_POST}${slug}`;
 
   return (
     <PageLayout
       title={t('article.title')}
       onBack={goBack}
-      onShare={post ? () => void Share.share({ message: url }) : undefined}
+      onShare={head ? () => void Share.share({ message: url }) : undefined}
       contentStyle={styles.content}
     >
-      {isPending ? (
-        <LoadingMore loading />
-      ) : !post ? (
+      {isPending || (!listed && articlePending) ? (
+        <PageLoader />
+      ) : !head ? (
         <EmptyState
           icon="news"
           title={t('lineup.emptyTitle')}
@@ -57,24 +63,45 @@ export function ArticleScreen() {
         <>
           <View style={styles.head}>
             <RemoteImage
-              source={{ uri: post.image }}
+              source={{ uri: head.image }}
               resizeMode="cover"
               position="top"
               style={styles.cover}
             />
             <Text variant="h4Medium" accessibilityRole="header">
-              {post.title}
+              {head.title}
             </Text>
-            <Text variant="bodySRegular" color="mutedForeground">
-              {new Intl.DateTimeFormat(i18n.language, {
-                dateStyle: 'long',
-              }).format(new Date(post.created_at))}
-            </Text>
+            {listed?.created_at ? (
+              <Text variant="bodySRegular" color="mutedForeground">
+                {new Intl.DateTimeFormat(i18n.language, {
+                  dateStyle: 'long',
+                }).format(new Date(listed.created_at))}
+              </Text>
+            ) : null}
           </View>
-          {body ? (
-            <ArticleBody html={body} style={styles.inset} />
+          {!article ? (
+            <LoadingMore loading={articlePending} />
           ) : (
-            <LoadingMore loading />
+            <>
+              {article.body ? (
+                <ArticleBody html={article.body} style={styles.inset} />
+              ) : article.description ? (
+                <Text variant="bodyLRegular" style={styles.inset}>
+                  {article.description}
+                </Text>
+              ) : null}
+              {article.video ? (
+                <Button
+                  size="md"
+                  icon="play"
+                  backgroundColor="brand"
+                  textColor="onBrand"
+                  text={t('article.watchVideo')}
+                  onPress={() => openLink(article.video!)}
+                  style={styles.inset}
+                />
+              ) : null}
+            </>
           )}
           <NewsBlock
             title={t('article.similar')}

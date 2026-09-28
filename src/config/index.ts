@@ -21,7 +21,12 @@ export const CONFIG = {
   },
   LINKS: {
     /** Club site article: base + post slug (the base alone is the news list). */
-    NEWS_POST: 'https://fcruhlviv.com/posts/',
+    NEWS_POST: 'https://www.asse.fr/en/actualites/',
+    /** Club site (English): squad and player pages are read from it. */
+    CLUB_SITE: 'https://www.asse.fr/en/',
+    /** Transfermarkt squad table ("detailed"), + season start year: heights. */
+    TRANSFERMARKT_SQUAD:
+      'https://www.transfermarkt.world/sent-eten/kader/verein/618/plus/1/saison_id/',
     /** Club site pages opened from the menu. */
     TEAM: 'https://fcruhlviv.com/team/80',
     TEAM_U19: 'https://fcruhlviv.com/team/120',

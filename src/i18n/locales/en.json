@@ -294,7 +294,8 @@
   "article": {
     "title": "Article",
     "similar": "Similar news",
-    "notFound": "This article is no longer available."
+    "notFound": "This article is no longer available.",
+    "watchVideo": "Watch video"
   },
   "player": {
     "notFound": "This player is no longer in the squad.",
