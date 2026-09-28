@@ -1,27 +1,33 @@
-import { Pressable } from 'react-native';
+import { Pressable, Switch } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 import type { MenuRowProps, MenuRowTone } from './types';
 
-/** Tappable settings row: icon, label and an optional value on the right. */
+/**
+ * Tappable settings row: icon, label and an optional value on the right —
+ * or a switch (`toggled`), e.g. notifications on/off.
+ */
 export function MenuRow({
   label,
   icon,
   value,
   tone = 'default',
   chevron = false,
+  toggled,
   onPress,
   style,
 }: MenuRowProps) {
   const { theme } = useUnistyles();
   const destructive = tone === 'destructive';
+  const isSwitch = toggled !== undefined;
 
   return (
     <Pressable
-      accessibilityRole="button"
+      accessibilityRole={isSwitch ? 'switch' : 'button'}
       accessibilityLabel={value ? `${label}, ${value}` : label}
+      accessibilityState={isSwitch ? { checked: toggled } : undefined}
       onPress={onPress}
       style={({ pressed }) => [
         styles.row(tone),
@@ -42,6 +48,19 @@ export function MenuRow({
         {label}
       </Text>
       {value ? <Text variant="bodyMRegular">{value}</Text> : null}
+      {isSwitch ? (
+        // The row is the accessible switch; this one is visual (and tappable).
+        <Switch
+          value={toggled}
+          onValueChange={onPress}
+          trackColor={{ false: theme.colors.muted, true: theme.colors.brand }}
+          thumbColor={theme.colors.background}
+          ios_backgroundColor={theme.colors.muted}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          style={styles.switch}
+        />
+      ) : null}
       {chevron ? (
         <Icon
           name="arrowRight"
@@ -69,6 +88,10 @@ const styles = StyleSheet.create((theme) => ({
   }),
   label: {
     flex: 1,
+  },
+  // The iOS switch is 31 px high; keep the row as compact as the others.
+  switch: {
+    marginVertical: -theme.spacing(1.5),
   },
   pressed: {
     opacity: 0.7,

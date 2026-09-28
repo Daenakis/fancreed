@@ -9,4 +9,8 @@ export const STORAGE_KEYS = {
   HAS_LAUNCHED: 'app-has-launched',
   /** Set once the Home tour (onboarding) was finished on this device (plain MMKV) */
   ONBOARDING_DONE: 'app-onboarding-done',
+  /** Settings: push notifications switch (plain MMKV; no push service yet) */
+  PUSH_ENABLED: 'settings-push-enabled',
+  /** Settings: geolocation switch (plain MMKV; on only with OS permission) */
+  LOCATION_ENABLED: 'settings-location-enabled',
 } as const;

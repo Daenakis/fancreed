@@ -32,6 +32,24 @@ describe('MenuRow', () => {
     ).toBe(lightTheme.colors.destructive);
   });
 
+  it('acts as a switch with its state when toggled is set', () => {
+    const onPress = jest.fn();
+    const { getByRole } = render(
+      <MenuRow
+        label="Push"
+        icon="notification"
+        toggled={false}
+        onPress={onPress}
+      />,
+    );
+
+    const row = getByRole('switch', { name: 'Push' });
+    expect(row).not.toBeChecked();
+
+    fireEvent.press(row);
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
   it('shows an arrow when chevron is set', () => {
     const { UNSAFE_getAllByType } = render(
       <MenuRow label="News" icon="news" chevron onPress={jest.fn()} />,

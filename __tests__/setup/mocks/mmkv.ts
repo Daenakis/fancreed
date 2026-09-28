@@ -19,8 +19,34 @@ jest.mock('react-native-mmkv', () => {
       store.clear();
     }),
   };
+  // State-backed stand-ins for the MMKV React hooks (same store).
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useState } = require('react') as typeof import('react');
+  const useMMKVString = (key: string) => {
+    const [value, setValue] = useState<string | undefined>(store.get(key));
+    const set = (next: string | undefined) => {
+      if (next === undefined) store.delete(key);
+      else store.set(key, next);
+      setValue(next);
+    };
+    return [value, set] as const;
+  };
+  const useMMKVBoolean = (key: string) => {
+    const [value, setValue] = useState<boolean | undefined>(
+      store.has(key) ? String(store.get(key)) === 'true' : undefined,
+    );
+    const set = (next: boolean) => {
+      store.set(key, String(next));
+      setValue(next);
+    };
+    return [value, set] as const;
+  };
   return {
     createMMKV: jest.fn(() => instance),
     MMKV: jest.fn(() => instance),
+    useMMKVString,
+    useMMKVBoolean,
+    /** Test helper (not a mock, so mock resets can't break it): empties the store. */
+    __clearStore: () => store.clear(),
   };
 });

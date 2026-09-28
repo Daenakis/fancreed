@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@tests/test-utils';
 import { router } from 'expo-router';
-import { Alert, Linking } from 'react-native';
+import { Linking } from 'react-native';
 
 import { CONFIG } from '@/config';
 
@@ -27,13 +27,16 @@ describe('SideMenu', () => {
     expect(router.push).toHaveBeenCalledWith('/tournament');
   });
 
-  it('says settings are coming soon', () => {
-    const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  it.each([
+    ['menu.settings', '/settings'],
+    ['menu.feedback', '/feedback'],
+  ])('opens %s at %s', (name, path) => {
     const { getByRole } = render(<SideMenu visible onClose={onClose} />);
 
-    fireEvent.press(getByRole('button', { name: 'menu.settings' }));
+    fireEvent.press(getByRole('button', { name }));
 
-    expect(alert).toHaveBeenCalledWith('menu.comingSoon');
+    expect(onClose).toHaveBeenCalled();
+    expect(router.push).toHaveBeenCalledWith(path);
   });
 
   it('closes from the back arrow', () => {

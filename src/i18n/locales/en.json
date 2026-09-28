@@ -440,6 +440,32 @@
   "challenge": {
     "title": "Challenge"
   },
+  "settings": {
+    "title": "Settings",
+    "verification": "Verification",
+    "push": "Push notifications",
+    "location": "Geolocation",
+    "language": "Language",
+    "locationDenied": "Allow location access for the app in your phone settings.",
+    "openSettings": "Open settings",
+    "notNow": "Not now"
+  },
+  "feedback": {
+    "title": "Feedback",
+    "intro": "Have a question or a suggestion? Our managers will get back to you quickly.",
+    "name": "Name",
+    "phone": "Phone number",
+    "message": "Questions, complaints or suggestions",
+    "send": "Send",
+    "sentTitle": "Thank you!",
+    "sentText": "Your message has been sent. Our managers will contact you soon.",
+    "errors": {
+      "phoneRequired": "Enter your phone number",
+      "phoneInvalid": "Enter a phone number with 10–14 digits, e.g. +380501234567",
+      "messageRequired": "Write your message",
+      "messageTooLong": "The message is too long"
+    }
+  },
   "onboarding": {
     "back": "Back",
     "next": "Next",

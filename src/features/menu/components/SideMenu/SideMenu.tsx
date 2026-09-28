@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Linking, Modal, useWindowDimensions, View } from 'react-native';
+import { Linking, Modal, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -58,11 +58,12 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
     transform: [{ translateX: offset.get() }],
   }));
 
-  const openScreen = (path: '/tournament' | '/videos') => {
+  const openScreen = (
+    path: '/tournament' | '/videos' | '/settings' | '/feedback',
+  ) => {
     onClose();
     router.push(path);
   };
-  const comingSoon = () => Alert.alert(t('menu.comingSoon'));
 
   const sections: MenuItem[] = [
     {
@@ -103,19 +104,18 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
       onPress: () => openLink(CONFIG.LINKS.ACADEMY),
     },
   ];
-  // TODO: settings and feedback screens (no design yet).
   const footer: MenuItem[] = [
     {
       key: 'settings',
       icon: 'settings',
       label: t('menu.settings'),
-      onPress: comingSoon,
+      onPress: () => openScreen('/settings'),
     },
     {
       key: 'feedback',
       icon: 'support',
       label: t('menu.feedback'),
-      onPress: comingSoon,
+      onPress: () => openScreen('/feedback'),
     },
   ];
 

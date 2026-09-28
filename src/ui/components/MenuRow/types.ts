@@ -14,6 +14,11 @@ export type MenuRowProps = {
   tone?: MenuRowTone;
   /** Arrow on the right for rows that open a screen or page. */
   chevron?: boolean;
+  /**
+   * Shows a switch in this state; the row then acts as a switch — a tap
+   * anywhere on it calls `onPress` (flip the value there).
+   */
+  toggled?: boolean;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
 };

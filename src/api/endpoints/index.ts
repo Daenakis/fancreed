@@ -1,6 +1,7 @@
 export { authApi } from './auth';
 export { clubsApi } from './clubs';
 export { eventsApi } from './events';
+export { feedbackApi } from './feedback';
 export { fixturesApi } from './fixtures';
 export { leaguesApi } from './leagues';
 export { newsApi } from './news';

@@ -3,6 +3,7 @@ export {
   authApi,
   clubsApi,
   eventsApi,
+  feedbackApi,
   fixturesApi,
   leaguesApi,
   newsApi,

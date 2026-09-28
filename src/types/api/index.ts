@@ -2,6 +2,7 @@ export * from './auth';
 export * from './clubs';
 export * from './common';
 export * from './events';
+export * from './feedback';
 export * from './fixtures';
 export * from './leagues';
 export * from './news';

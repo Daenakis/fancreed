@@ -28,6 +28,12 @@ jest.mock('expo-calendar/legacy', () => ({
 
 jest.mock('expo-location', () => ({
   geocodeAsync: jest.fn(),
+  getForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ granted: true, canAskAgain: true }),
+  ),
+  requestForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ granted: true, canAskAgain: true }),
+  ),
 }));
 
 jest.mock(
