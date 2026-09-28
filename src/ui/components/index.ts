@@ -1,5 +1,10 @@
 export { AddPhoto, type AddPhotoProps } from './AddPhoto';
-export { APP_HEADER_LOGO, AppHeader, type AppHeaderProps } from './AppHeader';
+export {
+  APP_HEADER_LOGO,
+  AppHeader,
+  appHeaderMenuButtonOffset,
+  type AppHeaderProps,
+} from './AppHeader';
 export { BlockHeader, type BlockHeaderProps } from './BlockHeader';
 export { BottomSheet, type BottomSheetProps } from './BottomSheet';
 export {
@@ -28,6 +33,7 @@ export {
 } from './ImageCard';
 export { InfoRow, type InfoRowProps } from './InfoRow';
 export { LoadingMore, type LoadingMoreProps } from './LoadingMore';
+export { MenuButton, type MenuButtonProps } from './MenuButton';
 export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
 export { Notice, type NoticeProps } from './Notice';
 export { PageLayout, type PageLayoutProps } from './PageLayout';

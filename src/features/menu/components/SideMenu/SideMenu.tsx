@@ -1,17 +1,30 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, Modal, useWindowDimensions, View } from 'react-native';
+import {
+  Linking,
+  Modal,
+  ScrollView,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { StyleSheet } from 'react-native-unistyles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { scheduleOnRN } from 'react-native-worklets';
 
-import { MenuRow, PageLayout } from '@/ui/components';
+import {
+  APP_HEADER_LOGO,
+  appHeaderMenuButtonOffset,
+  MenuButton,
+  MenuRow,
+  Text,
+} from '@/ui/components';
 
 import { CONFIG } from '@/config';
 
@@ -24,12 +37,16 @@ const CLOSE_MS = 220;
 const openLink = (url: string) => void Linking.openURL(url);
 
 /**
- * Side menu: a full-screen panel sliding in from the left over the app.
- * In-app sections close it and navigate at the same time (the new screen
- * opens under the sliding-out panel); club pages open on the club site.
+ * Side menu: a full-screen panel sliding in from the left over the app,
+ * while the header's menu button stays in place and turns into a cross
+ * (tap it to close). In-app sections close it and navigate at the same time
+ * (the new screen opens under the sliding-out panel); club pages open on the
+ * club site.
  */
 export function SideMenu({ visible, onClose }: SideMenuProps) {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
+  const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const offset = useSharedValue(-width);
   // Stays mounted until the slide-out finishes.
@@ -130,16 +147,31 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
       onRequestClose={onClose}
     >
       <Animated.View style={[styles.panel, panelStyle]}>
-        <PageLayout
-          tone="plain"
-          title={t('menu.title')}
-          onBack={onClose}
-          contentStyle={styles.content}
+        {/* Same height as the app header, so the title lines up with the
+            close button below. */}
+        <View style={styles.header(insets.top)}>
+          <Text variant="bodyLMedium" accessibilityRole="header">
+            {t('menu.title')}
+          </Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={styles.content(insets.bottom)}
+          showsVerticalScrollIndicator={false}
         >
           <View style={styles.group}>{rows(sections)}</View>
           <View style={styles.group}>{rows(footer)}</View>
-        </PageLayout>
+        </ScrollView>
       </Animated.View>
+      {/* Doesn't slide: it sits exactly on the header's menu button and
+          turns from lines into a cross (and back when closing). */}
+      <MenuButton
+        open={visible}
+        onPress={onClose}
+        style={[
+          styles.close,
+          appHeaderMenuButtonOffset(theme.spacing, insets.top),
+        ]}
+      />
     </Modal>
   );
 }
@@ -149,11 +181,26 @@ SideMenu.displayName = 'SideMenu';
 const styles = StyleSheet.create((theme) => ({
   panel: {
     flex: 1,
+    backgroundColor: theme.colors.background,
   },
-  content: {
+  // Mirrors AppHeader's bar: same top padding and row height.
+  header: (topInset: number) => ({
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: topInset + theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    minHeight: topInset + theme.spacing(4) + APP_HEADER_LOGO.height,
+  }),
+  // Settings and Feedback stay above the home indicator.
+  content: (bottomInset: number) => ({
     flexGrow: 1,
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacing(4),
+    paddingTop: theme.spacing(2),
+    paddingBottom: bottomInset + theme.spacing(4),
+  }),
+  close: {
+    position: 'absolute',
   },
   group: {
     gap: theme.spacing(2),

@@ -39,10 +39,13 @@ describe('SideMenu', () => {
     expect(router.push).toHaveBeenCalledWith(path);
   });
 
-  it('closes from the back arrow', () => {
+  it('closes from the cross in place of the menu button', () => {
     const { getByRole } = render(<SideMenu visible onClose={onClose} />);
 
-    fireEvent.press(getByRole('button', { name: 'common.back' }));
+    const close = getByRole('button', { name: 'common.close' });
+    expect(close).toBeExpanded();
+
+    fireEvent.press(close);
 
     expect(onClose).toHaveBeenCalled();
   });

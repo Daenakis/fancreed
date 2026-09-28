@@ -5,10 +5,25 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { Icon } from '../Icon';
+import { MenuButton } from '../MenuButton';
 import type { AppHeaderProps } from './types';
 
 /** Logo box; the same size anything animating into the logo must land on. */
 export const APP_HEADER_LOGO = { width: 32, height: 48 };
+
+/**
+ * Where the menu button sits (its top-left corner), for screens that draw
+ * over the header — the side menu puts its close button exactly here.
+ */
+export const appHeaderMenuButtonOffset = (
+  spacing: (value: number) => number,
+  topInset: number,
+) => ({
+  // styles.bar: paddingTop topInset + spacing(2), rows centred on the logo
+  // height; paddingHorizontal spacing(5). The button is 24 pt.
+  top: topInset + spacing(2) + (APP_HEADER_LOGO.height - 24) / 2,
+  left: spacing(5),
+});
 
 /**
  * Top bar of the signed-in app: menu, club logo, profile avatar.
@@ -30,15 +45,8 @@ export function AppHeader({
 
   return (
     <View style={[styles.bar(insets.top), style]}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('nav.menu')}
-        disabled={!onMenuPress}
-        hitSlop={8}
-        onPress={onMenuPress}
-      >
-        <Icon name="menu" size={24} color={theme.colors.foreground} />
-      </Pressable>
+      {/* The side menu draws its own (open) copy exactly here. */}
+      <MenuButton open={false} disabled={!onMenuPress} onPress={onMenuPress} />
       <View pointerEvents="none" style={styles.logoBox(insets.top)}>
         <Animated.Image
           source={logo}
