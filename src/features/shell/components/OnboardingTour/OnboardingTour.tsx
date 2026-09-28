@@ -19,7 +19,7 @@ const STEPS: OnboardingStep[] = [
   { key: 'profile', target: { kind: 'profile' } },
   {
     key: 'gamification',
-    target: { kind: 'tab', index: 0, icon: 'lion' },
+    target: { kind: 'tab', index: 0, icon: 'asse' },
   },
   { key: 'home', target: { kind: 'tab', index: 1, icon: 'homeFill' } },
   {

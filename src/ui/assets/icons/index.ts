@@ -4,6 +4,7 @@ import ArrowDown from './ArrowDown';
 import ArrowLeft from './ArrowLeft';
 import ArrowRight from './ArrowRight';
 import ArrowUp from './ArrowUp';
+import Asse from './Asse';
 import Ball from './Ball';
 import Bell from './Bell';
 import Bus from './Bus';
@@ -72,6 +73,7 @@ export const ICONS = {
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
   arrowUp: ArrowUp,
+  asse: Asse,
   ball: Ball,
   bell: Bell,
   bus: Bus,

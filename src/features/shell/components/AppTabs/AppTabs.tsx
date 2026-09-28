@@ -32,7 +32,7 @@ const TABS: AppTab[] = [
   {
     name: 'gamification',
     href: '/gamification',
-    icon: 'lion',
+    icon: 'asse',
     label: 'nav.gamification',
   },
   {
