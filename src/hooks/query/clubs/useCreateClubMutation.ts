@@ -9,6 +9,8 @@ import { clubsApi, fetcher } from '@/api';
 import { QueryKey } from '@/types';
 import type { CreateClubRequest } from '@/types/api';
 
+import { refreshClubData } from './refreshClubData';
+
 export const createClubMutationOptions = () =>
   mutationOptions({
     mutationKey: [QueryKey.Clubs, 'create'],
@@ -20,7 +22,6 @@ export function useCreateClubMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     ...createClubMutationOptions(),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }

@@ -12,6 +12,7 @@ import { QueryKey } from '@/types';
 import type { CreateClubEventRequest } from '@/types/api';
 
 import { useApiErrorAlert } from '../../useApiErrorAlert';
+import { refreshClubData } from './refreshClubData';
 
 type CreateClubEventParams = {
   clubId: string;
@@ -58,36 +59,33 @@ export const leaveClubEventMutationOptions = () =>
       fetcher(clubsApi.leaveEvent(clubId, eventId)),
   });
 
-/** Creates a club event with its address and refreshes club data. */
+/** Creates a club event with its address and refreshes club and event data. */
 export function useCreateClubEventMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     ...createClubEventMutationOptions(),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }
 
-/** Joins a club event and refreshes club data. */
+/** Joins a club event and refreshes club and event data. */
 export function useJoinClubEventMutation() {
   const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...joinClubEventMutationOptions(),
     onError,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }
 
-/** Leaves a club event and refreshes club data. */
+/** Leaves a club event and refreshes club and event data. */
 export function useLeaveClubEventMutation() {
   const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...leaveClubEventMutationOptions(),
     onError,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }

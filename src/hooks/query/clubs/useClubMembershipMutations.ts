@@ -9,6 +9,7 @@ import { clubsApi, fetcher } from '@/api';
 import { QueryKey } from '@/types';
 
 import { useApiErrorAlert } from '../../useApiErrorAlert';
+import { refreshClubData } from './refreshClubData';
 
 export const joinClubMutationOptions = () =>
   mutationOptions({
@@ -22,26 +23,24 @@ export const leaveClubMutationOptions = () =>
     mutationFn: (id: string) => fetcher(clubsApi.leave(id)),
   });
 
-/** Joins an open fan club and refreshes club data. */
+/** Joins an open fan club and refreshes club and event data. */
 export function useJoinClubMutation() {
   const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...joinClubMutationOptions(),
     onError,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }
 
-/** Leaves a fan club and refreshes club data. */
+/** Leaves a fan club and refreshes club and event data. */
 export function useLeaveClubMutation() {
   const onError = useApiErrorAlert();
   const queryClient = useQueryClient();
   return useMutation({
     ...leaveClubMutationOptions(),
     onError,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Clubs] }),
+    onSuccess: () => refreshClubData(queryClient),
   });
 }
