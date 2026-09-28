@@ -4,19 +4,22 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Linking, RefreshControl, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { ChoiceGroup, EmptyState, LoadingMore } from '@/ui/components';
+import { ChoiceGroup, EmptyState } from '@/ui/components';
 
 import { useFixturesTableQuery } from '@/hooks';
 
 import { matchPhase } from '@/utils';
 
-import { MatchCard } from '@/features/matches';
+import { MatchCard, MatchCardSkeleton } from '@/features/matches';
 import { ShellHeader } from '@/features/shell';
 
 import type { CalendarSection } from './types';
 
 // TODO: open links in an in-app browser once one is approved (expo-web-browser).
 const openLink = (url: string) => void Linking.openURL(url);
+
+/** Placeholder cards while the matches load (about a screenful). */
+const SKELETON_CARDS = 4;
 
 /**
  * Calendar tab: upcoming matches and results of the main team as cards
@@ -47,7 +50,15 @@ export function CalendarScreen() {
         style={styles.tabs}
       />
       {isPending ? (
-        <LoadingMore loading />
+        <View
+          accessibilityLabel={t('common.loading')}
+          accessibilityState={{ busy: true }}
+          style={styles.list}
+        >
+          {Array.from({ length: SKELETON_CARDS }, (_, i) => (
+            <MatchCardSkeleton key={i} />
+          ))}
+        </View>
       ) : (
         <FlatList
           data={matches}

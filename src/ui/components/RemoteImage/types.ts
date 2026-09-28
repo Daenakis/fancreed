@@ -19,9 +19,3 @@ export type RemoteImageProps = Omit<ImageProps, 'source' | 'style'> & {
   /** The image box: size, radius, margins. */
   style?: StyleProp<ViewStyle>;
 };
-
-/** The loading placeholder inside RemoteImage. */
-export type SkeletonProps = {
-  /** No pulse — the picture failed to load. */
-  still: boolean;
-};

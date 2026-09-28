@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Image,
   type ImageSourcePropType,
   type LayoutRectangle,
   View,
 } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useReducedMotion,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
 import { StyleSheet } from 'react-native-unistyles';
 
-import type { RemoteImageProps, SkeletonProps } from './types';
-
-const PULSE_MS = 700;
+import { Skeleton } from '../Skeleton';
+import type { RemoteImageProps } from './types';
 
 type Size = { width: number; height: number };
 
@@ -105,39 +97,22 @@ export function RemoteImage({
           onError?.(event);
         }}
       />
-      {state === 'loaded' ? null : <Skeleton still={state === 'failed'} />}
+      {state === 'loaded' ? null : (
+        <Skeleton still={state === 'failed'} style={styles.skeleton} />
+      )}
     </View>
   );
 }
 
 RemoteImage.displayName = 'RemoteImage';
 
-function Skeleton({ still }: SkeletonProps) {
-  const reduceMotion = useReducedMotion();
-  const opacity = useSharedValue(1);
-
-  useEffect(() => {
-    if (still || reduceMotion) return;
-    opacity.value = withRepeat(
-      withTiming(0.4, { duration: PULSE_MS }),
-      -1,
-      true,
-    );
-  }, [still, reduceMotion, opacity]);
-
-  const pulse = useAnimatedStyle(() => ({ opacity: opacity.value }));
-
-  return (
-    <Animated.View pointerEvents="none" style={[styles.skeleton, pulse]} />
-  );
-}
-
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create({
   box: {
     overflow: 'hidden',
   },
+  // Fills the box, which clips it to the image's own corners.
   skeleton: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: theme.colors.muted,
+    borderRadius: 0,
   },
-}));
+});

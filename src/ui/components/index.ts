@@ -38,6 +38,7 @@ export {
 } from './RemoteImage';
 export { SectionTitle, type SectionTitleProps } from './SectionTitle';
 export { Select, type SelectProps } from './Select';
+export { Skeleton, type SkeletonProps } from './Skeleton';
 export { SliderIndicator, type SliderIndicatorProps } from './SliderIndicator';
 export { SlideshowList, type SlideshowListProps } from './SlideshowList';
 export {

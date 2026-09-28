@@ -1,6 +1,8 @@
 export {
   MatchCard,
   type MatchCardProps,
+  MatchCardSkeleton,
+  type MatchCardSkeletonProps,
   type MatchCardVariant,
   Pitch,
   type PitchProps,
