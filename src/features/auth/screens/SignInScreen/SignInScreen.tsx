@@ -35,6 +35,8 @@ import {
 } from '../../constants';
 
 const INTRO_DELAY = 600;
+/** "Welcome!" fades in during the delay, before the logo moves. */
+const WELCOME_IN = 400;
 const INTRO_DURATION = 800;
 
 export function SignInScreen() {
@@ -51,10 +53,13 @@ export function SignInScreen() {
     () => useSplashStore.getState().signInIntro && !reduceMotion,
   );
   const progress = useSharedValue(playIntro ? 0 : 1);
+  // "Welcome!" fades in: the native splash before us shows only the logo.
+  const welcomeIn = useSharedValue(playIntro ? 0 : 1);
 
   useEffect(() => {
     if (!playIntro) return;
     useSplashStore.getState().consumeSignInIntro();
+    welcomeIn.value = withTiming(1, { duration: WELCOME_IN });
     progress.value = 0;
     progress.value = withDelay(
       INTRO_DELAY,
@@ -63,7 +68,7 @@ export function SignInScreen() {
         easing: Easing.inOut(Easing.cubic),
       }),
     );
-  }, [progress, playIntro]);
+  }, [progress, welcomeIn, playIntro]);
 
   // Logo starts centred on screen and ends top-left, scaled down.
   // transformOrigin is the logo's top centre, so only its top edge and
@@ -82,7 +87,8 @@ export function SignInScreen() {
     ],
   }));
   const welcomeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.value, [0, 0.5], [1, 0], 'clamp'),
+    opacity:
+      welcomeIn.value * interpolate(progress.value, [0, 0.5], [1, 0], 'clamp'),
   }));
   const contentStyle = useAnimatedStyle(() => ({
     opacity: interpolate(progress.value, [0.4, 1], [0, 1], 'clamp'),

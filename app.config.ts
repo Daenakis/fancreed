@@ -3,8 +3,8 @@ import 'tsx/cjs';
 import type { AppIconBadgeConfig } from 'app-icon-badge/types';
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
-import Env from './env';
-import withIosSceneDelegate from './plugins/withIosSceneDelegate';
+import { Env } from './env';
+import { withIosSceneDelegate } from './plugins/withIosSceneDelegate';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_RUN_MODE !== 'prod',
@@ -24,9 +24,8 @@ const appIconBadgeConfig: AppIconBadgeConfig = {
 
 // Expo account or organization that owns the project (`eas whoami`).
 const EXPO_ACCOUNT_OWNER = 'fancreed';
-// UUID printed by `eas init` (e.g. 'a1b2c3d4-...'). Leave empty until then —
-// a non-UUID value makes EAS fail with "Invalid UUID appId".
-const EAS_PROJECT_ID = '';
+// EAS project @fancreed/fancreed (linked with `eas init`, 2026-09-28).
+const EAS_PROJECT_ID = '50f16ce0-8bf1-4779-9824-9a793ddf5a14';
 
 const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -51,7 +50,7 @@ const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: '#E6F4FE',
+      backgroundColor: '#FFFFFF',
       foregroundImage: './assets/adaptive-icon.png',
     },
     package: Env.EXPO_PUBLIC_PACKAGE,
@@ -104,9 +103,14 @@ const createConfig = ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#2E3C4B',
-        image: './assets/splash-icon.png',
-        imageWidth: 150,
+        // Same as the JS splash (theme `brand`, CLUB_LOGO / CLUB_LOGO_WIDTH in
+        // src/constants/brand.ts), so the hand-over to it is invisible.
+        // The plugin squares its image, so it gets the logo on a square
+        // canvas (scripts/make-splash-logo.swift); imageWidth is then the
+        // logo's height: 120 wide × 181/139 = 156.
+        backgroundColor: '#58AF6C',
+        image: './assets/splash-logo.png',
+        imageWidth: 156,
       },
     ],
     ['app-icon-badge', appIconBadgeConfig],
