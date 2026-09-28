@@ -15,6 +15,12 @@ jest.mock('expo-router', () => ({
   usePathname: jest.fn(() => '/'),
   // Tests set route params with jest.mocked(useLocalSearchParams).mockReturnValue(…).
   useLocalSearchParams: jest.fn(() => ({})),
+  // The screen is treated as focused: run the effect like useEffect.
+  useFocusEffect: (effect: () => void | (() => void)) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { useEffect } = require('react') as typeof import('react');
+    useEffect(effect, [effect]);
+  },
   Link: 'Link',
   Slot: 'Slot',
   Stack: { Screen: 'Screen' },

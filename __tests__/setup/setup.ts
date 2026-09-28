@@ -36,6 +36,16 @@ jest.mock('expo-location', () => ({
   ),
 }));
 
+// Native view; tests read its props (source, handlers) via UNSAFE_getByType.
+jest.mock('react-native-webview', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createElement } = require('react') as typeof import('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native') as typeof import('react-native');
+  const WebView = (props: object) => createElement(View, props);
+  return { WebView };
+});
+
 jest.mock(
   'react-native-safe-area-context',
   // eslint-disable-next-line @typescript-eslint/no-require-imports

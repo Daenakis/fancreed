@@ -440,6 +440,11 @@
   "challenge": {
     "title": "Challenge"
   },
+  "shop": {
+    "errorTitle": "The shop didn't load",
+    "errorText": "Check your internet connection and try again.",
+    "retry": "Try again"
+  },
   "settings": {
     "title": "Settings",
     "verification": "Verification",

@@ -1,4 +1,4 @@
-import Env from '@env';
+import { Env } from '@env';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import * as Device from 'expo-device';
 
@@ -26,6 +26,8 @@ export const CONFIG = {
     TEAM: 'https://fcruhlviv.com/team/80',
     TEAM_U19: 'https://fcruhlviv.com/team/120',
     ACADEMY: 'https://fcruhlviv.com/academy',
+    /** Club fan shop, shown in the Shop tab (web view). */
+    SHOP: 'https://www.boutiquedesverts.fr/collections/',
   },
 } as const;
 
