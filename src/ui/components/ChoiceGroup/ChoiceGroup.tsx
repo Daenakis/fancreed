@@ -24,6 +24,7 @@ export function ChoiceGroup<T extends string | number>({
   onChange,
   variant = 'segmented',
   caption,
+  large = false,
   style,
 }: ChoiceGroupProps<T>) {
   const radio = variant === 'radio';
@@ -50,6 +51,7 @@ export function ChoiceGroup<T extends string | number>({
       {options.map((option, i) => {
         const common = {
           label: option.label,
+          large,
           icon: option.icon,
           selected: option.value === value,
           onPress: () => {
@@ -99,7 +101,14 @@ export function ChoiceGroup<T extends string | number>({
 
 ChoiceGroup.displayName = 'ChoiceGroup';
 
-function Segment({ label, selected, first, last, onPress }: SegmentProps) {
+function Segment({
+  label,
+  large,
+  selected,
+  first,
+  last,
+  onPress,
+}: SegmentProps) {
   return (
     <Pressable
       accessibilityRole="radio"
@@ -111,7 +120,12 @@ function Segment({ label, selected, first, last, onPress }: SegmentProps) {
         pressed && styles.pressed,
       ]}
     >
-      <Text color={selected ? 'primaryForeground' : 'foreground'}>{label}</Text>
+      <Text
+        variant={large ? 'h4Regular' : 'bodyLRegular'}
+        color={selected ? 'primaryForeground' : 'foreground'}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -135,7 +149,7 @@ function Tab({ label, selected, onPress }: ChoiceItemProps) {
   );
 }
 
-function Chip({ label, icon, selected, onPress }: ChoiceItemProps) {
+function Chip({ label, large, icon, selected, onPress }: ChoiceItemProps) {
   const { theme } = useUnistyles();
   const color = selected ? theme.colors.onBrand : theme.colors.foreground;
 
@@ -151,14 +165,17 @@ function Chip({ label, icon, selected, onPress }: ChoiceItemProps) {
       ]}
     >
       {icon ? <Icon name={icon} size={16} color={color} /> : null}
-      <Text variant="bodyMRegular" color={selected ? 'onBrand' : 'foreground'}>
+      <Text
+        variant={large ? 'bodyLRegular' : 'bodyMRegular'}
+        color={selected ? 'onBrand' : 'foreground'}
+      >
         {label}
       </Text>
     </Pressable>
   );
 }
 
-function ListItem({ label, selected, onPress }: ChoiceItemProps) {
+function ListItem({ label, large, selected, onPress }: ChoiceItemProps) {
   return (
     <Pressable
       accessibilityRole="radio"
@@ -173,12 +190,12 @@ function ListItem({ label, selected, onPress }: ChoiceItemProps) {
       <View style={styles.smallCircle(selected)}>
         {selected ? <View style={styles.dot} /> : null}
       </View>
-      <Text variant="bodyMRegular">{label}</Text>
+      <Text variant={large ? 'bodyLRegular' : 'bodyMRegular'}>{label}</Text>
     </Pressable>
   );
 }
 
-function RadioItem({ label, selected, onPress }: ChoiceItemProps) {
+function RadioItem({ label, large, selected, onPress }: ChoiceItemProps) {
   return (
     <Pressable
       accessibilityRole="radio"
@@ -190,7 +207,10 @@ function RadioItem({ label, selected, onPress }: ChoiceItemProps) {
       <View style={styles.circle(selected)}>
         {selected ? <View style={styles.dot} /> : null}
       </View>
-      <Text variant="bodyMRegular" style={styles.radioLabel}>
+      <Text
+        variant={large ? 'bodyLRegular' : 'bodyMRegular'}
+        style={styles.radioLabel}
+      >
         {label}
       </Text>
     </Pressable>

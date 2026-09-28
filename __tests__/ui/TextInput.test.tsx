@@ -131,4 +131,17 @@ describe('TextInput', () => {
       (StyleSheet.flatten(getByText('Wrong').props.style) as TextStyle).color,
     ).toBe(lightTheme.colors.destructive);
   });
+
+  it('makes the label and the value 2 px larger with large', () => {
+    const { getByText, getByLabelText } = render(
+      <TextInput large label="Name" value="Ivan" />,
+    );
+
+    expect(styleOf(getByText('Name')).fontSize).toBe(
+      lightTheme.typography.bodyLMedium.fontSize,
+    );
+    expect(styleOf(getByLabelText('Name')).fontSize).toBe(
+      lightTheme.typography.h4Regular.fontSize,
+    );
+  });
 });

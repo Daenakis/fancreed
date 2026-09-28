@@ -25,6 +25,7 @@ export function DateField({
   initialView,
   minDate,
   maxDate,
+  large = false,
   style,
 }: DateFieldProps) {
   const { t } = useTranslation();
@@ -49,6 +50,7 @@ export function DateField({
             value={value ? formatDayMonthYear(value) : ''}
             error={error}
             shakeKey={shakeKey}
+            large={large}
           />
         </View>
       </Pressable>

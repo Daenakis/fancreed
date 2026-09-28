@@ -6,13 +6,21 @@ import { Text } from '../Text';
 import type { NoticeProps } from './types';
 
 /** Light-green hint box with an icon, e.g. "fill in your profile". */
-export function Notice({ text, icon = 'info', style }: NoticeProps) {
+export function Notice({
+  text,
+  icon = 'info',
+  large = false,
+  style,
+}: NoticeProps) {
   const { theme } = useUnistyles();
 
   return (
     <View accessible accessibilityLabel={text} style={[styles.box, style]}>
-      <Icon name={icon} size={14} color={theme.colors.brand} />
-      <Text variant="bodyXSMedium" style={styles.text}>
+      <Icon name={icon} size={large ? 16 : 14} color={theme.colors.brand} />
+      <Text
+        variant={large ? 'bodySMedium' : 'bodyXSMedium'}
+        style={styles.text}
+      >
         {text}
       </Text>
     </View>

@@ -28,6 +28,8 @@ export type TextInputProps = Omit<RNTextInputProps, 'style' | 'editable'> & {
   rightAccessory?: ReactNode;
   /** Makes the field read-only and dimmed. Defaults to `false`. */
   disabled?: boolean;
+  /** Text 2 px larger (label, value, error), e.g. on the profile screens. Defaults to `false`. */
+  large?: boolean;
   /** `inverse` = light text/border for dark backgrounds. Defaults to `default`. */
   variant?: TextInputVariant;
   /** Style of the outer wrapper (label + field + error). */

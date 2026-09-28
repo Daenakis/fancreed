@@ -17,6 +17,7 @@ export function MenuRow({
   chevron = false,
   toggled,
   disabled = false,
+  large = false,
   onPress,
   style,
 }: MenuRowProps) {
@@ -43,17 +44,27 @@ export function MenuRow({
     >
       <Icon
         name={icon}
-        size={18}
+        size={large ? 20 : 18}
         color={destructive ? theme.colors.destructive : theme.colors.brand}
       />
       <Text
-        variant={destructive ? 'bodyMSemibold' : 'bodyMRegular'}
+        variant={
+          destructive
+            ? large
+              ? 'bodyLMedium'
+              : 'bodyMSemibold'
+            : large
+              ? 'bodyLRegular'
+              : 'bodyMRegular'
+        }
         color={destructive ? 'destructive' : 'foreground'}
         style={styles.label}
       >
         {label}
       </Text>
-      {value ? <Text variant="bodyMRegular">{value}</Text> : null}
+      {value ? (
+        <Text variant={large ? 'bodyLRegular' : 'bodyMRegular'}>{value}</Text>
+      ) : null}
       {isSwitch ? (
         // The row is the accessible switch; this one is visual (and tappable).
         <Switch
@@ -70,7 +81,7 @@ export function MenuRow({
       {chevron ? (
         <Icon
           name="arrowRight"
-          size={16}
+          size={large ? 18 : 16}
           color={theme.colors.mutedForeground}
         />
       ) : null}

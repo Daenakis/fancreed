@@ -19,6 +19,8 @@ export type MenuRowProps = {
    * anywhere on it calls `onPress` (flip the value there).
    */
   toggled?: boolean;
+  /** Text and icons 2 px larger, e.g. on the profile screen. Defaults to `false`. */
+  large?: boolean;
   /** Dimmed and not tappable, e.g. a feature that isn't available yet. */
   disabled?: boolean;
   onPress: () => void;

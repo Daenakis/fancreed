@@ -27,6 +27,7 @@ export const typography = {
   bodyMMedium: { fontFamily: 'Inter-Medium', fontSize: 14, lineHeight: 20 },
   bodyMRegular: { fontFamily: 'Inter-Regular', fontSize: 14, lineHeight: 20 },
   bodySSemibold: { fontFamily: 'Inter-SemiBold', fontSize: 12, lineHeight: 16 },
+  bodySMedium: { fontFamily: 'Inter-Medium', fontSize: 12, lineHeight: 16 },
   bodySRegular: { fontFamily: 'Inter-Regular', fontSize: 12, lineHeight: 16 },
   bodyXSMedium: { fontFamily: 'Inter-Medium', fontSize: 10, lineHeight: 14 },
 } as const;

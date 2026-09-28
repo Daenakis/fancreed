@@ -11,5 +11,7 @@ export type DateFieldProps = {
   initialView?: Date;
   minDate?: Date;
   maxDate?: Date;
+  /** Text 2 px larger, like TextInput's `large`. Defaults to `false`. */
+  large?: boolean;
   style?: StyleProp<ViewStyle>;
 };

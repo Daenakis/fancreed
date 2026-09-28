@@ -27,6 +27,7 @@ export function TextInput({
   rightAccessory,
   disabled = false,
   variant = 'default',
+  large = false,
   secureTextEntry = false,
   multiline,
   containerStyle,
@@ -49,7 +50,7 @@ export function TextInput({
     <View style={containerStyle}>
       {label ? (
         <Text
-          variant="bodyMMedium"
+          variant={large ? 'bodyLMedium' : 'bodyMMedium'}
           color={inverse ? 'onBrand' : 'foreground'}
           style={styles.label}
         >
@@ -65,7 +66,7 @@ export function TextInput({
         {leftIcon ? <Image source={leftIcon} style={styles.leftIcon} /> : null}
         {prefix ? (
           <Text
-            variant="bodyLRegular"
+            variant={large ? 'h4Regular' : 'bodyLRegular'}
             color={inverse ? 'brandMutedForeground' : 'mutedForeground'}
             style={styles.prefix}
           >
@@ -93,7 +94,7 @@ export function TextInput({
             onBlur?.(e);
           }}
           style={[
-            styles.input(variant, disabled),
+            styles.input(variant, disabled, large),
             multiline && styles.multiline,
             style,
           ]}
@@ -117,7 +118,11 @@ export function TextInput({
         ) : null}
       </Animated.View>
       {error ? (
-        <Text variant="bodySRegular" color="destructive" style={styles.error}>
+        <Text
+          variant={large ? 'bodyMRegular' : 'bodySRegular'}
+          color="destructive"
+          style={styles.error}
+        >
           {error}
         </Text>
       ) : null}
@@ -167,9 +172,9 @@ const styles = StyleSheet.create((theme) => ({
   },
   // No lineHeight on single-line inputs: on iOS it makes the height jump
   // between the placeholder and typed text.
-  input: (variant: TextInputVariant, disabled: boolean) => ({
+  input: (variant: TextInputVariant, disabled: boolean, large: boolean) => ({
     fontFamily: theme.typography.bodyLRegular.fontFamily,
-    fontSize: theme.typography.bodyLRegular.fontSize,
+    fontSize: theme.typography[large ? 'h4Regular' : 'bodyLRegular'].fontSize,
     flex: 1,
     alignSelf: 'stretch',
     paddingVertical: 0,

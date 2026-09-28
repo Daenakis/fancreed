@@ -37,11 +37,15 @@ export type ChoiceGroupProps<T extends string | number> = {
   variant?: ChoiceGroupVariant;
   /** Caption under the group, e.g. "Gender *". */
   caption?: string;
+  /** Option labels 2 px larger, e.g. on the profile screens. Defaults to `false`. */
+  large?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
 export type ChoiceItemProps = {
   label: string;
+  /** Larger label (see ChoiceGroup `large`). */
+  large?: boolean;
   icon?: IconName;
   selected: boolean;
   onPress: () => void;
