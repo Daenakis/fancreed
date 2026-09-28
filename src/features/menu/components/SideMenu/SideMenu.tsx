@@ -150,7 +150,7 @@ export function SideMenu({ visible, onClose }: SideMenuProps) {
         {/* Same height as the app header, so the title lines up with the
             close button below. */}
         <View style={styles.header(insets.top)}>
-          <Text variant="bodyLMedium" accessibilityRole="header">
+          <Text variant="h4Medium" accessibilityRole="header">
             {t('menu.title')}
           </Text>
         </View>

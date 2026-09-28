@@ -47,7 +47,7 @@ export function PageLayout({
           color={onHeader}
         />
         <Text
-          variant={plain ? 'bodyLMedium' : 'bodyMMedium'}
+          variant={plain ? 'h4Medium' : 'bodyLMedium'}
           color={plain ? 'foreground' : 'onBrand'}
           numberOfLines={1}
           accessibilityRole="header"
