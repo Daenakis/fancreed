@@ -122,9 +122,10 @@ const styles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     gap: theme.spacing(1),
   },
+  // 40 pt (was 32): easier to read and tap in line-up predictions.
   photo: {
-    width: theme.spacing(8),
-    height: theme.spacing(8),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
     borderRadius: theme.radius.full,
     borderWidth: 1,
     borderColor: theme.colors.onBrand,

@@ -30,8 +30,8 @@ const STEPS: OnboardingStep[] = [
 ];
 
 const TAB_COUNT = 4;
-/** White circle around the highlighted control. */
-const SPOT = 44;
+/** White circle around the highlighted control (Figma: ~48 pt). */
+const SPOT = 48;
 /** AppHeader's menu icon and TabBarButton's icon size. */
 const ICON = 24;
 const ARROW = 12;
