@@ -37,6 +37,7 @@ export { MenuButton, type MenuButtonProps } from './MenuButton';
 export { MenuRow, type MenuRowProps, type MenuRowTone } from './MenuRow';
 export { Notice, type NoticeProps } from './Notice';
 export { PageLayout, type PageLayoutProps } from './PageLayout';
+export { PageLoader, type PageLoaderProps } from './PageLoader';
 export {
   RemoteImage,
   type RemoteImagePosition,

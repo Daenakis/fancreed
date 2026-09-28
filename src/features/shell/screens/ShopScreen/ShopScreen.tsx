@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native-unistyles';
 import { WebView } from 'react-native-webview';
 
-import { Button, EmptyState, LoadingMore } from '@/ui/components';
+import { Button, EmptyState, PageLoader } from '@/ui/components';
 
 import { CONFIG } from '@/config';
 
@@ -67,7 +67,7 @@ export function ShopScreen() {
           startInLoadingState
           renderLoading={() => (
             <View style={styles.loading}>
-              <LoadingMore loading />
+              <PageLoader />
             </View>
           )}
           // No swipe-back inside the shop (iOS); off by default, kept explicit.

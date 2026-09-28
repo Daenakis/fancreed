@@ -8,10 +8,10 @@ import {
   Button,
   ChoiceGroup,
   EmptyState,
-  LoadingMore,
   MenuRow,
   Notice,
   PageLayout,
+  PageLoader,
 } from '@/ui/components';
 
 import {
@@ -63,7 +63,7 @@ export function ProfileScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : !profile ? (
         <EmptyState
           icon="user"

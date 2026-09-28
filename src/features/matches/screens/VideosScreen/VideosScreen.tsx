@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Linking, Share } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import {
-  EmptyState,
-  ImageCard,
-  LoadingMore,
-  PageLayout,
-} from '@/ui/components';
+import { EmptyState, ImageCard, PageLayout, PageLoader } from '@/ui/components';
 
 import { useMatchVideosQuery } from '@/hooks';
 
@@ -40,7 +35,7 @@ export function VideosScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : ordered.length ? (
         ordered.map((match) => (
           <ImageCard

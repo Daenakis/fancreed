@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { EmptyState, LoadingMore, PageLayout } from '@/ui/components';
+import { EmptyState, PageLayout, PageLoader } from '@/ui/components';
 
 import { useClubEventsQuery } from '@/hooks';
 
@@ -24,7 +24,7 @@ export function MatchEventsScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : matchEvents.length ? (
         // TODO: open the event once its screen is designed.
         matchEvents.map((event) => <EventRow key={event._id} event={event} />)

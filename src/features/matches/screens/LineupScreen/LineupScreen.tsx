@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Share } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { EmptyState, LoadingMore, PageLayout } from '@/ui/components';
+import { EmptyState, PageLayout, PageLoader } from '@/ui/components';
 
 import { useFixtureQuery } from '@/hooks';
 
@@ -37,7 +37,7 @@ export function LineupScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : lineup?.startXI.length ? (
         <Pitch
           slots={lineup.startXI.map((player) => ({

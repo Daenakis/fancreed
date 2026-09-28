@@ -11,9 +11,9 @@ import {
   ChoiceGroup,
   DateField,
   EmptyState,
-  LoadingMore,
   Notice,
   PageLayout,
+  PageLoader,
   Text,
   TextInput,
 } from '@/ui/components';
@@ -58,7 +58,7 @@ export function EditProfileScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : profile ? (
         <ProfileForm profile={profile} />
       ) : (

@@ -8,8 +8,8 @@ import {
   EmptyState,
   Icon,
   InfoRow,
-  LoadingMore,
   PageLayout,
+  PageLoader,
   RemoteImage,
   SectionTitle,
   Text,
@@ -116,7 +116,7 @@ export function ClubScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : !club ? (
         <EmptyState
           icon="team"

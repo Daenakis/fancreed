@@ -9,8 +9,8 @@ import {
   EmptyState,
   Icon,
   InfoRow,
-  LoadingMore,
   PageLayout,
+  PageLoader,
   SectionTitle,
   Text,
 } from '@/ui/components';
@@ -106,7 +106,7 @@ export function ClubEventScreen() {
       contentStyle={styles.content}
     >
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : !event ? (
         <EmptyState
           icon="party"

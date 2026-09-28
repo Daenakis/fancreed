@@ -6,8 +6,8 @@ import { StyleSheet } from 'react-native-unistyles';
 import {
   ChoiceGroup,
   EmptyState,
-  LoadingMore,
   PageLayout,
+  PageLoader,
   Select,
   StandingsTable,
 } from '@/ui/components';
@@ -73,7 +73,7 @@ export function TournamentScreen() {
         onChange={setSection}
       />
       {isPending ? (
-        <LoadingMore loading />
+        <PageLoader />
       ) : !league ? (
         <EmptyState
           icon="table"
