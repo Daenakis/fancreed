@@ -205,7 +205,8 @@ Project-specific rules learned the hard way. Personal preferences (git, reply st
 - **Icons:** generate with `yarn icons` (never hand-write SVG components). Some icons are hand-edited after generation (`Lion.tsx`) — never run `yarn icons --force` without asking.
 - **Fonts:** keep `useFonts` in `useAppReady`. The font files' PostScript names are `Inter18pt-*`; iOS only finds embedded fonts by that name, `useFonts` registers the `Inter-*` names the theme uses.
 - **Backend:** `https://app.fancreed.com/api/`, contract in the apidoc (`/apidoc`, credentials from Denis — never commit them). Auth is email-only, single JWT (no refresh), email activation with a 4-digit code. See `src/docs/api.md` for how requests are organised. Field validation in `src/schemas/authFields.ts` mirrors the apidoc regexes.
-- **Placeholders still open:** EAS project id (`app.config.ts`), `ascAppId` (`eas.json`).
+- **Placeholders still open:** `ascAppId` (`eas.json`). EAS project `@fancreed/fancreed` is linked (id in `app.config.ts`).
+- **Config imports:** `app.config.ts` imports local files by name (`import { Env } from './env'`) — EAS CLI's config reader wraps default imports as `{ default }`, which broke `eas init`. Check config changes with EAS's reader too (`eas config -p ios --profile development`).
 - **Autonomy:** run commands, installs and checks yourself without asking. Stop and ask Denis only for important/hard changes (breaking behaviour, visible UI change, new npm packages that add functionality, anything outward-facing).
 - **Committing:** stage with `git add -A <folder>` (never list paths that may already be deleted — one bad path makes the whole `git add` fail silently in a chain) and check `git status` is clean for the intended files before pushing.
 - **Workflows:** use the project skills — `/migrate-component`, `/new-feature`, `/new-component`, `/migrate-screen`, `/review`, `/setup`.

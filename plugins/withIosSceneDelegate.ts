@@ -118,4 +118,6 @@ const withSceneDelegateFile: ConfigPlugin = (config) => {
 const withIosSceneDelegate: ConfigPlugin = (config) =>
   withSceneDelegateFile(withSceneAppDelegate(withSceneManifest(config)));
 
+// Named too — app.config.ts imports it by name (see env.ts).
+export { withIosSceneDelegate };
 export default withIosSceneDelegate;

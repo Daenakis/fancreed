@@ -76,4 +76,7 @@ const Env = validateEnv({
   onInvalid: STRICT_ENV_VALIDATION ? 'throw' : 'warn',
 });
 
+// Named too: EAS CLI's config reader wraps a default import from
+// app.config.ts as `{ default }`, so app.config.ts imports `{ Env }`.
+export { Env };
 export default Env;
