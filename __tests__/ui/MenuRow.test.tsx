@@ -50,6 +50,24 @@ describe('MenuRow', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
+  it('is disabled and ignores presses when disabled is set', () => {
+    const onPress = jest.fn();
+    const { getByRole } = render(
+      <MenuRow
+        label="Verification"
+        icon="verification"
+        disabled
+        onPress={onPress}
+      />,
+    );
+
+    const row = getByRole('button', { name: 'Verification' });
+    fireEvent.press(row);
+
+    expect(row).toBeDisabled();
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
   it('shows an arrow when chevron is set', () => {
     const { UNSAFE_getAllByType } = render(
       <MenuRow label="News" icon="news" chevron onPress={jest.fn()} />,

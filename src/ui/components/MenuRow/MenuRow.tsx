@@ -16,6 +16,7 @@ export function MenuRow({
   tone = 'default',
   chevron = false,
   toggled,
+  disabled = false,
   onPress,
   style,
 }: MenuRowProps) {
@@ -27,11 +28,16 @@ export function MenuRow({
     <Pressable
       accessibilityRole={isSwitch ? 'switch' : 'button'}
       accessibilityLabel={value ? `${label}, ${value}` : label}
-      accessibilityState={isSwitch ? { checked: toggled } : undefined}
+      accessibilityState={{
+        disabled,
+        ...(isSwitch ? { checked: toggled } : {}),
+      }}
+      disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         styles.row(tone),
         pressed && styles.pressed,
+        disabled && styles.disabled,
         style,
       ]}
     >
@@ -95,5 +101,8 @@ const styles = StyleSheet.create((theme) => ({
   },
   pressed: {
     opacity: 0.7,
+  },
+  disabled: {
+    opacity: 0.5,
   },
 }));

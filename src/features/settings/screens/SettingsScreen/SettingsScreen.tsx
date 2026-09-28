@@ -79,8 +79,9 @@ export function SettingsScreen() {
         icon="verification"
         label={t('settings.verification')}
         chevron
-        // No design for the verification flow yet.
-        onPress={() => Alert.alert(t('menu.comingSoon'))}
+        // TODO: document verification — no design or backend yet.
+        disabled
+        onPress={() => {}}
       />
       <MenuRow
         icon="notification"

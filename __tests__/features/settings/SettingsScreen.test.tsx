@@ -19,6 +19,14 @@ beforeEach(() => {
 });
 
 describe('SettingsScreen', () => {
+  it('shows verification as not available yet', () => {
+    const { getByRole } = render(<SettingsScreen />);
+
+    expect(
+      getByRole('button', { name: 'settings.verification' }),
+    ).toBeDisabled();
+  });
+
   it('turns push notifications on and remembers it', () => {
     const { getByRole, unmount } = render(<SettingsScreen />);
 
