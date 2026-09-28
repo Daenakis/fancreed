@@ -14,6 +14,9 @@ import { useNewsQuery } from '@/hooks';
 
 import type { NewsBlockProps } from './types';
 
+/** Auto-play step of the news cards (Home). */
+const AUTO_PLAY_MS = 10_000;
+
 /**
  * Home-screen news: "Latest news" title, swipeable article cards and an
  * "All news" button. Hidden when there are no posts.
@@ -24,6 +27,7 @@ export function NewsBlock({
   title,
   excludeSlug,
   count = 10,
+  autoPlay = false,
   style,
 }: NewsBlockProps) {
   const { t } = useTranslation();
@@ -39,6 +43,7 @@ export function NewsBlock({
       <Carousel
         data={posts}
         itemWidthRatio={0.9}
+        autoPlayMs={autoPlay ? AUTO_PLAY_MS : undefined}
         keyExtractor={(post) => String(post.id)}
         renderItem={(post) => (
           <ImageCard

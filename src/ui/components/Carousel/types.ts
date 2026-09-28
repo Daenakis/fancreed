@@ -17,6 +17,12 @@ export type CarouselProps<T> = {
   indicatorColor?: ColorToken;
   /** Page shown first. Defaults to 0. */
   initialIndex?: number;
+  /**
+   * Moves to the next page every this many ms, from the last back to the
+   * first. The timer restarts after every page change (a swipe too) and
+   * waits while the user drags; off with a screen reader. Off by default.
+   */
+  autoPlayMs?: number;
   /** Called when the user lands on another page. */
   onIndexChange?: (index: number) => void;
   style?: StyleProp<ViewStyle>;

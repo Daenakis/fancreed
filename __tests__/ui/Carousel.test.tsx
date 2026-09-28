@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@tests/test-utils';
+import { act, fireEvent, render } from '@tests/test-utils';
 import { FlatList, Text } from 'react-native';
 
 import { Carousel } from '@/ui/components';
@@ -57,5 +57,56 @@ describe('Carousel', () => {
     );
 
     expect(queryByLabelText('common.slideOf')).toBeNull();
+  });
+
+  describe('auto-play', () => {
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
+
+    const autoPlay = (onIndexChange = jest.fn()) =>
+      render(
+        <Carousel
+          data={data}
+          keyExtractor={(item) => item}
+          renderItem={(item) => <Text>{item}</Text>}
+          autoPlayMs={10_000}
+          onIndexChange={onIndexChange}
+        />,
+      );
+
+    it('moves to the next page every interval and loops back to the first', () => {
+      const onIndexChange = jest.fn();
+      autoPlay(onIndexChange);
+
+      act(() => jest.advanceTimersByTime(9_999));
+      expect(onIndexChange).not.toHaveBeenCalled();
+
+      act(() => jest.advanceTimersByTime(1));
+      act(() => jest.advanceTimersByTime(10_000));
+      act(() => jest.advanceTimersByTime(10_000));
+
+      expect(onIndexChange.mock.calls.map(([index]) => index)).toEqual([
+        1, 2, 0,
+      ]);
+    });
+
+    it('waits while the user drags', () => {
+      const onIndexChange = jest.fn();
+      const utils = autoPlay(onIndexChange);
+
+      fireEvent(utils.UNSAFE_getByType(FlatList), 'scrollBeginDrag');
+      act(() => jest.advanceTimersByTime(30_000));
+
+      expect(onIndexChange).not.toHaveBeenCalled();
+    });
+
+    it('stays off without autoPlayMs', () => {
+      const onIndexChange = jest.fn();
+      setup(onIndexChange);
+
+      act(() => jest.advanceTimersByTime(60_000));
+
+      expect(onIndexChange).not.toHaveBeenCalled();
+    });
   });
 });

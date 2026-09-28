@@ -13,5 +13,7 @@ export type NewsBlockProps = {
   excludeSlug?: string;
   /** How many latest posts to show. Defaults to 10. */
   count?: number;
+  /** Cards move on by themselves every 10 s, looping. Defaults to `false`. */
+  autoPlay?: boolean;
   style?: StyleProp<ViewStyle>;
 };
