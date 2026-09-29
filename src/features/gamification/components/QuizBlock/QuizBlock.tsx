@@ -6,8 +6,8 @@ import { StyleSheet } from 'react-native-unistyles';
 import {
   Button,
   ChoiceGroup,
-  LoadingMore,
   SectionTitle,
+  Skeleton,
   Text,
 } from '@/ui/components';
 
@@ -28,7 +28,14 @@ export function QuizBlock({ style }: QuizBlockProps) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
 
-  if (isPending) return <LoadingMore loading />;
+  if (isPending) {
+    return (
+      <View style={[styles.block, style]}>
+        <SectionTitle title={t('quiz.title')} style={styles.flush} />
+        <Skeleton height={CARD_HEIGHT} radius="lg" />
+      </View>
+    );
+  }
   if (!quiz?.questions.length) return null;
 
   const total = quiz.questions.length;
@@ -117,6 +124,9 @@ export function QuizBlock({ style }: QuizBlockProps) {
 }
 
 QuizBlock.displayName = 'QuizBlock';
+
+/** Height of a loaded question card with four answers. */
+const CARD_HEIGHT = 356;
 
 const styles = StyleSheet.create((theme) => ({
   block: {

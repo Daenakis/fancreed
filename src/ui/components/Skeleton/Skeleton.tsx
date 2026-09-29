@@ -8,6 +8,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { StyleSheet } from 'react-native-unistyles';
 
+import type { ColorToken } from '@/ui/theme';
+
 import type { SkeletonProps } from './types';
 
 const PULSE_MS = 700;
@@ -24,6 +26,7 @@ export function Skeleton({
   width,
   height,
   radius = 'sm',
+  color = 'muted',
   still = false,
   style,
 }: SkeletonProps) {
@@ -46,7 +49,7 @@ export function Skeleton({
       pointerEvents="none"
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={[styles.block(radius), { width, height }, pulse, style]}
+      style={[styles.block(radius, color), { width, height }, pulse, style]}
     />
   );
 }
@@ -54,8 +57,8 @@ export function Skeleton({
 Skeleton.displayName = 'Skeleton';
 
 const styles = StyleSheet.create((theme) => ({
-  block: (radius: NonNullable<SkeletonProps['radius']>) => ({
+  block: (radius: NonNullable<SkeletonProps['radius']>, color: ColorToken) => ({
     borderRadius: theme.radius[radius],
-    backgroundColor: theme.colors.muted,
+    backgroundColor: theme.colors[color],
   }),
 }));

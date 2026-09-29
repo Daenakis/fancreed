@@ -7,7 +7,6 @@ import {
   Button,
   Carousel,
   ImageCard,
-  LoadingMore,
   RemoteImage,
   Text,
 } from '@/ui/components';
@@ -17,8 +16,11 @@ import {
   useMakeVoteMutation,
   useMatchOddsQuery,
   useSponsorsQuery,
+  useSquadQuery,
   useVotesQuery,
 } from '@/hooks';
+
+import { playerPhoto } from '@/utils';
 
 import type { VotesBlockProps } from './types';
 
@@ -31,6 +33,8 @@ import type { VotesBlockProps } from './types';
 export function VotesBlock({ style }: VotesBlockProps) {
   const { t } = useTranslation();
   const { data, isPending } = useVotesQuery();
+  // The club site's cut-out photos, nicer than api-football's headshots.
+  const { data: squad } = useSquadQuery();
   const makeVote = useMakeVoteMutation();
   const { data: fixtures } = useFixturesTableQuery();
   const votes = data?.votes ?? [];
@@ -39,8 +43,9 @@ export function VotesBlock({ style }: VotesBlockProps) {
   const { data: sponsors } = useSponsorsQuery();
   const [index, setIndex] = useState(0);
 
-  if (isPending) return <LoadingMore loading />;
-  if (!votes.length) return null;
+  // No placeholder: most of the time there's no vote, and a skeleton that
+  // vanishes would jump the page more than a block that appears.
+  if (isPending || !votes.length) return null;
 
   const open = !votes[0]!.finished;
   const showResults = data!.youVoted || !open;
@@ -97,9 +102,11 @@ export function VotesBlock({ style }: VotesBlockProps) {
         style={styles.carousel}
         renderItem={(vote, i) => {
           const mine = data!.yourVote?._id === vote._id;
+          const photo = playerPhoto(vote.player, squad);
           return (
             <ImageCard
-              image={vote.player.actualPhoto ?? vote.player.photo}
+              image={photo.image}
+              fallbackImage={photo.fallback}
               placeholderIcon="lion"
               title={vote.player.actualName ?? vote.player.name}
               subtitle={

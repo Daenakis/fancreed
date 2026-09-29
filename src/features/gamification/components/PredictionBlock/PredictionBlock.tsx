@@ -6,9 +6,9 @@ import { StyleSheet } from 'react-native-unistyles';
 import {
   Button,
   GoalsPicker,
-  LoadingMore,
   RemoteImage,
   SectionTitle,
+  Skeleton,
   Text,
 } from '@/ui/components';
 
@@ -36,7 +36,14 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
   const [home, setHome] = useState<number | null>(null);
   const [away, setAway] = useState<number | null>(null);
 
-  if (isPending) return <LoadingMore loading />;
+  if (isPending) {
+    return (
+      <View style={style}>
+        <SectionTitle title={t('prediction.title')} />
+        <Skeleton height={CARD_HEIGHT} radius="lg" style={styles.skeleton} />
+      </View>
+    );
+  }
   if (!match) return null;
 
   const sent = makePrediction.isSuccess;
@@ -152,7 +159,13 @@ function TeamLogo({ uri, name }: TeamLogoProps) {
   );
 }
 
+/** Height of the loaded card (crests, score pickers and the button). */
+const CARD_HEIGHT = 244;
+
 const styles = StyleSheet.create((theme) => ({
+  skeleton: {
+    marginHorizontal: theme.spacing(5),
+  },
   card: {
     marginHorizontal: theme.spacing(5),
     padding: theme.spacing(4),

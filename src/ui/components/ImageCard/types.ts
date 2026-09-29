@@ -6,10 +6,11 @@ import type { ColorToken } from '@/ui/theme';
 /**
  * - `photo` (default): tall full-bleed photo, e.g. a player in a vote carousel.
  * - `tile`: small framed tile with the image inset, e.g. an event or challenge.
+ * - `square`: small full-bleed square with a one-line name, e.g. a fan club.
  * - `article`: wide cover image with a left-aligned title and description
  *   (news).
  */
-export type ImageCardVariant = 'photo' | 'tile' | 'article';
+export type ImageCardVariant = 'photo' | 'tile' | 'square' | 'article';
 
 export type ImageCardProps = {
   /** URL or local image; a grey placeholder is shown when missing. */
@@ -22,6 +23,8 @@ export type ImageCardProps = {
   subtitleIcon?: IconName;
   /** `article` only: body text under the title, cut to 3 lines. */
   description?: string;
+  /** URL shown instead when `image` fails to load. */
+  fallbackImage?: string | null;
   /** Defaults to `photo`. */
   variant?: ImageCardVariant;
   /** Shown on a green frame when there is no image, e.g. `lion` for a player. */

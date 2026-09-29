@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Share, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
@@ -13,9 +13,9 @@ import {
   TextInput,
 } from '@/ui/components';
 
-import { useSquadQuery } from '@/hooks';
+import { useBackendSquadQuery, useSquadQuery } from '@/hooks';
 
-import { formationGrid, FORMATIONS } from '@/utils';
+import { backendSquadPhoto, formationGrid, FORMATIONS } from '@/utils';
 
 import type { Player } from '@/types/api';
 
@@ -30,7 +30,18 @@ import type { LineupPredictionBlockProps, PlayerPickerProps } from './types';
  */
 export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
   const { t } = useTranslation();
-  const { data: squad } = useSquadQuery();
+  const { data: clubSquad } = useSquadQuery();
+  const { data: backendSquad } = useBackendSquadQuery();
+  // api-football headshots fit the small round photos; the club site's
+  // cut-out stays for players the backend doesn't list.
+  const squad = useMemo(
+    () =>
+      clubSquad?.map((player) => ({
+        ...player,
+        photo: backendSquadPhoto(player, backendSquad) ?? player.photo,
+      })),
+    [clubSquad, backendSquad],
+  );
   const [formation, setFormation] = useState<string | null>(null);
   const [picked, setPicked] = useState<Record<string, Player>>({});
   const [editing, setEditing] = useState<string | null>(null);

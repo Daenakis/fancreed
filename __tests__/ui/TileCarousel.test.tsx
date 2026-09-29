@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@tests/test-utils';
+import { FlatList } from 'react-native';
 
 import { TileCarousel } from '@/ui/components';
 
@@ -60,5 +61,16 @@ describe('TileCarousel', () => {
     );
 
     expect(queryByText(items[0]!.title)).toBeNull();
+  });
+
+  it('lays out square tiles in pages as wide as three tiles when variant is square', () => {
+    const { getByText, UNSAFE_getByType } = render(
+      <TileCarousel items={items} onPressItem={jest.fn()} variant="square" />,
+    );
+    const list = UNSAFE_getByType(FlatList);
+
+    expect(getByText('Tile A').props.numberOfLines).toBe(1);
+    // 3 tiles of 100 + 2 gaps of 8, then an 8 gap to the next page.
+    expect(list.props.snapToInterval).toBe(324);
   });
 });

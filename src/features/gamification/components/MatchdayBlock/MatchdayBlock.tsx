@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, Share, View } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
-import { Icon, LoadingMore, Text } from '@/ui/components';
+import { Icon, Skeleton, Text } from '@/ui/components';
 
 import { useCalendarReminder, useMatchdayEventsQuery } from '@/hooks';
 
@@ -36,7 +36,47 @@ export function MatchdayBlock({ onOpenLink, style }: MatchdayBlockProps) {
   const [expanded, setExpanded] = useState(false);
   const [reminding, setReminding] = useState<AppEvent | null>(null);
 
-  if (isPending) return <LoadingMore loading />;
+  if (isPending) {
+    // Same band as one loaded event, so the page doesn't jump when it arrives.
+    return (
+      <View style={[styles.block, style]}>
+        <Skeleton
+          width={theme.spacing(20)}
+          height={theme.spacing(5.5)}
+          color="brandBorder"
+        />
+        <View style={styles.head}>
+          <View style={styles.lines}>
+            <Skeleton
+              width="90%"
+              height={theme.spacing(4)}
+              color="brandBorder"
+            />
+            <Skeleton
+              width="60%"
+              height={theme.spacing(4)}
+              color="brandBorder"
+            />
+          </View>
+          <Skeleton
+            width={theme.spacing(16)}
+            height={theme.spacing(6)}
+            color="brandBorder"
+          />
+        </View>
+        <View style={styles.actions}>
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton
+              key={i}
+              height={theme.spacing(12.5)}
+              color="brandBorder"
+              style={styles.tile}
+            />
+          ))}
+        </View>
+      </View>
+    );
+  }
   if (!events?.length) return null;
   const shown = expanded ? events : events.slice(0, COLLAPSED);
 
@@ -212,6 +252,10 @@ const styles = StyleSheet.create((theme) => ({
   },
   title: {
     flex: 1,
+  },
+  lines: {
+    flex: 1,
+    gap: theme.spacing(2),
   },
   when: {
     alignItems: 'flex-end',

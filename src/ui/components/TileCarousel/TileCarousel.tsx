@@ -7,6 +7,8 @@ import { ImageCard } from '../ImageCard';
 import type { TileCarouselProps, TileItem } from './types';
 
 const ADD_KEY = '__add__';
+/** Side of a `square` tile, as ImageCard's. */
+const SQUARE = 100;
 
 /**
  * Small image tiles in swipeable pages (3 per page by default) with page
@@ -20,6 +22,7 @@ export function TileCarousel<T extends TileItem>({
   onPressItem,
   onAdd,
   addLabel,
+  variant = 'tile',
   pageSize = 3,
   hideCaptions = false,
   placeholderIcon,
@@ -36,15 +39,24 @@ export function TileCarousel<T extends TileItem>({
 
   if (!pages.length) return null;
 
+  const square = variant === 'square';
+
   return (
     <Carousel
       data={pages}
       itemWidthRatio={0.95}
-      gap={0}
+      // Pages as wide as their tiles, so the next page's first tile peeks.
+      itemWidth={
+        square
+          ? pageSize * SQUARE + (pageSize - 1) * theme.spacing(2)
+          : undefined
+      }
+      align={square ? 'start' : 'center'}
+      gap={square ? theme.spacing(2) : 0}
       keyExtractor={(_, index) => String(index)}
       style={style}
       renderItem={(page) => (
-        <View style={styles.page}>
+        <View style={[styles.page, square && styles.squarePage]}>
           {page.map((tile) =>
             tile === ADD_KEY ? (
               <Pressable
@@ -52,14 +64,18 @@ export function TileCarousel<T extends TileItem>({
                 accessibilityRole="button"
                 accessibilityLabel={addLabel}
                 onPress={onAdd}
-                style={({ pressed }) => [styles.add, pressed && styles.pressed]}
+                style={({ pressed }) => [
+                  styles.add,
+                  square && styles.squareAdd,
+                  pressed && styles.pressed,
+                ]}
               >
                 <Icon name="plus" size={40} color={theme.colors[textColor]} />
               </Pressable>
             ) : (
               <ImageCard
                 key={tile.key}
-                variant="tile"
+                variant={variant}
                 image={tile.image}
                 title={tile.title}
                 hideCaption={hideCaptions}
@@ -84,6 +100,10 @@ const styles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     gap: theme.spacing(3),
   },
+  squarePage: {
+    justifyContent: 'flex-start',
+    gap: theme.spacing(2),
+  },
   add: {
     width: 100,
     height: 130,
@@ -93,6 +113,11 @@ const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: theme.colors.border,
+  },
+  squareAdd: {
+    width: SQUARE,
+    height: SQUARE,
+    borderRadius: theme.radius.md,
   },
   pressed: {
     opacity: 0.7,

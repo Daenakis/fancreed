@@ -149,4 +149,34 @@ describe('ImageCard', () => {
     expect(queryByText('Onur')).toBeNull();
     expect(getByLabelText('Onur')).toBeTruthy();
   });
+
+  it('uses a full-bleed square with a one-line caption when variant is square', () => {
+    const { getByText, getByLabelText } = render(
+      <ImageCard variant="square" image={url} title="Ultras of the north" />,
+    );
+    const frame = getByLabelText('Ultras of the north').children[0];
+    if (typeof frame === 'string') throw new Error('expected the image frame');
+
+    expect(getByText('Ultras of the north').props.numberOfLines).toBe(1);
+    expect(StyleSheet.flatten(frame.props.style)).toMatchObject({
+      aspectRatio: 1,
+      overflow: 'hidden',
+    });
+  });
+
+  it('shows the fallback image when the image fails to load', () => {
+    const { UNSAFE_getByType } = render(
+      <ImageCard
+        image={url}
+        fallbackImage="https://example.com/b.png"
+        title="Ivan"
+      />,
+    );
+
+    fireEvent(UNSAFE_getByType(Image), 'error', { nativeEvent: {} });
+
+    expect(UNSAFE_getByType(Image).props.source).toEqual({
+      uri: 'https://example.com/b.png',
+    });
+  });
 });

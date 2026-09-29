@@ -50,6 +50,7 @@ export function RemoteImage({
   resizeMode = 'cover',
   position = 'center',
   skeleton = false,
+  fallbackSource,
   style,
   onLoad,
   onError,
@@ -64,12 +65,15 @@ export function RemoteImage({
   const [picture, setPicture] = useState<Size | null>(null);
   const [box, setBox] = useState<LayoutRectangle | null>(null);
 
+  const [fellBack, setFellBack] = useState(false);
+
   // A new picture starts loading again.
   const [shownUri, setShownUri] = useState(uri);
   if (uri !== shownUri) {
     setShownUri(uri);
     setState(waits ? 'loading' : 'loaded');
     setPicture(null);
+    setFellBack(false);
   }
 
   const anchorTop = position === 'top' && resizeMode === 'cover';
@@ -86,7 +90,7 @@ export function RemoteImage({
     >
       <Image
         {...props}
-        source={source}
+        source={fellBack && fallbackSource ? fallbackSource : source}
         resizeMode={topFit ? 'stretch' : resizeMode}
         style={topFit ?? styles.fill}
         onLoad={(event) => {
@@ -96,6 +100,11 @@ export function RemoteImage({
           onLoad?.(event);
         }}
         onError={(event) => {
+          if (fallbackSource && !fellBack) {
+            setFellBack(true);
+            setPicture(null);
+            return;
+          }
           setState('failed');
           onError?.(event);
         }}

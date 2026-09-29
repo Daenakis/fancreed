@@ -1,5 +1,5 @@
 import { act, fireEvent, render } from '@tests/test-utils';
-import { FlatList, Text } from 'react-native';
+import { FlatList, StyleSheet, Text, type ViewStyle } from 'react-native';
 
 import { Carousel } from '@/ui/components';
 
@@ -108,5 +108,23 @@ describe('Carousel', () => {
 
       expect(onIndexChange).not.toHaveBeenCalled();
     });
+  });
+
+  it('starts the page at the screen gutter when align is start', () => {
+    const { UNSAFE_getByType } = render(
+      <Carousel
+        data={data}
+        keyExtractor={(item) => item}
+        renderItem={(item) => <Text>{item}</Text>}
+        itemWidth={300}
+        align="start"
+      />,
+    );
+    const content = StyleSheet.flatten(
+      UNSAFE_getByType(FlatList).props.contentContainerStyle,
+    ) as ViewStyle;
+
+    // Window 750: 20 gutter, then room for the last 300-wide page to snap there.
+    expect(content).toMatchObject({ paddingLeft: 20, paddingRight: 430 });
   });
 });

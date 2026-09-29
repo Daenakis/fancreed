@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
-import { Carousel, LoadingMore, SectionTitle } from '@/ui/components';
+import { Carousel, SectionTitle, Skeleton } from '@/ui/components';
 
 import { useClubEventsQuery } from '@/hooks';
 
@@ -24,8 +24,7 @@ export function ClubEventsBlock({
   const { t } = useTranslation();
   const { data: events, isPending } = useClubEventsQuery();
 
-  if (isPending) return <LoadingMore loading />;
-  if (!events?.length && !onCreateEvent) return null;
+  if (!isPending && !events?.length && !onCreateEvent) return null;
 
   const pages = Array.from(
     { length: Math.ceil((events?.length ?? 0) / PAGE) },
@@ -46,7 +45,9 @@ export function ClubEventsBlock({
             : undefined
         }
       />
-      {pages.length ? (
+      {isPending ? (
+        <Skeleton height={64} radius="lg" style={styles.skeleton} />
+      ) : pages.length ? (
         <Carousel
           data={pages}
           itemWidthRatio={0.9}
@@ -73,5 +74,9 @@ ClubEventsBlock.displayName = 'ClubEventsBlock';
 const styles = StyleSheet.create((theme) => ({
   page: {
     gap: theme.spacing(2),
+  },
+  // One EventRow, where the carousel's first page sits.
+  skeleton: {
+    marginHorizontal: theme.spacing(5),
   },
 }));

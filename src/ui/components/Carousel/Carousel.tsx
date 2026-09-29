@@ -11,7 +11,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import { SliderIndicator } from '../SliderIndicator';
 import type { CarouselProps } from './types';
@@ -32,6 +32,8 @@ export function Carousel<T>({
   renderItem,
   keyExtractor,
   itemWidthRatio = 0.8,
+  itemWidth: fixedItemWidth,
+  align = 'center',
   gap = 12,
   showIndicator = true,
   indicatorColor = 'brand',
@@ -49,9 +51,13 @@ export function Carousel<T>({
   const [screenReader, setScreenReader] = useState(false);
   // Scroll position in pages, for dots that follow the finger.
   const progress = useSharedValue(initialIndex);
-  const itemWidth = Math.round(width * itemWidthRatio);
+  const { theme } = useUnistyles();
+  const itemWidth = fixedItemWidth ?? Math.round(width * itemWidthRatio);
   const step = itemWidth + gap;
-  const sidePadding = (width - itemWidth) / 2;
+  const leading =
+    align === 'start' ? theme.spacing(5) : (width - itemWidth) / 2;
+  // Room after the last page so it can snap into the same place as the others.
+  const trailing = Math.max(width - leading - itemWidth, 0);
 
   const onScroll = useAnimatedScrollHandler((e) => {
     progress.value = e.contentOffset.x / step;
@@ -105,7 +111,11 @@ export function Carousel<T>({
         showsHorizontalScrollIndicator={false}
         snapToInterval={step}
         decelerationRate="fast"
-        contentContainerStyle={{ paddingHorizontal: sidePadding, gap }}
+        contentContainerStyle={{
+          paddingLeft: leading,
+          paddingRight: trailing,
+          gap,
+        }}
         keyExtractor={keyExtractor}
         renderItem={({ item, index: i }) => (
           <View style={{ width: itemWidth }}>{renderItem(item, i)}</View>

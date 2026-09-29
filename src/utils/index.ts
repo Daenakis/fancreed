@@ -24,6 +24,8 @@ export {
   roundNumber,
 } from './matches';
 export { goBack } from './navigation';
+export { persistedQuery, WEEK_MS } from './persistedQuery';
+export { backendSquadPhoto, clubSquadPhoto, playerPhoto } from './playerPhoto';
 export { shouldRetryQuery } from './shouldRetryQuery';
 export { leagueTitle, rowsAroundTeam, toStandingsRow } from './standings';
 export {

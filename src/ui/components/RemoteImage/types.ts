@@ -21,6 +21,8 @@ export type RemoteImageProps = Omit<ImageProps, 'source' | 'style'> & {
    * (large bundled pictures). URLs always get it.
    */
   skeleton?: boolean;
+  /** Shown instead when `source` fails to load, e.g. a lower-quality photo. */
+  fallbackSource?: ImageSourcePropType;
   /** The image box: size, radius, margins. */
   style?: StyleProp<ViewStyle>;
 };

@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
-import { LoadingMore, SectionTitle, TileCarousel } from '@/ui/components';
+import { SectionTitle, Skeleton, TileCarousel } from '@/ui/components';
 
 import { useClubsQuery } from '@/hooks';
 
 import type { FanClubsBlockProps } from './types';
 
 /**
- * "Fan clubs": logo tiles (green lion without a logo) in pages of three,
+ * "Fan clubs": square logo tiles (green lion without a logo) in pages of three,
  * "+" in the title creates a club.
  */
 export function FanClubsBlock({
@@ -23,8 +24,7 @@ export function FanClubsBlock({
     (c) => c.opened !== false || c.youMember || c.youOwner,
   );
 
-  if (isPending) return <LoadingMore loading />;
-  if (!clubs?.length && !onCreateClub) return null;
+  if (!isPending && !clubs?.length && !onCreateClub) return null;
 
   return (
     <View style={style}>
@@ -40,7 +40,16 @@ export function FanClubsBlock({
             : undefined
         }
       />
-      {clubs?.length ? (
+      {isPending ? (
+        <View style={styles.skeleton}>
+          {[0, 1, 2, 3].map((i) => (
+            <View key={i} style={styles.skeletonTile}>
+              <Skeleton width={100} height={100} radius="md" />
+              <Skeleton width={64} height={12} />
+            </View>
+          ))}
+        </View>
+      ) : clubs?.length ? (
         <TileCarousel
           items={clubs.map((club) => ({
             key: club._id,
@@ -49,6 +58,7 @@ export function FanClubsBlock({
             club,
           }))}
           onPressItem={(item) => onOpenClub(item.club)}
+          variant="square"
           placeholderIcon="lion"
           tileSurface="brand"
         />
@@ -58,3 +68,18 @@ export function FanClubsBlock({
 }
 
 FanClubsBlock.displayName = 'FanClubsBlock';
+
+// Mirrors TileCarousel's `square` tiles and the page dots' space under them.
+const styles = StyleSheet.create((theme) => ({
+  skeleton: {
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+    paddingLeft: theme.spacing(5),
+    paddingBottom: theme.spacing(4.5),
+    overflow: 'hidden',
+  },
+  skeletonTile: {
+    alignItems: 'center',
+    gap: theme.spacing(2),
+  },
+}));

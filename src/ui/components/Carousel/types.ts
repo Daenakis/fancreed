@@ -9,6 +9,14 @@ export type CarouselProps<T> = {
   keyExtractor: (item: T, index: number) => string;
   /** Page width as a share of the screen width. Defaults to 0.8. */
   itemWidthRatio?: number;
+  /** Page width in points; overrides `itemWidthRatio`. */
+  itemWidth?: number;
+  /**
+   * `center`: the page centred, neighbours peeking on both sides.
+   * `start`: the page at the screen gutter, the next one peeking on the right.
+   * Defaults to `center`.
+   */
+  align?: 'center' | 'start';
   /** Gap between pages. Defaults to 12. */
   gap?: number;
   /** Page dots under the carousel. Defaults to `true`. */

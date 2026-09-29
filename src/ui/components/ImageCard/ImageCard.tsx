@@ -11,7 +11,8 @@ import type { ImageCardProps, ImageCardVariant } from './types';
 /**
  * Image with a caption under it. `photo` is a tall full-bleed picture
  * (players), `tile` a small framed tile with the image inset (events,
- * challenges). Pressable only when `onPress` is set.
+ * challenges), `square` a small full-bleed square with a one-line name (fan
+ * clubs). Pressable only when `onPress` is set.
  *
  * @example
  * <ImageCard image={player.photo} title={player.name} subtitle="45%" />
@@ -19,9 +20,11 @@ import type { ImageCardProps, ImageCardVariant } from './types';
  * <ImageCard variant="article" image={news.image} title={news.title} description={news.description} onPress={open} />
  * <ImageCard variant="article" image={thumb} title={video.title} overlayIcon="play" onPress={open} />
  * <ImageCard variant="tile" image={event.image} title={event.name} textColor="background" onPress={open} />
+ * <ImageCard variant="square" image={club.origPhoto} title={club.name} placeholderIcon="lion" onPress={open} />
  */
 export function ImageCard({
   image,
+  fallbackImage,
   title,
   subtitle,
   subtitleIcon,
@@ -38,6 +41,7 @@ export function ImageCard({
   const { theme } = useUnistyles();
   const source = typeof image === 'string' ? { uri: image } : image;
   const article = variant === 'article';
+  const square = variant === 'square';
   const label = [title, subtitle].filter(Boolean).join(', ');
 
   const content = (
@@ -51,7 +55,8 @@ export function ImageCard({
         {source ? (
           <RemoteImage
             source={source}
-            resizeMode={article ? 'cover' : 'contain'}
+            fallbackSource={fallbackImage ? { uri: fallbackImage } : undefined}
+            resizeMode={article || square ? 'cover' : 'contain'}
             // News photos: crop from the bottom so heads stay in view.
             position={article ? 'top' : 'center'}
             style={styles.image(variant)}
@@ -59,7 +64,7 @@ export function ImageCard({
         ) : placeholderIcon ? (
           <Icon
             name={placeholderIcon}
-            size={96}
+            size={square ? 80 : 96}
             color={theme.colors.brandBorder}
           />
         ) : null}
@@ -118,7 +123,7 @@ export function ImageCard({
         <Text
           variant={variant === 'tile' ? 'bodyMSemibold' : 'bodySSemibold'}
           color={textColor}
-          numberOfLines={variant === 'tile' ? 2 : undefined}
+          numberOfLines={variant === 'tile' ? 2 : square ? 1 : undefined}
           style={styles.caption}
         >
           {title}
@@ -168,7 +173,10 @@ const styles = StyleSheet.create((theme) => ({
           backgroundColor: theme.colors.secondary,
         }
       : {
-          width: variant === 'tile' ? 100 : theme.spacing(28),
+          width:
+            variant === 'tile' || variant === 'square'
+              ? 100
+              : theme.spacing(28),
           alignItems: 'center',
         },
   frame: (
@@ -185,14 +193,24 @@ const styles = StyleSheet.create((theme) => ({
           borderRadius: theme.radius.lg,
           backgroundColor: theme.colors[tileSurface],
         }
-      : {
-          width: '100%',
-          height: variant === 'article' ? 180 : 200,
-          borderRadius:
-            variant === 'article' ? theme.radius.md : theme.radius.lg,
-          overflow: 'hidden',
-          backgroundColor: empty ? theme.colors.muted : undefined,
-        },
+      : variant === 'square'
+        ? {
+            width: '100%',
+            aspectRatio: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: theme.radius.md,
+            overflow: 'hidden',
+            backgroundColor: theme.colors[tileSurface],
+          }
+        : {
+            width: '100%',
+            height: variant === 'article' ? 180 : 200,
+            borderRadius:
+              variant === 'article' ? theme.radius.md : theme.radius.lg,
+            overflow: 'hidden',
+            backgroundColor: empty ? theme.colors.muted : undefined,
+          },
   image: (variant: ImageCardVariant) =>
     variant === 'tile'
       ? { width: '80%', height: '80%', borderRadius: theme.radius.md }

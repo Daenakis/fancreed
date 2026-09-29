@@ -6,7 +6,7 @@ import type * as T from '@/types/api';
 
 import { CONFIG } from '@/config';
 
-import { siteClient } from '../client';
+import { axiosInstance, siteClient } from '../client';
 
 /** Squad page of the current season, or the previous one until it's up. */
 async function fetchSquadPage(): Promise<AxiosResponse<string>> {
@@ -24,15 +24,19 @@ async function fetchSquadPage(): Promise<AxiosResponse<string>> {
 }
 
 /**
- * Backend group "squads" (`squads/actual`), read from the club site for now:
- * the backend still holds the old club's players.
- * TODO(backend): back to `squads/actual` once it serves the ASSE squad.
+ * Backend group "squads". The squad itself comes from the club site (full
+ * names, positions, cut-out photos); the backend's api-football squad gives
+ * the headshots used on the pitch.
  */
 export const squadsApi = {
   /** The club's current squad. */
   actual: async (): Promise<AxiosResponse<T.ActualSquadResponse>> => {
     const response = await fetchSquadPage();
     const squad = parseClubSquad(response.data, CONFIG.LINKS.CLUB_SITE);
+    // A redesigned page parses to nobody: fail, so the saved squad stays.
+    if (!squad.players.length) throw new Error('Club site squad not found');
     return { ...response, data: { squad } };
   },
+  /** The backend's (api-football) squad: short names and headshots. */
+  backend: () => axiosInstance.get<T.ActualSquadResponse>('squads/actual'),
 } as const;

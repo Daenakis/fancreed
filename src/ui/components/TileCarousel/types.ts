@@ -17,6 +17,12 @@ export type TileCarouselProps<T extends TileItem> = {
   onAdd?: () => void;
   /** Screen-reader name of the "+" tile. */
   addLabel?: string;
+  /**
+   * `tile`: framed tiles centred in the page. `square`: full-bleed squares
+   * from the screen gutter with the next page peeking (fan clubs).
+   * Defaults to `tile`.
+   */
+  variant?: 'tile' | 'square';
   /** Tiles per page. Defaults to 3. */
   pageSize?: number;
   /** Tile frame background. Defaults to `translucentSurface`. */

@@ -88,4 +88,28 @@ describe('RemoteImage', () => {
       height: 300,
     });
   });
+
+  it('switches to the fallback when the image fails, and only reports a failed fallback', () => {
+    const onError = jest.fn();
+    const { getByRole, UNSAFE_getByType } = render(
+      <RemoteImage
+        source={{ uri: 'https://example.com/a.jpg' }}
+        fallbackSource={{ uri: 'https://example.com/b.jpg' }}
+        accessibilityLabel="Photo"
+        onError={onError}
+      />,
+    );
+
+    fireEvent(UNSAFE_getByType(Image), 'error', { nativeEvent: {} });
+
+    expect(UNSAFE_getByType(Image).props.source).toEqual({
+      uri: 'https://example.com/b.jpg',
+    });
+    expect(getByRole('image', { name: 'Photo' })).toBeBusy();
+    expect(onError).not.toHaveBeenCalled();
+
+    fireEvent(UNSAFE_getByType(Image), 'error', { nativeEvent: {} });
+
+    expect(onError).toHaveBeenCalledTimes(1);
+  });
 });

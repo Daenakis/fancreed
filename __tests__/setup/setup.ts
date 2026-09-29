@@ -90,4 +90,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.restoreAllMocks();
+  // Device-cached query data (persistedQuery) must not leak between tests.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  (require('@/utils') as typeof import('@/utils')).storage.clearAll();
 });

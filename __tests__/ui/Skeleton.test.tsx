@@ -34,4 +34,14 @@ describe('Skeleton', () => {
       props: { accessibilityElementsHidden: true },
     });
   });
+
+  it('uses the given theme colour when color is set', () => {
+    const root = render(
+      <Skeleton width={40} height={12} color="brandBorder" />,
+    );
+
+    expect(blockStyle(root).backgroundColor).toBe(
+      lightTheme.colors.brandBorder,
+    );
+  });
 });
