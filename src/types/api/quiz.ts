@@ -1,22 +1,44 @@
-// Quiz ("Вікторина"). TODO(backend): no endpoint yet — mocked in `quizApi`.
+// Backend group "quizzes".
+
+/** A text in every app language. */
+export type LocalizedText = { en: string; uk: string };
 
 export type QuizQuestion = {
-  id: string;
-  text: string;
-  options: string[];
+  _id: string;
+  text: LocalizedText;
+  options: LocalizedText[];
 };
 
 export type Quiz = {
-  id: string;
+  _id: string;
+  title: LocalizedText;
   questions: QuizQuestion[];
 };
 
-/** Answer = index of the chosen option, per question id. */
-export type QuizAnswers = Record<string, number>;
-
 export type QuizResult = {
-  /** 0–100. */
-  score: number;
-  /** Place in the fans' rating. */
-  place: number;
+  /** Right answers. */
+  correct: number;
+  /** Questions. */
+  total: number;
+  /** The fan's option index per question. */
+  answers: number[];
+  /** 0–100: 100% minus the share of fans with more right answers. */
+  betterThan: number;
+};
+
+export type QuizResponse = {
+  /** `null` when no quiz is running. */
+  quiz: Quiz | null;
+  /** `null` until the fan answers. */
+  yourResult: QuizResult | null;
+};
+
+export type QuizAnswerRequest = {
+  quiz: string;
+  /** Option index per question, in question order. */
+  answers: number[];
+};
+
+export type QuizAnswerResponse = {
+  result: QuizResult;
 };

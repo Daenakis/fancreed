@@ -4,11 +4,11 @@ import { fetcher, quizApi } from '@/api';
 
 import { QueryKey } from '@/types';
 
-/** The current quiz (mocked until the backend has it). */
+/** The current quiz and the fan's result once they've answered. */
 export const quizQueryOptions = () =>
   queryOptions({
-    queryKey: [QueryKey.Quiz, 'current'],
-    queryFn: () => fetcher(quizApi.current()),
+    queryKey: [QueryKey.Quiz, 'actual'],
+    queryFn: () => fetcher(quizApi.actual()),
   });
 
 export function useQuizQuery() {

@@ -7,6 +7,13 @@ export type AppEvent = {
   time: string | number;
   title: string;
   location: string;
+  /** Texts per app language; `title`/`location` are the fallback. */
+  translations?: Partial<
+    Record<
+      'en' | 'uk',
+      { title?: string; location?: string; description?: string }
+    >
+  > | null;
   /** Old records may carry only one of the two. */
   coords?: { latitude?: number; longitude?: number } | null;
 };

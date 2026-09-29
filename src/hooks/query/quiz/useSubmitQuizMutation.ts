@@ -1,17 +1,37 @@
-import { mutationOptions, useMutation } from '@tanstack/react-query';
+import {
+  mutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { fetcher, quizApi } from '@/api';
 
 import { QueryKey } from '@/types';
-import type { QuizAnswers } from '@/types/api';
+import type { QuizAnswerRequest, QuizResponse } from '@/types/api';
+
+import { useApiErrorAlert } from '../../useApiErrorAlert';
 
 export const submitQuizMutationOptions = () =>
   mutationOptions({
-    mutationKey: [QueryKey.Quiz, 'submit'],
-    mutationFn: (answers: QuizAnswers) => fetcher(quizApi.submit(answers)),
+    mutationKey: [QueryKey.Quiz, 'answer'],
+    mutationFn: (params: QuizAnswerRequest) => fetcher(quizApi.answer(params)),
   });
 
-/** Sends the answers and returns the score and rating place. */
+/** Sends the answers; the result then shows from the quiz query. */
 export function useSubmitQuizMutation() {
-  return useMutation(submitQuizMutationOptions());
+  const queryClient = useQueryClient();
+  const onError = useApiErrorAlert();
+  return useMutation({
+    ...submitQuizMutationOptions(),
+    onSuccess: ({ result }) =>
+      queryClient.setQueryData<QuizResponse>(
+        [QueryKey.Quiz, 'actual'],
+        (old) => old && { ...old, yourResult: result },
+      ),
+    onError: (error) => {
+      onError(error);
+      // e.g. answered on another device: show that result.
+      void queryClient.invalidateQueries({ queryKey: [QueryKey.Quiz] });
+    },
+  });
 }

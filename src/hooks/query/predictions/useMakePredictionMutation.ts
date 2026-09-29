@@ -1,4 +1,8 @@
-import { mutationOptions, useMutation } from '@tanstack/react-query';
+import {
+  mutationOptions,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { fetcher, predictionsApi } from '@/api';
 
@@ -15,6 +19,19 @@ export const makePredictionMutationOptions = () =>
   });
 
 export function useMakePredictionMutation() {
+  const queryClient = useQueryClient();
   const onError = useApiErrorAlert();
-  return useMutation({ ...makePredictionMutationOptions(), onError });
+  const refresh = (fixture: number) =>
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.Predictions, 'fixture', fixture],
+    });
+  return useMutation({
+    ...makePredictionMutationOptions(),
+    // The pick is saved for the signed-in fan: reload it (and the shares).
+    onSuccess: (_, params) => refresh(params.fixture),
+    onError: (error, params) => {
+      onError(error);
+      void refresh(params.fixture);
+    },
+  });
 }

@@ -30,7 +30,7 @@ import {
   pitchRows,
 } from '@/utils';
 
-import type { Player } from '@/types/api';
+import type { LineupPrediction, Player } from '@/types/api';
 
 import { Pitch, type PitchSlot } from '@/features/matches';
 
@@ -106,9 +106,33 @@ export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
   }
   if (!match) return null;
 
+  const shareLineup = (prediction: LineupPrediction) =>
+    void Share.share({
+      message: t('lineupPrediction.shareMessage', {
+        formation: prediction.formation,
+        players: pitchRows(prediction.players)
+          .reverse()
+          .flat()
+          .map((p) => p.name)
+          .join(', '),
+      }),
+    });
+
   return (
     <View style={[styles.block, style]}>
-      <SectionTitle title={t('lineupPrediction.title')} style={styles.flush} />
+      <SectionTitle
+        title={t('lineupPrediction.title')}
+        action={
+          saved
+            ? {
+                icon: 'telegram',
+                label: t('common.share'),
+                onPress: () => shareLineup(saved),
+              }
+            : undefined
+        }
+        style={styles.flush}
+      />
       {saved ? (
         <SavedPrediction prediction={saved} />
       ) : (
@@ -171,7 +195,7 @@ LineupPredictionBlock.displayName = 'LineupPredictionBlock';
 
 /**
  * The fan's saved line-up: a collapsed row with the formation that opens
- * the pitch, and Share.
+ * the pitch (Share is in the block title).
  */
 function SavedPrediction({ prediction }: SavedPredictionProps) {
   const { t } = useTranslation();
@@ -189,18 +213,6 @@ function SavedPrediction({ prediction }: SavedPredictionProps) {
       grid: p.grid,
     },
   }));
-
-  const share = () =>
-    void Share.share({
-      message: t('lineupPrediction.shareMessage', {
-        formation: prediction.formation,
-        players: pitchRows(prediction.players)
-          .reverse()
-          .flat()
-          .map((p) => p.name)
-          .join(', '),
-      }),
-    });
 
   // The pitch runs to the card's edges so it keeps the size it had while
   // picking; only the texts and the button are inset. It's only built
@@ -231,16 +243,6 @@ function SavedPrediction({ prediction }: SavedPredictionProps) {
         />
       </Pressable>
       {open ? <Pitch slots={slots} /> : null}
-      <View style={styles.inset}>
-        <Button
-          size="xs"
-          fullWidth
-          backgroundColor="brand"
-          textColor="onBrand"
-          text={t('votes.share')}
-          onPress={share}
-        />
-      </View>
     </View>
   );
 }

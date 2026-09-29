@@ -143,7 +143,7 @@ describe('LineupPredictionBlock', () => {
     });
     expect(toggle).toHaveProp('accessibilityState', { expanded: false });
     expect(utils.queryByLabelText('Keeper One, 1')).toBeNull();
-    expect(utils.getByRole('button', { name: 'votes.share' })).toBeTruthy();
+    expect(utils.getByRole('button', { name: 'common.share' })).toBeTruthy();
     expect(
       utils.queryByRole('button', { name: 'lineupPrediction.formation' }),
     ).toBeNull();

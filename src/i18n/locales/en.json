@@ -160,14 +160,12 @@
   "votes": {
     "playerOfMatch": "Players of the match",
     "choose": "Vote",
-    "share": "Share",
     "shareMessage": "Pick the player of the match {{home}} – {{away}} in the Fancreed app!",
     "yourVote": "your vote"
   },
   "prediction": {
     "title": "Match prediction",
     "send": "Vote",
-    "share": "Share",
     "shareMessage": "My prediction for {{home}} – {{away}}: {{homeGoals}}:{{awayGoals}}. What's yours? Predict in the Fancreed app!",
     "homeGoals": "{{team}} goals",
     "awayGoals": "{{team}} goals"
@@ -431,12 +429,10 @@
     "next": "Next",
     "showResult": "See the result",
     "result": "Your result",
-    "place": "#{{place}} in the rating",
-    "pointsLabel_one": "point",
-    "pointsLabel_other": "points",
-    "points_one": "{{count}} point",
-    "points_other": "{{count}} points",
-    "shareMessage": "I scored {{score}} points in the Fancreed quiz. Can you beat it?"
+    "betterThan": "Better than {{percent}}% of fans",
+    "correctLabel": "right answers",
+    "correct": "{{correct}} of {{total}} right",
+    "shareMessage": "My Fancreed quiz result: {{correct}} of {{total}} right. Can you beat it?"
   },
   "challenge": {
     "title": "Challenge"

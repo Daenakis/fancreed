@@ -11,10 +11,17 @@ export {
   parseClubSquad,
   seasonStartYear,
 } from './clubSite';
-export { eventDate, formatEventDate, hasEventDay, mapsUrl } from './events';
+export {
+  eventDate,
+  formatEventDate,
+  hasEventDay,
+  localizeEvent,
+  mapsUrl,
+} from './events';
 export { geocodeAddress } from './geocode';
 export { type HtmlBlock, htmlToBlocks, htmlToText } from './html';
 export { formationGrid, FORMATIONS, pitchRows, shortName } from './lineup';
+export { localized } from './localized';
 export {
   type Countdown,
   countdownTo,

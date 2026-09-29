@@ -19,6 +19,7 @@ import { useSplashStore } from '@/store';
 
 import { STORAGE_KEYS } from '@/constants';
 
+import { usePrefetchFanCentre } from '../../hooks';
 import { OnboardingTour } from '../OnboardingTour';
 import type { AppTab, TabIndicatorProps } from './types';
 
@@ -76,6 +77,8 @@ export function AppTabs() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
+  // Home opens first; the Fan-centre tab loads behind it.
+  usePrefetchFanCentre();
   // Detail screens (e.g. /news/…) show no tab as selected.
   const onTabRoot = TABS.some((tab) => tab.href === pathname);
   const [barWidth, setBarWidth] = useState(0);

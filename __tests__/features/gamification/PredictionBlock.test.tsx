@@ -44,6 +44,15 @@ const pick = (
   }
 };
 
+const mockSaved = (yourVote: { friend: number; enemy: number } | null) =>
+  jest
+    .spyOn(predictionsApi, 'byFixture')
+    .mockResolvedValue(apiOk({ prediction: { votes: [] }, yourVote }));
+
+beforeEach(() => {
+  mockSaved(null);
+});
+
 describe('PredictionBlock', () => {
   it('shows the next (not started) match', async () => {
     mockFixtures([
@@ -81,10 +90,19 @@ describe('PredictionBlock', () => {
     await waitFor(() =>
       expect(make).toHaveBeenCalledWith({ fixture: 2, friend: 2, enemy: 1 }),
     );
-    fireEvent.press(
-      await utils.findByRole('button', { name: 'prediction.share' }),
-    );
+    fireEvent.press(await utils.findByRole('button', { name: 'common.share' }));
     expect(share).toHaveBeenCalled();
+  });
+
+  it('shows the saved pick locked with Share instead of Send', async () => {
+    mockFixtures([fixture(2, 'Not Started', 20, OUR_TEAM)]);
+    mockSaved({ friend: 2, enemy: 1 });
+    const utils = render(<PredictionBlock />);
+
+    expect(
+      await utils.findByRole('button', { name: 'common.share' }),
+    ).toBeTruthy();
+    expect(utils.queryByRole('button', { name: 'prediction.send' })).toBeNull();
   });
 
   it('renders nothing when there is no upcoming match', async () => {

@@ -55,7 +55,7 @@ describe('VotesBlock', () => {
     });
     const { findByRole, getByText } = render(<VotesBlock />);
 
-    fireEvent.press(await findByRole('button', { name: 'votes.share' }));
+    fireEvent.press(await findByRole('button', { name: 'common.share' }));
 
     expect(getByText('Player a\n60%')).toBeTruthy();
     expect(share).toHaveBeenCalledWith({ message: 'votes.shareMessage' });
@@ -67,7 +67,7 @@ describe('VotesBlock', () => {
       .mockResolvedValue(apiOk(response([vote('a', 100, true)])));
     const { findByRole } = render(<VotesBlock />);
 
-    expect(await findByRole('button', { name: 'votes.share' })).toBeTruthy();
+    expect(await findByRole('button', { name: 'common.share' })).toBeTruthy();
   });
 
   it('renders nothing when there is nothing to vote on', async () => {

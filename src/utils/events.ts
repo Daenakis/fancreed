@@ -49,3 +49,18 @@ export function formatEventDate(date: Date, language: string): string {
   }).format(date);
   return `${day}, ${time}`;
 }
+
+/** The event with its title and place in the app language, when translated. */
+export function localizeEvent<T extends AppEvent>(
+  event: T,
+  language: string,
+): T {
+  const texts =
+    event.translations?.[language as 'en' | 'uk'] ?? event.translations?.en;
+  if (!texts) return event;
+  return {
+    ...event,
+    title: texts.title || event.title,
+    location: texts.location || event.location,
+  };
+}

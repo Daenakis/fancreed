@@ -16,6 +16,7 @@ import {
   useMakePredictionMutation,
   useMatchOddsQuery,
   useNextMatchQuery,
+  usePredictionQuery,
   useSponsorsQuery,
 } from '@/hooks';
 
@@ -31,12 +32,15 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
   const { data, isPending } = useNextMatchQuery();
   const match = data?.next;
   const { data: odds } = useMatchOddsQuery(match?._id);
+  const { data: saved, isLoading: savedLoading } = usePredictionQuery(
+    match?._id,
+  );
   const { data: sponsors } = useSponsorsQuery();
   const makePrediction = useMakePredictionMutation();
   const [home, setHome] = useState<number | null>(null);
   const [away, setAway] = useState<number | null>(null);
 
-  if (isPending) {
+  if (isPending || savedLoading) {
     return (
       <View style={style}>
         <SectionTitle title={t('prediction.title')} />
@@ -46,8 +50,21 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
   }
   if (!match) return null;
 
-  const sent = makePrediction.isSuccess;
   const ourTeamIsHome = match.homeTeam.id === match._teamId;
+  // The saved pick (from the backend) locks the score; picks are per club
+  // (friend = ours), the pickers per side.
+  const yourVote = saved?.yourVote;
+  const sent = !!yourVote || makePrediction.isSuccess;
+  const shownHome = yourVote
+    ? ourTeamIsHome
+      ? yourVote.friend
+      : yourVote.enemy
+    : home;
+  const shownAway = yourVote
+    ? ourTeamIsHome
+      ? yourVote.enemy
+      : yourVote.friend
+    : away;
   const sponsor = sponsors?.find(
     (s) => s.name.toLowerCase() === odds?.sponsor.toLowerCase(),
   );
@@ -66,14 +83,21 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
       message: t('prediction.shareMessage', {
         home: match.homeTeam.name,
         away: match.awayTeam.name,
-        homeGoals: home,
-        awayGoals: away,
+        homeGoals: shownHome,
+        awayGoals: shownAway,
       }),
     });
 
   return (
     <View style={style}>
-      <SectionTitle title={t('prediction.title')} />
+      <SectionTitle
+        title={t('prediction.title')}
+        action={
+          sent
+            ? { icon: 'telegram', label: t('common.share'), onPress: share }
+            : undefined
+        }
+      />
       <View style={styles.card}>
         {sponsor ? (
           <RemoteImage
@@ -101,7 +125,7 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
           <TeamLogo uri={match.homeTeam.logo} name={match.homeTeam.name} />
           <View style={styles.score}>
             <GoalsPicker
-              value={home}
+              value={shownHome}
               onChange={setHome}
               color="onBrand"
               readOnly={sent}
@@ -113,7 +137,7 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
               :
             </Text>
             <GoalsPicker
-              value={away}
+              value={shownAway}
               onChange={setAway}
               color="onBrand"
               readOnly={sent}
@@ -124,14 +148,7 @@ export function PredictionBlock({ style }: PredictionBlockProps) {
           </View>
           <TeamLogo uri={match.awayTeam.logo} name={match.awayTeam.name} />
         </View>
-        {sent ? (
-          <Button
-            variant="brand"
-            fullWidth
-            text={t('prediction.share')}
-            onPress={share}
-          />
-        ) : (
+        {sent ? null : (
           <Button
             variant="brand"
             fullWidth

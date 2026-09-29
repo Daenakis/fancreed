@@ -13,20 +13,22 @@ import {
 
 import { useQuizQuery, useSubmitQuizMutation } from '@/hooks';
 
-import type { QuizAnswers } from '@/types/api';
+import { localized } from '@/utils';
 
 import type { QuizBlockProps } from './types';
 
 /**
- * "Quiz": one question at a time ("3/12"), pick an answer, Next; after the
- * last one the fan's score and rating place show with Share.
+ * "Quiz" from the backend: one question at a time ("3/12"), pick an answer,
+ * Next; after the last one the fan's right answers and how many fans they
+ * beat show with Share. The result stays once answered.
  */
 export function QuizBlock({ style }: QuizBlockProps) {
-  const { t } = useTranslation();
-  const { data: quiz, isPending } = useQuizQuery();
+  const { t, i18n } = useTranslation();
+  const { data, isPending } = useQuizQuery();
   const submit = useSubmitQuizMutation();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<QuizAnswers>({});
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const quiz = data?.quiz;
 
   if (isPending) {
     return (
@@ -40,13 +42,31 @@ export function QuizBlock({ style }: QuizBlockProps) {
 
   const total = quiz.questions.length;
   const question = quiz.questions[step]!;
-  const answer = answers[question.id];
+  const answer = answers[question._id];
   const last = step === total - 1;
-  const result = submit.data;
+  const result = data?.yourResult;
+
+  const share = result
+    ? () =>
+        void Share.share({
+          message: t('quiz.shareMessage', {
+            correct: result.correct,
+            total: result.total,
+          }),
+        })
+    : undefined;
 
   return (
     <View style={[styles.block, style]}>
-      <SectionTitle title={t('quiz.title')} style={styles.flush} />
+      <SectionTitle
+        title={t('quiz.title')}
+        action={
+          share
+            ? { icon: 'telegram', label: t('common.share'), onPress: share }
+            : undefined
+        }
+        style={styles.flush}
+      />
       {result ? (
         <View style={styles.card}>
           <View style={styles.row}>
@@ -55,32 +75,29 @@ export function QuizBlock({ style }: QuizBlockProps) {
             </Text>
             <View style={styles.badge}>
               <Text variant="bodyXSMedium" color="brand">
-                {t('quiz.place', { place: result.place })}
+                {t('quiz.betterThan', { percent: result.betterThan })}
               </Text>
             </View>
           </View>
           <View
             accessible
-            accessibilityLabel={t('quiz.points', { count: result.score })}
+            accessibilityLabel={t('quiz.correct', {
+              correct: result.correct,
+              total: result.total,
+            })}
             style={styles.ring}
           >
-            <Text variant="h1Semibold">{result.score}</Text>
-            <Text variant="bodyXSMedium" color="mutedForeground">
-              {t('quiz.pointsLabel', { count: result.score })}
+            <Text variant="h1Semibold">
+              {result.correct}/{result.total}
+            </Text>
+            <Text
+              variant="bodyXSMedium"
+              color="mutedForeground"
+              style={styles.center}
+            >
+              {t('quiz.correctLabel')}
             </Text>
           </View>
-          <Button
-            size="xs"
-            fullWidth
-            backgroundColor="brand"
-            textColor="onBrand"
-            text={t('votes.share')}
-            onPress={() =>
-              void Share.share({
-                message: t('quiz.shareMessage', { score: result.score }),
-              })
-            }
-          />
         </View>
       ) : (
         <View style={styles.card}>
@@ -96,14 +113,19 @@ export function QuizBlock({ style }: QuizBlockProps) {
               /{total}
             </Text>
           </View>
-          <Text variant="bodyLMedium">{question.text}</Text>
+          <Text variant="bodyLMedium">
+            {localized(question.text, i18n.language)}
+          </Text>
           <ChoiceGroup
             variant="list"
             value={answer}
             onChange={(value) =>
-              setAnswers((a) => ({ ...a, [question.id]: value }))
+              setAnswers((a) => ({ ...a, [question._id]: value }))
             }
-            options={question.options.map((label, value) => ({ label, value }))}
+            options={question.options.map((option, value) => ({
+              label: localized(option, i18n.language),
+              value,
+            }))}
           />
           <Button
             size="xs"
@@ -114,7 +136,12 @@ export function QuizBlock({ style }: QuizBlockProps) {
             disabled={answer === undefined}
             loading={submit.isPending}
             onPress={() =>
-              last ? submit.mutate(answers) : setStep((s) => s + 1)
+              last
+                ? submit.mutate({
+                    quiz: quiz._id,
+                    answers: quiz.questions.map((q) => answers[q._id]!),
+                  })
+                : setStep((s) => s + 1)
             }
           />
         </View>
@@ -160,10 +187,14 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radius.sm,
     backgroundColor: theme.colors.mintSurfaceStrong,
   },
+  center: {
+    textAlign: 'center',
+  },
   ring: {
     alignSelf: 'center',
-    width: 96,
-    height: 96,
+    width: 112,
+    height: 112,
+    padding: theme.spacing(2),
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 4,

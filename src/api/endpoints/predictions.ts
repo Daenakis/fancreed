@@ -19,6 +19,8 @@ export const predictionsApi = {
   // apidoc lists GET, the old app used POST with a body — keep POST.
   make: (params: T.MakePredictionRequest) =>
     axiosInstance.post<void>('predictions/make', params),
+  byFixture: (fixture: number) =>
+    axiosInstance.get<T.PredictionResponse>(`predictions/fixture/${fixture}`),
   odds: (_fixture: number) =>
     Promise.resolve({ data: MOCK_ODDS } as AxiosResponse<T.MatchOdds>),
 } as const;

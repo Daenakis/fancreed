@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Share, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Pressable, Share, View } from 'react-native';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import {
   Button,
   Carousel,
+  Icon,
   ImageCard,
   RemoteImage,
   Text,
@@ -27,11 +28,12 @@ import type { VotesBlockProps } from './types';
 /**
  * "Players of the match" (Figma): sponsor and both crests in the title,
  * players to swipe through and Vote. Once the fan has voted — or voting is
- * over — everyone's share shows, the fan's pick is marked and the button
- * turns into Share. Hidden when there's nothing to vote on.
+ * over — everyone's share shows, the fan's pick is marked and a share icon
+ * appears in the title. Hidden when there's nothing to vote on.
  */
 export function VotesBlock({ style }: VotesBlockProps) {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
   const { data, isPending } = useVotesQuery();
   // The club site's cut-out photos, nicer than api-football's headshots.
   const { data: squad } = useSquadQuery();
@@ -92,6 +94,17 @@ export function VotesBlock({ style }: VotesBlockProps) {
             />
           </>
         ) : null}
+        {showResults ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('common.share')}
+            hitSlop={12}
+            onPress={share}
+            style={styles.share}
+          >
+            <Icon name="telegram" size={20} color={theme.colors.foreground} />
+          </Pressable>
+        ) : null}
       </View>
       <Carousel
         data={votes}
@@ -122,17 +135,8 @@ export function VotesBlock({ style }: VotesBlockProps) {
           );
         }}
       />
-      <View style={styles.inset}>
-        {showResults ? (
-          <Button
-            size="xs"
-            fullWidth
-            backgroundColor="brand"
-            textColor="onBrand"
-            text={t('votes.share')}
-            onPress={share}
-          />
-        ) : (
+      {showResults ? null : (
+        <View style={styles.inset}>
           <Button
             size="xs"
             fullWidth
@@ -142,8 +146,8 @@ export function VotesBlock({ style }: VotesBlockProps) {
             loading={makeVote.isPending}
             onPress={() => makeVote.mutate({ id: votes[index]!._id })}
           />
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -157,6 +161,9 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing(2),
     paddingHorizontal: theme.spacing(5),
     marginBottom: theme.spacing(3),
+  },
+  share: {
+    marginLeft: 'auto',
   },
   sponsor: {
     width: 80,

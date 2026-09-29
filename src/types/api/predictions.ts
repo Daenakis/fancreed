@@ -8,6 +8,19 @@ export type MakePredictionRequest = {
   enemy: number;
 };
 
+/** A pick: goals for our club (`friend`) and for the opponent (`enemy`). */
+export type PredictionPick = { friend: number; enemy: number };
+
+export type PredictionResponse = {
+  /** All fans' picks for the match with their shares. */
+  prediction: {
+    total?: number;
+    votes: (PredictionPick & { total: number; percent: number })[];
+  };
+  /** The signed-in fan's own pick, `null` until they vote. */
+  yourVote: PredictionPick | null;
+};
+
 /**
  * Sponsor odds shown after a prediction is sent.
  * TODO(backend): no endpoint yet — mocked in `predictionsApi.odds`.

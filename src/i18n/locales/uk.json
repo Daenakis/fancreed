@@ -162,14 +162,12 @@
   "votes": {
     "playerOfMatch": "Гравці матчу",
     "choose": "Проголосувати",
-    "share": "Поділитися",
     "shareMessage": "Обери гравця матчу {{home}} – {{away}} у застосунку Fancreed!",
     "yourVote": "ваш голос"
   },
   "prediction": {
     "title": "Матч-прогноз",
     "send": "Голосувати",
-    "share": "Поділитись",
     "shareMessage": "Мій прогноз на матч {{home}} – {{away}}: {{homeGoals}}:{{awayGoals}}. А твій? Прогнозуй у застосунку Fancreed!",
     "homeGoals": "Голи {{team}}",
     "awayGoals": "Голи {{team}}"
@@ -441,16 +439,10 @@
     "next": "Далі",
     "showResult": "Дізнатись результат",
     "result": "Ваш результат",
-    "place": "{{place}} місце в рейтингу",
-    "pointsLabel_one": "бал",
-    "pointsLabel_few": "бали",
-    "pointsLabel_many": "балів",
-    "pointsLabel_other": "бала",
-    "points_one": "{{count}} бал",
-    "points_few": "{{count}} бали",
-    "points_many": "{{count}} балів",
-    "points_other": "{{count}} бала",
-    "shareMessage": "Я набрав {{score}} балів у вікторині Fancreed. Зможеш краще?"
+    "betterThan": "Краще за {{percent}}% фанатів",
+    "correctLabel": "правильних відповідей",
+    "correct": "{{correct}} з {{total}} правильно",
+    "shareMessage": "Мій результат у вікторині Fancreed — {{correct}} з {{total}}. Зможеш краще?"
   },
   "challenge": {
     "title": "Челендж"
