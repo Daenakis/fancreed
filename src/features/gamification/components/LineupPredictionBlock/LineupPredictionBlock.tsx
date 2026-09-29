@@ -1,32 +1,49 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Share, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import {
   BottomSheet,
   Button,
+  Icon,
   RemoteImage,
   SectionTitle,
   Select,
+  Skeleton,
   Text,
   TextInput,
 } from '@/ui/components';
 
-import { useBackendSquadQuery, useSquadQuery } from '@/hooks';
+import {
+  useBackendSquadQuery,
+  useLineupPredictionQuery,
+  useMakeLineupPredictionMutation,
+  useNextMatchQuery,
+  useSquadQuery,
+} from '@/hooks';
 
-import { backendSquadPhoto, formationGrid, FORMATIONS } from '@/utils';
+import {
+  backendSquadPhoto,
+  formationGrid,
+  FORMATIONS,
+  pitchRows,
+} from '@/utils';
 
 import type { Player } from '@/types/api';
 
 import { Pitch, type PitchSlot } from '@/features/matches';
 
-import type { LineupPredictionBlockProps, PlayerPickerProps } from './types';
+import type {
+  LineupPredictionBlockProps,
+  PlayerPickerProps,
+  SavedPredictionProps,
+} from './types';
 
 /**
- * "Line-up prediction": pick a formation, fill the eleven places from the
- * squad, then vote — the fan's line-up shows with Share.
- * TODO(backend): no line-up prediction API yet — the vote isn't saved.
+ * "Line-up prediction" for the next match: pick a formation, fill the eleven
+ * places from the squad, then vote — the saved line-up shows with Share.
+ * Hidden when there's no upcoming match.
  */
 export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
   const { t } = useTranslation();
@@ -45,7 +62,12 @@ export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
   const [formation, setFormation] = useState<string | null>(null);
   const [picked, setPicked] = useState<Record<string, Player>>({});
   const [editing, setEditing] = useState<string | null>(null);
-  const [voted, setVoted] = useState(false);
+  const { data: matches, isPending: matchPending } = useNextMatchQuery();
+  const match = matches?.next;
+  const { data: saved, isLoading: savedLoading } = useLineupPredictionQuery(
+    match?._id,
+  );
+  const make = useMakeLineupPredictionMutation();
 
   const grid = formation ? formationGrid(formation) : [];
   const slots: PitchSlot[] = grid.map((g) => ({
@@ -54,42 +76,41 @@ export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
   }));
   const complete = grid.length > 0 && grid.every((g) => picked[g]);
 
-  const share = () =>
-    void Share.share({
-      message: t('lineupPrediction.shareMessage', {
-        formation,
-        players: grid
-          .map((g) => picked[g]?.actualName ?? picked[g]?.name)
-          .join(', '),
+  const vote = () =>
+    match &&
+    formation &&
+    make.mutate({
+      fixture: match._id,
+      formation,
+      players: grid.map((g) => {
+        const player = picked[g]!;
+        return {
+          grid: g,
+          name: player.actualName ?? player.name,
+          number: player.number,
+          photo: player.actualPhoto ?? player.photo,
+        };
       }),
     });
+
+  if (matchPending || savedLoading) {
+    return (
+      <View style={[styles.block, style]}>
+        <SectionTitle
+          title={t('lineupPrediction.title')}
+          style={styles.flush}
+        />
+        <Skeleton height={SELECT_HEIGHT} radius="md" />
+      </View>
+    );
+  }
+  if (!match) return null;
 
   return (
     <View style={[styles.block, style]}>
       <SectionTitle title={t('lineupPrediction.title')} style={styles.flush} />
-      {voted ? (
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <Text variant="bodyLMedium" style={styles.flex}>
-              {t('lineupPrediction.yours')}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text variant="bodySRegular" style={styles.flex}>
-              {t('lineupPrediction.formation')}
-            </Text>
-            <Text variant="bodySSemibold">{formation}</Text>
-          </View>
-          <Pitch slots={slots} />
-          <Button
-            size="xs"
-            fullWidth
-            backgroundColor="brand"
-            textColor="onBrand"
-            text={t('votes.share')}
-            onPress={share}
-          />
-        </View>
+      {saved ? (
+        <SavedPrediction prediction={saved} />
       ) : (
         <>
           <Select
@@ -122,7 +143,8 @@ export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
                 textColor="onBrand"
                 text={t('lineupPrediction.vote')}
                 disabled={!complete}
-                onPress={() => setVoted(true)}
+                loading={make.isPending}
+                onPress={vote}
               />
             </>
           ) : null}
@@ -146,6 +168,82 @@ export function LineupPredictionBlock({ style }: LineupPredictionBlockProps) {
 }
 
 LineupPredictionBlock.displayName = 'LineupPredictionBlock';
+
+/**
+ * The fan's saved line-up: a collapsed row with the formation that opens
+ * the pitch, and Share.
+ */
+function SavedPrediction({ prediction }: SavedPredictionProps) {
+  const { t } = useTranslation();
+  const { theme } = useUnistyles();
+  const [open, setOpen] = useState(false);
+  const slots: PitchSlot[] = prediction.players.map((p) => ({
+    grid: p.grid,
+    player: {
+      _id: p.grid,
+      _teamId: 0,
+      name: p.name,
+      number: p.number ?? 0,
+      position: '',
+      photo: p.photo ?? '',
+      grid: p.grid,
+    },
+  }));
+
+  const share = () =>
+    void Share.share({
+      message: t('lineupPrediction.shareMessage', {
+        formation: prediction.formation,
+        players: pitchRows(prediction.players)
+          .reverse()
+          .flat()
+          .map((p) => p.name)
+          .join(', '),
+      }),
+    });
+
+  // The pitch runs to the card's edges so it keeps the size it had while
+  // picking; only the texts and the button are inset. It's only built
+  // when opened: eleven photos the page doesn't need to load up front.
+  return (
+    <View style={styles.card}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+        accessibilityLabel={`${t('lineupPrediction.yours')}, ${prediction.formation}`}
+        onPress={() => setOpen((o) => !o)}
+        style={({ pressed }) => [
+          styles.row,
+          styles.inset,
+          pressed && styles.pressed,
+        ]}
+      >
+        <View style={styles.flex}>
+          <Text variant="bodyLMedium">{t('lineupPrediction.yours')}</Text>
+          <Text variant="bodySRegular" color="mutedForeground">
+            {t('lineupPrediction.formation')} · {prediction.formation}
+          </Text>
+        </View>
+        <Icon
+          name={open ? 'arrowUp' : 'arrowDown'}
+          size={20}
+          color={theme.colors.foreground}
+        />
+      </Pressable>
+      {open ? <Pitch slots={slots} /> : null}
+      <View style={styles.inset}>
+        <Button
+          size="xs"
+          fullWidth
+          backgroundColor="brand"
+          textColor="onBrand"
+          text={t('votes.share')}
+          onPress={share}
+        />
+      </View>
+    </View>
+  );
+}
 
 /** Squad list with a search field, in a bottom sheet. */
 function PlayerPicker({
@@ -210,6 +308,9 @@ function PlayerPicker({
   );
 }
 
+/** Height of the formation Select. */
+const SELECT_HEIGHT = 48;
+
 const styles = StyleSheet.create((theme) => ({
   block: {
     gap: theme.spacing(3),
@@ -221,9 +322,13 @@ const styles = StyleSheet.create((theme) => ({
   },
   card: {
     gap: theme.spacing(3),
-    padding: theme.spacing(3),
+    paddingVertical: theme.spacing(3),
+    overflow: 'hidden',
     borderRadius: theme.radius.lg,
     backgroundColor: theme.colors.mintSurface,
+  },
+  inset: {
+    paddingHorizontal: theme.spacing(3),
   },
   row: {
     flexDirection: 'row',

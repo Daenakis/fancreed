@@ -4,6 +4,7 @@ export { eventsApi } from './events';
 export { feedbackApi } from './feedback';
 export { fixturesApi } from './fixtures';
 export { leaguesApi } from './leagues';
+export { lineupPredictionsApi } from './lineupPredictions';
 export { newsApi } from './news';
 export { playersApi } from './players';
 export { predictionsApi } from './predictions';

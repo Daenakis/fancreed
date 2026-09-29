@@ -5,6 +5,7 @@ export * from './events';
 export * from './feedback';
 export * from './fixtures';
 export * from './leagues';
+export * from './lineupPredictions';
 export * from './news';
 export * from './players';
 export * from './predictions';

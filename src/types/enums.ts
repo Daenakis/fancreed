@@ -6,6 +6,7 @@ export enum QueryKey {
   Feedback = 'feedback',
   Fixtures = 'fixtures',
   Leagues = 'leagues',
+  LineupPredictions = 'lineupPredictions',
   News = 'news',
   Players = 'players',
   Predictions = 'predictions',

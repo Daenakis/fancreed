@@ -1,6 +1,6 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-import type { Player } from '@/types/api';
+import type { LineupPrediction, Player } from '@/types/api';
 
 export type LineupPredictionBlockProps = {
   style?: StyleProp<ViewStyle>;
@@ -14,4 +14,8 @@ export type PlayerPickerProps = {
   takenIds: string[];
   selectedId?: string;
   onPick: (player: Player) => void;
+};
+
+export type SavedPredictionProps = {
+  prediction: LineupPrediction;
 };
