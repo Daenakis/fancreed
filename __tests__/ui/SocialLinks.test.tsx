@@ -19,6 +19,17 @@ describe('SocialLinks', () => {
     expect(getByRole('link', { name: 'Instagram' })).toBeTruthy();
   });
 
+  it('shows a twitter link as X', () => {
+    const { getByRole } = render(
+      <SocialLinks
+        links={[{ name: 'twitter', url: 'https://x.com/club' }]}
+        onOpen={jest.fn()}
+      />,
+    );
+
+    expect(getByRole('link', { name: 'X' })).toBeTruthy();
+  });
+
   it('calls onOpen with the pressed link', () => {
     const onOpen = jest.fn();
     const { getByRole } = render(<SocialLinks links={links} onOpen={onOpen} />);

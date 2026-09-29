@@ -18,6 +18,8 @@ const NETWORKS: Record<string, { icon: IconName; label: string }> = {
   youtube: { icon: 'video', label: 'YouTube' },
   tiktok: { icon: 'tiktok', label: 'TikTok' },
   x: { icon: 'xTwitter', label: 'X' },
+  // The backend needs 3+ characters in a name.
+  twitter: { icon: 'xTwitter', label: 'X' },
 };
 
 /**

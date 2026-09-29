@@ -1,15 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Linking, Share, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import {
   Button,
   EmptyState,
   LoadingMore,
   PageLayout,
-  PageLoader,
   RemoteImage,
+  Skeleton,
   SocialLinks,
   Text,
 } from '@/ui/components';
@@ -35,6 +35,7 @@ const openLink = (url: string) => void Linking.openURL(url);
  */
 export function ArticleScreen() {
   const { t, i18n } = useTranslation();
+  const { theme } = useUnistyles();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { data: posts, isPending } = useNewsQuery();
   const { data: article, isPending: articlePending } =
@@ -52,7 +53,12 @@ export function ArticleScreen() {
       contentStyle={styles.content}
     >
       {isPending || (!listed && articlePending) ? (
-        <PageLoader />
+        // The header in the article's shape; the body loads under it.
+        <View style={styles.head}>
+          <Skeleton height={COVER_HEIGHT} radius="md" />
+          <Skeleton width="90%" height={theme.spacing(5)} />
+          <Skeleton width="60%" height={theme.spacing(5)} />
+        </View>
       ) : !head ? (
         <EmptyState
           icon="news"
@@ -126,6 +132,8 @@ export function ArticleScreen() {
   );
 }
 
+const COVER_HEIGHT = 200;
+
 const styles = StyleSheet.create((theme) => ({
   content: {
     gap: theme.spacing(6),
@@ -140,7 +148,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   cover: {
     width: '100%',
-    height: 200,
+    height: COVER_HEIGHT,
     borderRadius: theme.radius.md,
   },
   inset: {

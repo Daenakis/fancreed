@@ -50,9 +50,8 @@ export type LevelLook = {
   gradient: [ColorToken, number][];
   /** Level tab and avatar placeholder. */
   ink: ColorToken;
-  lion: ColorToken;
-  /** Lion face features. */
-  face: ColorToken;
+  /** Club crest watermark. */
+  crest: ColorToken;
   /** Name, season, progress text and bar. */
   text: ColorToken;
 };

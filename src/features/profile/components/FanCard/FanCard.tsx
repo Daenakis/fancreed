@@ -26,7 +26,7 @@ const NEXT_LEVEL: Record<LoyaltyLevel, LoyaltyLevel | null> = {
   emerald: null,
 };
 
-/** Figma "Cards colors", metallic column: gradient stops, tab, lion and text. */
+/** Figma "Cards colors", metallic column: gradient stops, tab, crest and text. */
 const LOOKS: Record<LoyaltyLevel, LevelLook> = {
   bronze: {
     gradient: [
@@ -36,8 +36,7 @@ const LOOKS: Record<LoyaltyLevel, LevelLook> = {
       ['fanBronzeShade', 100],
     ],
     ink: 'fanBronzeInk',
-    lion: 'fanBronzeInk',
-    face: 'fanBronzeLight',
+    crest: 'fanBronzeInk',
     text: 'onFanCard',
   },
   silver: {
@@ -48,8 +47,7 @@ const LOOKS: Record<LoyaltyLevel, LevelLook> = {
       ['fanSilverShade', 100],
     ],
     ink: 'fanSilverInk',
-    lion: 'fanSilverInk',
-    face: 'fanSilverLight',
+    crest: 'fanSilverInk',
     text: 'onFanCard',
   },
   gold: {
@@ -60,8 +58,7 @@ const LOOKS: Record<LoyaltyLevel, LevelLook> = {
       ['fanGoldShade', 100],
     ],
     ink: 'fanGoldInk',
-    lion: 'fanGoldInk',
-    face: 'fanGoldLight',
+    crest: 'fanGoldInk',
     text: 'onFanCard',
   },
   emerald: {
@@ -72,8 +69,7 @@ const LOOKS: Record<LoyaltyLevel, LevelLook> = {
       ['fanEmeraldShade', 100],
     ],
     ink: 'fanEmeraldInk',
-    lion: 'fanEmeraldLion',
-    face: 'onBrand',
+    crest: 'fanEmeraldLion',
     text: 'onBrand',
   },
 };
@@ -249,20 +245,13 @@ function FanCardFront({
           </Text>
         </View>
       </View>
-      {/* Two layers: the head, then the face features in a lighter tone. */}
-      <View style={styles.lion(full)}>
-        <Icon
-          name="lion"
-          size={full ? 150 : 100}
-          color={theme.colors[look.lion]}
-        />
-        <Icon
-          name="lionFace"
-          size={full ? 150 : 100}
-          color={theme.colors[look.face]}
-          style={styles.lionFace}
-        />
-      </View>
+      {/* The club crest as a watermark in the level's tone. */}
+      <Icon
+        name="asse"
+        size={full ? 150 : 100}
+        color={theme.colors[look.crest]}
+        style={styles.crest(full)}
+      />
       {showProgress ? (
         <View style={styles.progress}>
           <Text
@@ -354,16 +343,11 @@ const styles = StyleSheet.create((theme) => ({
     flexShrink: 1,
     gap: theme.spacing(0.5),
   },
-  lion: (full: boolean) => ({
+  crest: (full: boolean) => ({
     position: 'absolute',
     right: full ? theme.spacing(8) : theme.spacing(4),
     bottom: theme.spacing(3),
   }),
-  lionFace: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
   progress: {
     position: 'absolute',
     left: theme.spacing(3),

@@ -2,7 +2,7 @@
 
 export type SocialEntry = {
   _id: string;
-  /** e.g. "facebook", "instagram", "telegram", "web", "youtube", "advert". */
+  /** e.g. "facebook", "instagram", "twitter" (X), "tiktok", "web", "youtube". */
   name: string;
   url: string;
   image?: string;

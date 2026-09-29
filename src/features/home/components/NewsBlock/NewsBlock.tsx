@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 
 import {
   Button,
   Carousel,
   ImageCard,
-  LoadingMore,
   SectionTitle,
+  Skeleton,
 } from '@/ui/components';
 
 import { useNewsQuery } from '@/hooks';
@@ -31,10 +31,23 @@ export function NewsBlock({
   style,
 }: NewsBlockProps) {
   const { t } = useTranslation();
+  const { theme } = useUnistyles();
   const { data, isPending } = useNewsQuery(count);
   const posts = data?.filter((post) => post.slug !== excludeSlug);
 
-  if (isPending) return <LoadingMore loading />;
+  if (isPending) {
+    // One card's image and title, where the carousel's first card sits.
+    return (
+      <View style={style}>
+        <SectionTitle title={title ?? t('home.newsTitle')} />
+        <View style={styles.skeleton}>
+          <Skeleton height={ARTICLE_IMAGE_HEIGHT} radius="md" />
+          <Skeleton width="90%" height={theme.spacing(5)} />
+          <Skeleton width="60%" height={theme.spacing(5)} />
+        </View>
+      </View>
+    );
+  }
   if (!posts?.length) return null;
 
   return (
@@ -70,7 +83,18 @@ export function NewsBlock({
 
 NewsBlock.displayName = 'NewsBlock';
 
+/** ImageCard `article` image height. */
+const ARTICLE_IMAGE_HEIGHT = 180;
+
 const styles = StyleSheet.create((theme) => ({
+  skeleton: {
+    width: '90%',
+    alignSelf: 'center',
+    gap: theme.spacing(3),
+    padding: theme.spacing(3),
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.secondary,
+  },
   all: {
     marginTop: theme.spacing(4),
     marginHorizontal: theme.spacing(5),
